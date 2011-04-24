@@ -1,0 +1,59 @@
+konsole/src     -->     konsole/s
+personal/bin    -->     personal/b
+/bin            -->     /b
+/tmp            -->     /t
+/lib            -->     /l
+/media          -->     /m
+/mnt            -->     OK
+
+
+/s
+/b
+/t
+
+
+[Session.cpp]
+
+QString Session::getDynamicTitle()
+{
+    // update current directory from process
+    ProcessInfo* process = updateWorkingDirectory();
+
+    // format tab titles using process info
+    bool ok = false;
+    QString title;
+    if ( process->name(&ok) == "ssh" && ok )
+    {
+        SSHProcessInfo sshInfo(*process);
+        title = sshInfo.format(tabTitleFormat(Session::RemoteTabTitle));
+    }
+    else
+        title = process->format(tabTitleFormat(Session::LocalTabTitle));
+
+    return title;
+}
+
+[ProcessInfo.cpp]
+
+QString ProcessInfo::format(const QString& input) const
+{
+   bool ok = false;
+
+   QString output(input);
+
+   // search for and replace known marker
+   output.replace("%u",userName());
+   output.replace("%n",name(&ok));
+   output.replace("%c",formatCommand(name(&ok),arguments(&ok),ShortCommandFormat));
+   output.replace("%C",formatCommand(name(&ok),arguments(&ok),LongCommandFormat));
+
+   QString dir = validCurrentDir();
+   output.replace("%D",dir);
+   output.replace("%d",formatShortDir(dir));
+
+   // remove any remaining %[LETTER] sequences
+   // output.replace(QRegExp("%\\w"), QString());
+
+   return output;
+}
+

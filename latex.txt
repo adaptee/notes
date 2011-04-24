@@ -1,0 +1,170 @@
+chapter 1 基本知识
+
+1.3.1 space
+
+whitespace 被统一的理解为space；
+连续的whitespace等价于单个space；
+行首的whitespaces被忽略；
+单个断行(line breaking)被视为"whitespace"
+
+两行之间的空行定义了段落；
+连续的空行等价于单个空行
+
+1.3.2 特殊字符
+
+  #  $  %  ^  &  _  {  }  ~   \
+
+  要输入这些字符的字面量，必须使用"\"作为前缀，例如 "\$"
+
+  但是"\\"并不会输入'\'，而是用于断行(line breaking)。
+
+  要想输入'\'，应该使用'$\backslash$'
+
+1.3.3 LaTex命令
+
+  两种格式：
+
+  1). \字母序列；任意非字母字符标志着命令的结束
+  2). \非字母序列
+
+  LaTex 忽略/吞掉 命令后的whitespace；如果希望保留命令后的space，可以使用"{} "
+
+  "{}" 用于为命令提供必需参数，"[]"用于为命令提供可选参数；
+
+  '%' 用于提供行注释；
+  verbatim包提供的comment环境可以提供多行注释
+
+1.4 LaTex 源文件的结构
+
+  \docuamentclass{...}
+  \usepackage{...}
+  \begin{document}
+  .....
+  .....
+  \end{document}
+
+  \docuamentclass 和 \usepackage 之间的部分被称为导言区(preamable)
+
+1.5 典型命令行使用
+
+  latex xxx.tex     基于Latexu源文件生成.dvi文件
+  xdvi xxx.dvi      预览dvi文件
+  dvipdf xxx.dvi    基于dvi文件生成pdf文件
+
+1.6 文档布局
+
+  \docuamentclass 命令指定了文档布局，其完整格式为：\docuamentclass[options]{class}
+
+  启用宏包(macro package) : \usepackage[options]{package}
+
+  指定页眉/页脚样式(page style) : \pagestyle{style}
+
+  改变当前页面的页眉/页脚样式：\thispagestyle{style}
+
+1.7 各种扩展名
+
+    .tex     LaTex源文件；发送给latex命令后生成dvi文件
+    .sty     宏包文件
+    .dtx     宏包文件的打包格式
+    .ins     宏包文件的安装文件
+    .cls     定义文档布局的class文件；对应命令"\docuamentclass"
+    .fd      字体描述文件
+
+1.8 大型文档
+
+  LaTex提供了几个命令，用于对大型文档进行任务划分
+
+  \include{filename}                插入指定的LaTex源文件；该命令会导致 LaTex 另起一页
+
+  \includeonly{filename, filename}  限制\incldue命令的有效范围；只能用于导言区；文件名和','之间不能有space
+
+  \input{filename}                  类似于\include，但不会另起一页
+
+  \usepackage{syntonly}
+  \syntaxonly                       令latex命令只是检查语法错误，不生成dvi文件；速度很快
+
+Chapter 2 文本排版
+
+  LaTex 的独特之处在于：强制文档内容具备良好的逻辑结构，否则就难以生成清晰漂亮的排版
+
+  LaTex 中最重要的文本单元是段落(paragraph)
+
+  每个段落应该只表述一个观点；需要表述新观点时，就应该另起一段；否则，就不应该无谓的分段，强制换行就够了。
+
+  大部分人完全低估了合理分段的重要性。
+
+  比段落更小的文本单位是句子。
+
+  英语文本中，句子尾部'.'后面的空白比缩略词尾部'.'后面的空白要长；LaTex会自动判断你需要哪一个，但有是会出错，这就需要明确告诉LaTex你需要的是哪一个。
+
+  如果你不确定句子中逗号的使用是否合适，就大声朗读句子并在每个逗号处喘气；如果喘气的时候觉得别扭，就删除逗号；另一方面，在你觉得喘不过气的地方添加逗号。
+
+2.2 断行与分页
+
+    通常书籍是用等长的行来排版的。为了优化整个段落的内容，LaTex 在单词之间插入必要的断行点(line break) 和间隙。如果一行的单词排不下，LaTex 也会进行必要的断词。
+
+    通常，每段的首行有缩进；两段之间没有额外的间隔。
+
+    \\
+    \newline    另起一行，而不是另起一段
+
+    \\*         同样另起一行，但禁止分页
+
+    \\newpage   另起一页
+
+    \linebreak[n]
+    \nolinebreak[n]
+
+    \pagebreak[n]
+    \nopagebreak[n]
+
+    LaTex 总是尽可能产生最好的断行效果。如果断行无法达到LaTex 的高标准，就让这一行在段落的右侧溢出。然后在处理源文件的同时，报告溢出的消息(“overfull hbox”)。
+
+2.3 内置字符串
+
+    \today
+    \TeX
+    \LaTeX
+    \LaTeXe
+
+2.4 特殊字符和符号
+
+    ` (反引号) 用于表示左单引号，' 用于表示右单音号
+
+    ``(两个连续的反引号) 用于表示左双引号，''(两个连续的单引号) 用于表示右双引号；
+
+    LaTex 中存在4种dash；通过使用不同数量的'-'，可以得到其中的三种；这四种dash是：
+
+    hythen(连字符)          -
+    en-dash(短破折号)       --
+    em-dash(长破折号)       ---
+    minus(减号)             $-$
+
+    \~          小波浪线
+    $\sim$      大波浪线；通常这个是你需要的，特比是用在URI中
+
+    \ldots      省略号(...)；效果和直接插入'...'是不同的，而且也不应该直接插入
+
+    \mbox{}     禁用前后两个字符之间的ligatures特性
+
+2.5 国际语言支持
+
+    宏包babel提供了国际化支持，使用方式： \usepackage[languages]{babel}
+
+    宏包ucs提供了Unicode支持，使用方式：
+    \usepackage{ucs}
+    \usepackage[utf8x]{inputenc}
+
+    宏包fontenc用于处理字体编码，使用方式： \usepackage[encoding]{fontenc}
+
+2.6 单词间隔
+
+    为了使输出的右边界对齐，LATEX 在单词间插入不等的间隔。在句子的末尾插入的空间稍多一些，因为这使得文本更具可读性。
+
+    LATEX 假定句子以句号、问号或惊叹号结尾。如果句号前面是一个大写字母，它就不视为句子的结尾。因为一般在有缩写的地方，才出现句号前面是大写字母的情况。
+
+    作者必须详细说明这些假设中的任何一个例外。空格前的'\'产生一个不能伸长的空格。句号前的命令\@ 说明这个句号是句子的末尾，即使它紧跟一个大写字母。
+
+2.7 标题、章和节
+
+

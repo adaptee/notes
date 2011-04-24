@@ -1,0 +1,58 @@
+[gentoo python module]
+import portage.output
+
+[gentoo] [bad]
+
+dolphin
+    /dev/sdb1 /media/CREATIVE vfat rw,nosuid,nodev,uhelper=hal,uid=1000,utf8,shortname=mixed,flush 0 0
+
+pcmanfm
+    /dev/sdb1 /media/CREATIVE vfat rw,nosuid,nodev,uhelper=hal,uid=1000,shortname=lower,noatime,flush 0 0
+
+[arch] [OK]
+
+*key* : utf8, shortname=mixed
+
+pcmanfm
+    /dev/sdc1 /media/CREATIVE vfat rw,nosuid,nodev,uhelper=hal,shortname=mixed,uid=1000,utf8,umask=077 0 0
+
+[kubuntu] [OK]
+
+dolphin
+    /dev/sdb1 /media/CREATIVE vfat rw,nosuid,nodev,uhelper=hal,uid=1000,utf8,shortname=mixed,flush 0 0
+
+pcmanfm
+    /dev/sdb1 /media/CREATIVE vfat rw,nosuid,nodev,uhelper=hal,shortname=mixed,uid=1000,utf8,umask=077 0 0
+
+[manual]
+
+iocharset=utf8
+
+[conclusion]
+
+    the key option is "utf8", which pcmanfm 0.5x provide, while pcmanfm 0.9x
+    does not.
+
+[dolphin & dolphin]
+
+    when moutting some removable device in dolphin, it will update /media/.hal-mtab
+
+
+    also, if some device is mounted by other app (such as pcmanfm), and you try to umount it in dolphin, you will probably encounter the erron info : "device not within /media/.hal-mtab, so it is not mounted by HAL"
+
+    clearly, currently dolphin rely on HAL in mount & unmount operation
+
+
+[ tip ]
+
+    /sys/block/<device>/removable    1 for removable
+
+[pmount]
+
+
+    --charset(pmount)  <-->  iocharset(mount)
+
+    within utf-8 locale, pmount will use "utf8" as the value of --charset
+
+
+

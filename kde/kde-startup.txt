@@ -1,0 +1,16 @@
+[archlinux]
+
+
+1.  /etc/rc.d/kdm start
+
+2.  /usr/bin/kdm
+
+3.  /bin/sh /usr/share/config/kdm/Xsession /usr/bin/startkde
+
+    ~/.bash_profile is sourced here
+
+4. /usr/bin/startkde
+
+
+[kde4-config]
+    kde4-config --types

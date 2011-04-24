@@ -1,0 +1,18 @@
+[problem of windows title]
+
+~/code/mplayer/mplayer.c:3121
+
+    if(filename) {
+	mp_msg(MSGT_CPLAYER, MSGL_INFO, MSGTR_Playing,
+		filename_recode(filename));
+        if(use_filename_title && vo_wintitle == NULL)
+            vo_wintitle = strdup ( mp_basename2 (filename));
+    }
+
+mp_basename2 is a macro, which simply extract the part before extension in the filename
+
+char * filename;
+char * vo_wintitle ;
+
+key problem:  all those type is ASCII-oriented, but not Unicode-oriented.
+

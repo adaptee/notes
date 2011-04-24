@@ -1,0 +1,29 @@
+[sys]
+
+    sys.getdefaultencoding()    Return current default string encoding used by the Unicode implementation.
+                                default of default is 'ascii' in standard python intrepreter
+
+    sys.setdefaultencoding()    change the above default value
+
+    sys.getfilesystemencoding()  Return the encoding used to convert Unicode filenames in operating system filenames.
+                                 used in os.listdir()
+
+    sys.stdin.encoding          controleed by sys.setdefaultencoding() ?
+
+[locale]
+
+    locale.getlocale()              current locale
+    locale.getdefaultlocale()       default locale
+    locale.getpreferredencoding()
+
+[filename]
+
+    When opening a file for reading or writing, you can usually just provide the Unicode string as the filename, and it will be automatically converted to the right encoding for you.
+
+    Functions in the os module such as os.stat() will also accept Unicode filenames.
+
+    os.listdir(), which returns filenames, raises an issue: should it return the Unicode version of filenames, or should it return 8-bit strings containing the encoded versions?
+
+    os.listdir() will do both, depending on whether you provided the directory path as an 8-bit string or a Unicode string. If you pass a Unicode string as the path, filenames will be decoded using the filesystem's encoding and a list of Unicode strings will be returned, while passing an 8-bit path will return the 8-bit versions of the filenames
+
+

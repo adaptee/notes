@@ -1,0 +1,13 @@
+
+[wireless-at-home]
+user: nku
+pass: nkgk305
+key: 19830427
+
+[laptop]
+
+F8H57SG
+
+Intel(R) Core(TM)2 Duo CPU     T5750  @ 2.00GHz
+
+nvidia GeForce 9300M G

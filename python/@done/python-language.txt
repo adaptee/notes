@@ -1,0 +1,520 @@
+[Chp2. Lexical analysis]
+
+    Python uses 7-bit ASCII character set for program text.
+
+    An encoding declaration can be used to indicate that string literals and comments use an encoding different from ASCII.
+
+2.1.4. Encoding declarations
+
+    String literals are converted to Unicode for syntactical analysis, then converted back to their original encoding before interpretation starts.
+
+2.1.5. Explicit line joining
+
+    using trailing backslash '\'
+
+2.1.6. Implicit line joining
+
+    Expressions in (), [ ] or { } can be split over more than one physical line without using backslashes.
+
+    triple-quoted strings also support implicit line joining
+
+2.3.1 Keywords
+
+    None became a constant and is now recognized by the compiler as a name for the built-in object None.
+
+2.3.2. Reserved classes of identifiers
+
+    _       In interactive mode, store the result of previous evaluation.
+            In non-interactive mode, has no special meaning. In practice, it is often used by gettext module.
+
+    _*      Not imported by from module import *
+
+    __*
+
+        Class-private names. Names in this category, when used within the context of a class definition, are re-written to use a mangled form to help avoid name clashes between "private" attributes of base and derived classes
+
+
+    __*__   System-defined names.
+
+2.4.1. String literals
+
+    prefix 'b' is the opposite of prefix 'u'; however, it is only meaningful in python 3k.
+
+    Unlike Standard C, all unrecognized escape sequences are left in the string unchanged, i.e., the backslash is left in the string.
+
+    r"\" is not a valid string literal (even a raw string cannot end in an odd number of backslashes). Specifically, a raw string cannot end in a single backslash (since the backslash would escape the following quote character).
+
+2.4.2. String literal concatenation
+
+    Multiple adjacent string literals (delimited by whitespace), possibly using different quoting conventions, are allowed, and their meaning is the same as their concatenation.;
+
+2.4.6. Imaginary literals
+
+    3.14j
+
+2.6. Delimiters
+
+    '...' has a special meaning as an ellipsis in slices.
+
+
+
+[Chp 3. Data model]
+
+    Objects are Python's abstraction for data. All data in a Python program is represented by objects or by relations between objects.
+
+    In a sense, and in conformance to Von Neumann's model of a "stored program computer", code is also represented by objects
+
+3.1 Objects、 values and types
+
+    Every object has an identity, a type and a value
+
+    An object's identity never changes once it has been created; you may think of it as the object's address in memory.The 'is' operator compares the identity of two objects; the id() function returns an integer representing its identity (currently implemented as its address).
+
+    An object's type is also unchangeable. type() returns an object's type (which is an object itself).
+
+    The value of some objects can change. An object's mutability is determined by its type;
+
+    CPython implementation detail: CPython currently uses a reference-counting scheme with (optional) delayed detection of cyclically linked garbage, which collects most objects as soon as they become unreachable, but is not guaranteed to collect garbage containing circular references.
+
+    Some objects contain references to "external" resources such as open files or windows. It is understood that these resources are freed when the object is garbage-collected, but since garbage collection is not guaranteed to happen, such objects also provide an explicit way to release the external resource, usually a close() method. Programs are strongly recommended to explicitly close such objects. The 'try...finally' statement provides a convenient way to do this.
+
+    Some objects contain references to other objects; these are called containers. Examples of containers are tuples, lists and dictionaries. The references are parts of a container's value. In most cases, when we talk about the value of a container, we imply the values, not the identities of the contained objects; however, when we talk about the mutability of a container, only the identities of the immediately contained objects are implied. So, if an immutable container (like a tuple) contains a reference to a mutable object, its value changes if that mutable object is changed.
+
+    Types affect almost all aspects of object behavior. Even the importance of object identity is affected in some sense: for immutable types, operations that compute new values may actually return a reference to any existing object with the same type and value, while for mutable objects this is not allowed. E.g., after a = 1; b = 1, a and b may or may not refer to the same object with the value one, depending on the implementation, but after c = []; d = [], c and d are guaranteed to refer to two different, unique, newly created empty lists. (Note that c = d = [] assigns the same object to both c and d.)
+
+
+3.2. The standard type hierarchy
+
+    Python distinguishes between integers, floating point numbers, and complex numbers:
+
+    The Boolean type is a subtype of plain integers, and Boolean values behave like the values 0 and 1, respectively, in almost all contexts, the exception being that when converted to a string, strings "False" or "True" are returned, respectively.
+
+    Some sequences also support "extended slicing" with a third "step" parameter: a[i:j:k] selects all items of a with index x where x = i + n*k, n >= 0 and i <= x < j.
+
+    chr(), unichr() and ord()
+
+    A bytearray object is a mutable array. They are created by the built-in bytearray() . Aside from being mutable (and hence unhashable), byte arrays otherwise provide the same interface and functionality as immutable bytes objects.
+
+
+    set is a container for unordered, finite sets of unique, immutable objects. You can't put a list into set, because list is mutable.
+
+    There are currently two intrinsic set types:
+
+    Sets            which means set itself is mutable. created by set()
+    Frozen Sets     which means set itself is immutable. created by frozenset()
+
+3.2.2  Callable  Types
+
+    Callables are the types to which the call operation can be applied:
+
+[user defined function]
+
+    f.func_name  == f.__name__
+    f.func_doc   == f.__doc__
+
+    f.func_defaults      a tuple containing default argument values.
+
+    f.func_code          a code object represent the compiled byte codes of the function body
+    f.func_closure       a tuple of cells that contain bindings for the function's free variables
+    f.func_globals       refer to the namespace this function resides in
+
+
+    Function objects also support getting and setting arbitrary attributes, which can be used, for example, to attach metadata to functions.
+    Note: current implementation only supports function attributes on user-defined functions. Function attributes on built-in functions may be supported in the future.
+
+    Additional information about a function's definition can be retrieved from its code object;
+
+[generator function]
+
+    A function or method which uses the yield statement is called a generator function.
+
+[User-defined methods]
+
+[Built-in functions]
+
+    A built-in function object is a wrapper around a C function. Examples of built-in functions are len().
+
+[class ]
+
+    When a new-style class is called, the arguments of the call are passed to __new__() and, in the typical case, to __init__() to initialize the new instance.
+
+    Class instances are callable only when the class has a __call__() method.
+
+[module]
+
+    A module object has a namespace implemented by a dictionary object (this is the dictionary referenced by the func_globals attribute of functions defined in the module). Attribute references are translated to lookups in this dictionary, e.g., m.x is equivalent to m.__dict__["x"].
+
+    A module object does not contain the code object used to initialize the module (since it isn't needed once the initialization is done).
+
+[class]
+
+    A class has a namespace implemented by a dictionary object. Class attribute references are translated to lookups in this dictionary, e.g., C.x is translated to C.__dict__["x"] (although for new-style classes in particular there are a number of hooks which allow for other means of locating attributes).
+
+3.3. New-style and classic classes
+
+    The concept of classic class is unrelated to the concept of type: if x is an instance of an classic class, then x.__class__ designates the class of x, but type(x) is always <type 'instance'>. This reflects the fact that all classic instances are implemented with a single built-in type, called instance.
+
+    New-style classes were introduced in Python 2.2 to unify classes and types. A new-style class is neither more nor less than a user-defined type. If x is an instance of a new-style class, then type(x) is typically the same as x.__class__ (although this is not guaranteed - a new-style class instance is permitted to override the value returned for x.__class__).
+
+    The major motivation for introducing new-style classes is to provide a unified object model with a full meta-model. It also has a number of practical benefits, like the ability to subclass most built-in types, or the introduction of "descriptors", which enable computed properties.
+
+    For compatibility reasons, classes are still classic by default. New-style classes are created by specifying another new-style class (i.e. a type) as a parent class, or the "top-level type" object if no other parent is needed.
+
+    classic classes are removed in Python 3.0, leaving only the semantics of new-style classes.
+
+3.4 Special method names
+
+    A class can implement certain operations that are invoked by special syntax (such as arithmetic operations or subscripting and slicing) by defining methods with special names. This is Python's approach to operator overloading.
+
+3.4.1 Baisc Customization
+
+object.__new__(cls[, ...])
+
+    called to create an instance of cls
+
+object.__init__(self[, ...]
+
+    called to initialize an instance, which has just been created by __new__
+
+object.__del__(self)
+
+    called when this object is to be destroyed.
+
+    del x doesn't directly call x.__del__() -- the former decrements the reference count for x by one, and the latter is called only when x's reference count reaches zero.
+
+object.__repr__(self)
+
+    Called by the repr() built-in function and by 'string conversions' (reverse quotes) to compute the "official" string representation of an object.
+
+    If at all possible, this should look like a valid Python expression that could be used to recreate an object with the same value
+
+    This is typically used for debugging, so it is important that the representation is information-rich and unambiguous.
+
+    If a class defines __repr__() but not __str__(), then __repr__() is also used when an "informal" string representation of instances of that class is required.
+
+object.__str__(self)
+
+    Called by the str() built-in function and by the print statement to compute the "informal" string representation of an object
+
+object.__unicode__(self)
+
+    Called to implement unicode() built-in; should return a Unicode object. When this method is not defined, string conversion is attempted, and the result of string conversion is converted to Unicode using the system default encoding
+
+
+object.__lt__(self, other)
+object.__le__(self, other)
+object.__eq__(self, other)
+object.__ne__(self, other)
+object.__gt__(self, other)
+object.__ge__(self, other)
+
+
+    "rich comparison" methods, called for comparison operators in preference to __cmp__()
+
+    There are no implied relationships among the comparison operators.
+
+    To automatically generate ordering operations from a single root operation, see functools.total_ordering().
+
+object.__cmp__(self, other)
+
+    Called by comparison operations if rich comparison (see above) is not defined. If no __cmp__(), __eq__() or __ne__() operation is defined, class instances are compared by object identity ("address").
+
+object.__hash__(self)
+
+    Called by built-in function hash() and for operations on members of hashed collections including set, frozenset, and dict.
+
+    The only requirement:  objects which compare equal have the same hash value;
+
+    User-defined classes have __cmp__() and __hash__() methods by default; with them, all objects compare unequal (except with themselves) and x.__hash__() returns id(x)
+
+object.__nonzero__(self)
+
+    Called to implement truth value testing and the built-in operation bool(); should return False or True, or their integer equivalents 0 or 1.
+
+    When this method is not defined, __len__() is called, if it is defined, and the object is considered true if its result is nonzero.
+
+    If a class defines neither __len__() nor __nonzero__(), all its instances are considered true.
+
+3.4.2. Customizing attribute access
+
+object.__getattr__(self, name)
+
+    Called when an attribute lookup has not found the attribute in the usual places (i.e. it is not an instance attribute nor is it found in the class tree for self). This method should return the (computed) attribute value or raise an AttributeError exception.
+
+    Note that if the attribute is found through the normal mechanism, __getattr__() is not called. (This is an intentional asymmetry between __getattr__() and __setattr__().) This is done both for efficiency reasons and because otherwise __getattr__() would have no way to access other attributes of the instance.)
+
+object.__setattr__(self, name, value)
+
+    Called when an attribute assignment is attempted. This is called instead of the normal mechanism.
+
+    If __setattr__() wants to assign to an instance attribute, it should not simply execute self.name = value -- this would cause a recursive call to itself. Instead, it should insert the value in the dictionary of instance attributes, e.g., self.__dict__[name] = value. For new-style classes, rather than accessing the instance dictionary, it should call the base class method with the same name, for example, object.__setattr__(self, name, value).
+
+object.__delattr__(self, name)
+
+    Like __setattr__() but for attribute deletion instead of assignment. This should only be implemented if del obj.name is meaningful for the object
+
+
+object.__getattribute__(self, name) (new-style clas only)
+
+    Called unconditionally to implement attribute accesses for instances of the class.
+
+3.4.2.2. Implementing Descriptors
+
+    Descriptors can only be implemented as new-style classes themselves.
+
+    The following methods only apply when an instance of the class containing the method (a so-called descriptor class) appears in the class dictionary of another new-style class (a so-called owner class）.
+
+    object.__get__(self, instance, owner)
+    object.__set__(self, instance, value)
+    object.__delete__(self, instance)
+
+3.4.2.3. Invoking Descriptors
+
+    Python methods (including staticmethod() and classmethod()) are implemented as non-data descriptors. Accordingly, instances can redefine and override methods. This allows individual instances to acquire behaviors that differ from other instances of the same class.
+
+    The property() function is implemented as a data descriptor. Accordingly, instances cannot override the behavior of a property.
+
+
+    For example:
+
+    class Foo(object):
+        @property
+        def p(self):
+            return 'p'
+
+    In [5]: f = F()
+
+    In [6]: f.p
+    Out[6]: 'p'
+
+    In [7]: f.p = 'P'
+    ---------------------------------------------------------------------------
+    AttributeError: can't set attribute
+
+    In [8]: f.__dict__['p'] = 'P'
+
+    In [9]: f.p
+    out[9]: 'p'
+
+
+3.4.2.4. __slots__
+
+    By default, instances of both old and new-style classes have a dictionary for attribute storage. This wastes space for objects having very few instance variables. The space consumption can become acute when creating large numbers of instances.
+
+    The default can be overridden by defining __slots__ in a new-style class definition. The __slots__ declaration takes a sequence of instance variables and reserves just enough space in each instance to hold a value for each variable. Space is saved because __dict__ is not created for each instance.
+
+3.4.3. Customizing class creation
+
+    By default, new-style classes are constructed using type(). A class definition is read into a separate namespace and the value of class name is bound to the result of type(name, bases, dict).
+
+    When the class definition is read, if __metaclass__ is defined then the callable assigned to it will be called instead of type(). This allows classes or functions to be written which monitor or alter the class creation process:
+
+    * Modifying the class dictionary prior to the class being created.
+    * Returning an instance of another class - essentially performing the role of a factory function.
+
+    These steps will have to be performed in the metaclass's __new__() method - type.__new__() can then be called from this method to create a class with different properties.
+
+3.4.4. Customizing instance and subclass checks
+
+    The following methods are used to override the default behavior of the isinstance() and issubclass() built-in functions:
+
+    class.__instancecheck__(self, instance)
+
+    class.__subclasscheck__(self, subclass)
+
+    Note that these methods are looked up on the type (metaclass) of a class. They cannot be defined as class methods in the actual class. This is consistent with the lookup of special methods that are called on instances, only in this case the instance is itself a class
+
+3.4.5. Emulating callable objects
+
+    object.__call__(self[, args...])
+
+    Called when the instance is "called" as a function; if this method is defined, x(arg1, arg2, ...) is a shorthand for x.__call__(arg1, arg2, ...)
+
+3.4.6. Emulating container types
+
+    object.__len__(self)
+        Called to implement the built-in function len().
+
+    object.__getitem__(self, key)
+        Called to implement evaluation of self[key].
+        For sequence types, the accepted keys should be integers and slice objects. Note that the special interpretation of negative indexes (if the class wishes to emulate a sequence type) is up to the __getitem__() method.
+        For mapping types, if key is missing (not in the container), KeyError should be raised.
+
+    object.__setitem__(self, key, value)
+        Called to implement assignment to self[key].
+
+    object.__delitem__(self, key)
+        Called to implement deletion of self[key].
+
+    object.__iter__(self)
+        This method is called when an iterator is required for a container.This method should return a new iterator object that can iterate over all the objects in the container.
+        Iterator objects also need to implement this method; they are required to return themselves.
+
+    object.__reversed__(self)
+        Called (if present) by the reversed() built-in to implement reverse iteration. It should return a new iterator object that iterates over all the objects in the container in reverse order.
+        If the __reversed__() method is not provided, the reversed() built-in will fall back to using the sequence protocol (__len__() and __getitem__()).
+
+    object.__contains__(self, item)
+        Called to implement membership test operators.
+        For objects that don't define __contains__(), the membership test first tries iteration via __iter__(), then the old sequence iteration protocol via __getitem__(),
+
+3.4.8. Emulating numeric types
+
+    object.__coerce__(self, other)
+        Called to implement "mixed-mode" numeric arithmetic. Should either return a 2-tuple containing self and other converted to a common numeric type, or None if conversion is impossible
+
+3.4.9. Coercion rules
+
+    In Python 3.0, coercion will not be supported.
+
+    It is no longer recommended to define a coercion operation.
+
+    For most intents and purposes, an operator that returns NotImplemented is treated the same as one that is not implemented at all.
+
+    In x + y, if x is a sequence that implements 'sequence concatenation', sequence concatenation is invoked.
+#
+
+    In x * y, if one operator is a sequence that implements 'sequence repetition', and the other is an integer (int or long), sequence repetition is invoked.
+
+
+3.4.10. With Statement Context Managers
+
+    Typical uses of context managers include saving and restoring various kinds of global state, locking and unlocking resources, closing opened files, etc.
+
+    object.__enter__(self)
+        Enter the runtime context related to this object. The with statement will bind this method's return value to the target(s) specified in the as clause of the statement, if any.
+
+    object.__exit__(self, exc_type, exc_value, traceback)
+        Exit the runtime context related to this object. The parameters describe the exception that caused the context to be exited. If the context was exited without an exception, all three arguments will be None.
+
+    If an exception is supplied, and the method wishes to suppress the exception (i.e., prevent it from being propagated), it should return a true value. Otherwise, the exception will be processed normally upon exit from this method.
+
+    Note that __exit__() methods should not reraise the passed-in exception; this is the caller's responsibility.
+
+3.4.11. Special method lookup for old-style classes
+
+    For old-style classes, special methods are always looked up in exactly the same way as any other method or attribute.
+
+3.4.12. Special method lookup for new-style classes
+
+    For new-style classes, implicit invocations of special methods are only guaranteed to work correctly if defined on an object's type, not in the object's instance dictionary.
+
+4. Execution model
+
+4.1. Naming and binding
+
+    A block is a piece of Python program text that is executed as a unit.
+
+    The following are blocks:
+
+        a module, a function body, and a class definition.
+        A script file is a block
+        Each command typed interactively is a block.
+        The file read by execfile() is a code block.
+        The string argument passed eval() and to exec statement is a code block.
+        The expression read and evaluated by input() is a code block.
+
+    A code block is executed in an execution frame.
+
+    If the definition occurs in a function/module block, the scope extends to any blocks contained within the defining one, unless a contained block introduces a different binding for the name.
+
+    If the definition occurs in a class block, the scope is 'limited' to the class block; it does 'not extend' to the code blocks of methods - this includes generator expressions since they are implemented using a function scope.
+
+    Names defined at the class scope are not visible in methods.
+
+    If a name is bound in a block, it is a local variable .
+    If a name is bound at the module level, it is a global variable.
+    If a variable is used in a code block but not defined there, it is a free variable.
+
+    When a name is not found at all, a 'NameError' exception is raised.
+
+    If the name refers to a local variable that has not been bound, a 'UnboundLocalError' exception is raised.
+
+    It is illegal to unbind a name that is referenced by an enclosing scope; the compiler will report a 'SyntaxError'.
+
+    If the global statement occurs within a block, all uses of the name refer to the binding of that name in the top-level namespace. Names are resolved in the top-level namespace by searching the global namespace, then the builtins namespace.
+
+    The eval(), execfile(), and input() functions and the exec statement do not have access to the full environment for resolving names. Free variables are not resolved in the nearest enclosing namespace, but in the global namespace.
+
+4.2 Exceptions
+
+    Python uses the "termination" model of error handling: an exception handler can find out what happened and continue execution at an outer level, but it cannot repair the cause of the error and retry the failing operation (except by re-entering the offending piece of code from the top).
+
+5. Expressions
+
+5.2.3. Parenthesized forms
+    A parenthesized form is an optional expression list enclosed in parentheses:
+
+    Note: tuples are NOT created by the parentheses, but rather by use of commas.
+
+    The exception is the empty tuple, for which parentheses are required.
+
+5.6. Binary arithmetic operations
+
+    The * (multiplication) operator yields the product of its arguments. The arguments must either both be numbers, or one argument must be an integer (plain or long) and the other must be a sequence. In the former case, the numbers are converted to a common type and then multiplied together. In the latter case, sequence repetition is performed; a negative repetition factor yields an empty sequence.
+
+
+6. Simple statements
+
+6.4. The pass statement
+
+    pass is a null operation -- when it is executed, nothing happens. It is useful as a placeholder when a statement is required syntactically, but no code needs to be executed
+
+
+6.6. The print statement
+
+    A '\n' character is written at the end, unless the print statement ends with a comma.
+
+    print also has an extended form, which is sometimes referred as "print chevron.". In this form, the first expression after the >> must evaluate to a "file-like" object, specifically an object that has a write() method.
+
+
+6.12. The import statement
+
+    Import statements are executed in two steps:
+
+    (1) find a module, and initialize it if necessary;
+    (2) define a name or names in the local namespace.
+
+    To understand how step (1) occurs, one must first understand how Python handles hierarchical naming of modules.
+
+    To help organize modules and provide a hierarchy in naming, Python has a concept of packages. A package can contain other packages and modules while modules cannot contain other modules or packages.
+
+    From a file system perspective, packages are directories and modules are files.
+
+    Once the name of the module is known (unless otherwise specified, the term "module" will refer to both packages and modules), searching for the module or package can begin. The first place checked is sys.modules, the cache of all modules that have been imported previously.
+
+    If no finder can find the module then ImportError is raised. Otherwise some finder returned a loader whose load_module() method is called with the name of the module to load.
+
+    The loader must set several attributes on the module: __name__, __file__, __path__(for package only), __package__(if contained in a package)
+
+    The first form of import statement binds the module name in the local namespace to the module object.If the module name is followed by as, the name following as is used as the local name for the module.
+
+    The from form does not bind the module name: it goes through the list of identifiers, looks each one of them up in the module found in step (1), and binds the name in the local namespace to the object thus found.
+
+    In the form of 'from xxx inmpot *', all public names defined in the module are bound in the local namespace of the import statement..
+
+    The public names defined by a module are determined by checking the module's namespace for a variable named __all__; if defined, it must be a sequence of strings which are names defined or imported by that module. If __all__ is not defined, the set of public names includes all names found in the module's namespace which do not begin with an underscore character ('_').
+
+    __all__ should contain the entire public API. It is intended to avoid accidentally exporting items that are not part of the API (such as library modules which were imported and used within the module).
+
+    When specifying what module to import you do not have to specify the absolute name of the module. By using leading dots in the specified module or package after from you can specify how high to traverse up the current package hierarchy without specifying exact names.
+
+
+    importlib.import_module() is provided to support applications that determine which modules need to be loaded dynamically.
+
+6.13. The global statement
+
+    The global statement is a declaration which holds for the entire current code block. It means that the listed identifiers are to be interpreted as globals. It would be impossible to assign to a global variable without global.
+
+6.14. The exec statement
+
+    This statement supports dynamic execution of Python code. The first expression should evaluate to either a string, an open file object, or a code object.
+
+    dynamic evaluation of expressions is supported by the built-in function eval(). The built-in functions globals() and locals() return the current global and local dictionary, respectively, which may be useful to pass around for use by exec.
+
+    the parser only accepts the Unix-style end of line convention. If you are reading the code from a file, make sure to use universal newline mode to convert Windows or Mac-style newlines.
+
+
+8. Top-level components
+
+    A complete Python program is executed in a minimally initialized environment: all built-in and standard modules are available, but none have been initialized, except for sys (various system services), __builtin__ (built-in functions, exceptions and None) and __main__. The latter is used to provide the local and global namespace for execution of the complete program.

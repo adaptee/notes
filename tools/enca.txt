@@ -1,0 +1,20 @@
+enca
+
+output mode
+
+    -i  iconv name
+
+    -r  rfc name
+
+    -m  mime-type name
+
+    -s
+
+guessing
+
+    -L lang
+
+
+[wget]
+
+-b goto background

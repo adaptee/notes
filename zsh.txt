@@ -1,0 +1,351 @@
+[zsh-user-guide]
+
+2.1 Types of shell
+    interactive-shell     :     read command from terminal and execute it, then loop again
+    non-interactive-shell :     read commands from file and execute them, then exit
+
+    login-shell           :     "-zsh"
+
+    login-shell does not have to be interactive!
+    Typical example : startup script of desktop environment will create a non-interactive login shell.
+
+    [[ -o login]]           login shell?
+    [[ -o interactive]]     interactive shell?
+
+2.2 All the startup files
+
+    zshenv(alwasy) => zprofile(login) => zshrc(interactive) => zlogin(login)
+
+    First Law of Zsh Administration: put as little as possible in /etc/zshenv .
+
+    rule of thumb : put as many options as possible into ~/.zshrc, and transfer them to ~/.zshenv only when has to.
+
+
+2.4.1 Arrays
+
+    KSH_ARRAYS (dangerous options) : a lot of zsh users write functions and scripts assuming it is not set
+
+    when KSH_ARRAYS is set, array is indexed from 0 ; else, indexed from 1
+
+2.5 What to put in your startup files
+
+    SH_WORD_SPLIT
+
+    autoload & fpath
+
+    local_options
+    local_traps
+
+    "print -P" can be used to test various percentage escape available in prompt.
+
+    named directory
+
+    global alias
+
+    .zshenv is the safest place to export environment variables
+
+    path    <==> $PATH
+    manpath <==> $MANPATH
+
+    export -TU <PATH> <path>
+
+    autoload is-at-least
+    is-at-least <version>
+
+3.2 Builtin commands
+
+    "print -z"      put arguments onto cmdline editing stack
+
+    In zsh, all but the rightest portion of the pipeline thus created is run in subshell.
+    In many other shells, the leftest hand of the pipeline is the only one that runs in the parent shell.
+
+    zsh tries to keep track of where you think you are, rather than where the system does.
+
+    disable & enable : disabe/enable built-ins, aliases, functions,
+
+    Associative arrays : "typeset -A xxx"
+    special expansion : (k) & (kv), (t)
+
+    2 precommand modifier: exec & noglob
+
+
+    [[ -t <fd> ]]   is fd associated with terminal
+
+    'vared'     useful builtin for editing variables ( variable edit)
+
+3.3 Functions
+
+    "$*" vs "$@"
+
+3.4 Aliases
+
+    aliases whose definitions end with a space force the next word along to be looked up as a possible alias, too.
+
+
+3.5 Command summary
+
+    alias => function => builtin => external
+
+3.6  Expansion and Quoting
+
+    command substitution : $(command)  `command`   ; only about replacing it with its stdout.
+
+    process substitution : <(process) >(process)  =(process) ; the underlying core is returning a named PIPE
+
+    Writing to a named PIPE will be blocked until someone read that named PIPE.
+
+    arithmetic substitution : $(( ... ))
+
+    =command    : expand to the fullpath of the command
+
+    **  match any pathname of any depth
+
+3.7 Redirection: greater-thans and less-thans
+
+    pipe is opened before the other redirection.
+
+    |&  redirect stderr to a pipe
+
+    redirections can occur anywhere on the command line, not just at the end.
+
+    $ >file echo foo
+
+    here document vs here string
+
+    Tip: exec > <file>   # redirect stdout permanently in this session or script.
+
+    Multios are most useful as a shorthand in interactive use; in a script or function it is safer to use 'tee' .
+
+    'repeat' :  repeat command for N times.
+
+    ( commands ;)   run in subshell, which is almost identical to main shell
+    { commands ;}   run in main shell
+
+4.1 Introducing zle
+
+    zle is a integral part of zsh, not a separate library.
+
+    Normal keys which correspond to printable characters are usually bound to 'self-insert'
+
+    Using the '-m' option to bindkey tells zsh that wherever it binds an escape sequence like '\eb', it should also bind the corresponding meta sequence like '\M-b'
+
+4.2 Basic editing
+
+    Backspace : ^h (PC keyboard), ^? (Unix Keyword)   : deletting the char on the left of cursor
+    Delete    : \e[3~  : delete the char under cursor
+
+4.3 Fancier editing
+
+4.4 History and searching
+
+4.5 Binding keys and handling keymaps
+
+    bindkey -r  : removing bindings
+    bindkey -pr : removing all bindins with specifed prefix
+
+    Tip: get the string sequence produced by Function Key Fn
+         in zsh/bash, press <C-v>, then press F1
+
+4.6 Advanced editing
+
+    \r  0x0D  ^M    CR(carriage return)         'ENTER'
+    \n  0x0A  ^J    LF(linefeed)                '?????'
+
+    historically, UNIX terminal drivers like to swap newline and carriage return,
+
+    When you press the 'ENTER' key, it produces '\r'; but the shell will read in a '\n', because terminal driver has change it into '\n' implicitly. Right?
+
+    'push-line-or-edit'     pushing current buffer onto buffer stack
+
+4.7 Extending zle
+
+    'widgit' is just a more specific name for editing-command of zle
+
+    zle -N widget-name function-name    # create new widget
+    zle -lL     # list all widgets
+
+    prefix '.' can be used to refer to the builtin widget safely.
+
+    BUFFER, LBUFFER, RBUFFER, CURSOR
+
+6.1 Completion and expansion
+
+    By default, <TAB> is bounded to expand-or-complete, which will first perform expansion, then perform completion.
+
+    complete-word
+    expand-or-complete-prefix
+
+    menu-complete
+    menu-expand-or-complete
+    reverse-menu-complete
+    menu-selet
+
+6.2 Configuring completion using shell options
+
+    The main entry point for completion chosen by context( preesing <TAB>) is function _main_complete
+
+    array $compstate provides the possibility of controlling completion in much detail.
+
+6.2.3 Menu completion and menu selection
+
+    'menu selection' is similar to 'menu completion', except it allow to move cursor around candicates to select one.
+    It is provided by zsh/complist
+
+    menu selection is an addition to menu completion, not a replacement
+
+    'accept-and-infer-next-history'
+
+6.2.5 Changing the way completions are displayed
+
+    LIST_TYPES
+    LIST_PACKED
+    LIST_ROWS_FIRST
+
+
+6.3 Getting started with new completion
+
+    Associative array $_comps records the mapping from command to its completion function.
+
+    '-default-' context and function _default
+
+6.4 How the shell finds the right completions
+
+    the full form of a context:  :completion:<func>:<completer>:<command>:<argument>:<tag>
+
+    Most elements of contexts tell you how completion arrived at this point, but the tags describe the things it can complete here.
+
+    style is just a kind of special shell variable/parameter.
+
+    Where styles differ from parameters is that they can take different values in different contexts.
+
+    The first argument to the 'zstyle'  specifies a context for which this style is defined.
+
+
+6.5 Configuring completion using styles
+
+    'zstyle -L'     list all existing styles
+
+    'zstyle -e'     eval at run time
+
+6.5.1 Specifying completers and their options
+
+    'completer' style
+
+6.5.2 Changing the format of listings
+
+    'format'
+    'group-name'
+    'group-order'
+    'tag-order'
+    'auto-description'
+    'list-colors'
+    'ignored-patterns'
+    'list-packed'
+    'list-rows-first'
+    'accept-exact'
+    'last-prompt'
+    'menu'
+
+6.6 Command widgets
+
+    _generic    this widget gives you a way of creating your own special completions.
+
+6.7 Matching control and controlling where things are inserted
+
+6.8. tutorial
+
+[problem]
+
+*. completion does not work for "git df" (df is alias for difftool)
+                                 "git difftool"
+
+* completion does not work with alias with the same name :
+    for example : alias yaourt='yaourt --noconfirm'
+
+*  hooks: chpwd, precmd, preexec, periodic
+
+[zshcontrib]
+* zkbd
+* select-word-style
+* smart-insert-last-word
+* zmv zcp
+
+vi-oper-swap-case
+
+[zsh-lovers]
+
+COMPLETION
+    See also man 1 zshcompctl zshcompsys zshcompwid. zshcompctl is the old style of zsh programmable completion,
+    zshcompsys is the new completion system, zshcompwid are the zsh completion widgets.
+
+    Some functions, like _apt and _dpkg, are very slow. You can use a cache in order to proxy the list of results (like
+    the list of available debian packages) Use a cache:
+
+        zstyle ':completion:*' use-cache on
+        zstyle ':completion:*' cache-path ~/.zsh/cache
+
+       For migrating your bashprompt to zsh use the script bash2zshprompt located in the zsh source distribution under
+       Misc.
+
+
+[FAQ]
+
+3.1: Why does $var where var="foo bar" not do what I expect?
+
+In most Bourne-shell derivatives, multiple-word variables such as
+
+    var="foo bar"
+
+
+are split into words when passed to a command or used in a for foo in $var loop. By default, zsh does not have that behaviour: the variable remains intact. (This is not a bug! See below.) The option SH_WORD_SPLIT exists to provide compatibility.
+
+
+3.2: In which startup file do I put...?
+
+When zsh starts up, there are four files you can change which it will run under various circumstances: .zshenv, .zprofile, .zshrc and .zlogin.
+
+The order in which the four files are searched (none of them need to exist) is the one just given. However, .zprofile and .zlogin are only run when the shell is a login shell --- when you first login, of course, and whenever you start zsh with the -l option. All login shells are interactive. The order is the only difference between those; you should decide whether you need things set before or after .zshrc.
+
+The only file you can alter which is started with every zsh (unless you use the -f option) is .zshenv, so this is a good place to put things you want even if the shell is non-interactive: options for changing the syntax, like EXTENDED_GLOB, any changes to set with limit, any more variables you want to make sure are set as for example $fpath to find functions. You almost certainly do not want .zshenv to produce any output.
+
+Finally, .zshrc is run for every interactive shell; that includes login shells, but also any other time you start up a shell, such as simply by typing zsh or opening a new terminal emulator window. This file is the place to change the editing behaviour via options or bindkey, control how your history is saved, set aliases unless you want to use them in scripts too, and for any other clutter which can't be exported but you only use when interacting directly with the shell. You probably don't want .zshrc to produce output, either, since there are occasions when this can be a problem, such as when using rsh from another host.
+
+
+3.4: How do I turn off spelling correction/globbing for a single command?
+
+In the first case, you presumably have setopt correctall in an initialisation file, so that zsh checks the spelling of each word in the command line. You probably do not want this behaviour for commands which do not operate on existing files.
+
+The answer is to alias the offending command to itself with nocorrect stuck on the front, e.g.
+
+    alias mkdir='nocorrect mkdir'
+
+
+
+3.5: How do I get the Meta key to work on my xterm?
+
+The Meta key isn't present on a lot of keyboards, but on some the Alt key has the same effect. If a character is typed on the keyboard while the Meta key is held down, the characters is sent as terminal input with its eighth bit set. For example, ASCII A, hex 65, becomes hex E5. This is sometimes used to provide extra editing commands.
+
+As stated in the manual, zsh needs to be told about the Meta key by using bindkey -me or bindkey -mv in your .zshrc or on the command line. You probably also need to tell the terminal driver to allow the `Meta' bit of the character through; stty pass8 is the usual incantation. Sample .zshrc entry:
+
+    [[ $TERM = "xterm" ]] && stty pass8 && bindkey -me
+
+
+or, on SYSVR4-ish systems without pass8,
+
+    [[ $TERM = "xterm" ]] && stty -parenb -istrip cs8 && bindkey -me
+
+
+(disable parity detection, don't strip high bit, use 8-bit characters). Make sure this comes before any bindkey entries in your .zshrc which redefine keys normally defined in the emacs/vi keymap. You may also need to set the eightBitOutput resource in your ~/.Xdefaults file, although this is on by default and it's unlikely anybody will have tinkered with it.
+
+You don't need the bindkey to be able to define your own sequences with the Meta key, though you still need the stty.
+
+If you are using multibyte input directly from the keyboard you probably don't want to use this feature since the eighth bit in each byte is used to indicate a part of a multibyte character. See chapter 5.
+
+3.13: How do I get a newline in my prompt?
+
+You can place a literal newline in quotes, i.e.
+
+    PROMPT="Hi Joe,
+    what now?%# "
+
+

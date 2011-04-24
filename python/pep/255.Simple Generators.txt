@@ -1,0 +1,31 @@
+generator related PEPs:
+
+255. Simple Generators
+289. Generator Expressions
+342. Coroutines via Enhanced Generators
+
+[PEP 255 Simple Generators]
+
+The yield statement may only be used inside functions. A function that
+contains a yield statement is called a 'generator function'.
+
+When a generator function is called, the actual arguments are bound
+to function-local formal argument names in the usual way, but no code
+in the body of the function is executed. Instead a 'generator object'
+is returned; this generator object 'conforms to the iterator protocol' so in
+particular can be used in for-loops in a natural way.
+
+Each time the next() method of a generator-iterator is invoked, the
+code in the body of the generator-function is executed until a yield or
+return statement (see below) is encountered, or until the end of the
+body is reached.
+
+A generator function can also contain return statements of the form:
+"return", which can't have arguements.
+
+When a return statement is encountered, control proceeds as in any
+function return, executing the appropriate finally clauses (if any
+exist). Then a 'StopIteration' exception is raised, signalling that the
+iterator is exhausted. A StopIteration exception is also raised if
+control flows off the end of the generator without an explict return.
+

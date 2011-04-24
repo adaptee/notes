@@ -1,0 +1,23 @@
+ffmpeg [infile options] <-i infile> [outfile option] <outfile>
+
+-target  one of the most useful option of ffmpeg; tell ffmpeg to do  what needed and expected to to
+
+-map     pickup the stream to use
+
+-acodec copy
+-vcodec copy
+
+-format     list supported container format
+-codecs     list supported codecs
+-f          force using specified container format
+
+-ss         starting point
+-t          duration
+
+
+-ab
+-ar
+-ac
+-an         no audio
+-vn         no video
+

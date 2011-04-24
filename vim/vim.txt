@@ -1,0 +1,63 @@
+
+pressing 'i' in normal mode:
+
+normal_cmd()        normal.c
+invoke_edit()       normal.c
+edit()              edit.c
+im_set_active       mbyte.c
+
+after pressing ESC in insert mode:
+
+ins_esc()         edit.c
+im_set_active()   mbyte.c
+xim_reset()       mbyte.c
+
+
+========================================
+
+remind (complicated)
+devtodo (looks good)
+task (complicated)
+doneyet ( just OK; weired when editing notes or names)
+tdl
+hiveremider
+tudu
+
+voom
+fugitive
+
+paster
+gist
+
+========================================
+
+yaourt -S vim-screen
+
+yaourt -S vim-protodef
+
+yaourt -S vim-timestamp
+yaourt -S vim-functionator
+
+yaourt -S vim-explorer ( by mingbai)
+
+yaourt -S vim-greputils
+
+yaourt -S vim-swapit
+
+yaourt -S vim-srcexpl
+yaourt -S vim-trinity
+
+
+----------------------------------------------
+
+
+==================================================
+
+yaourt -S vim-cuteerrormarker
+yaourt -S vim-javascriptlint
+
+yaourt -S vim-refactor
+yaourt -S vim-pep8
+yaourt -S vim-jpythonfold
+
+yaourt -S vim-autoclose

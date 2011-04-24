@@ -1,0 +1,116 @@
+[abstract base class]
+
+    abstract-base-classes complement duck-typing by providing a way to define interfaces when other techniques like hasattr() would be clumsy.
+
+    Python comes with many built-in ABCs for data structures (in the 'collections' module), numbers (in the 'numbers' module), and streams (in the 'io' module). You can create your own ABC with the abc module.
+
+[coercion]
+
+    The implicit conversion of an instance of one type to another during an operation which involves two arguments of the same type.
+
+    For example, int(3.15) converts the floating point number to the integer 3, but in 3+4.5, each argument is of a different type (one int, one float), and both must be converted to the same type before they can be added or it will raise a TypeError. Coercion between two operands can be performed with the coerce built-in function; thus, 3+4.5 is equivalent to calling operator.add(*coerce(3, 4.5)) and results in operator.add(3.0, 4.5). Without coercion, all arguments of even compatible types would have to be normalized to the same value by the programmer, e.g., float(3)+4.5 rather than just 3+4.5.
+
+[EAFP]
+
+    Easier to ask for forgiveness than permission.
+
+    This common Python coding style assumes the existence of valid keys or attributes and catches exceptions if the assumption proves false. This clean and fast style is 'characterized' by the presence of many try and except statements.
+
+    The technique contrasts with the 'LBYL' style common to many other languages such as C.
+
+
+[LBYL]
+
+    Look before you leap.
+
+    This coding style explicitly tests for pre-conditions before making calls or lookups.
+
+    This style contrasts with the EAFP approach and is 'characterized' by the presence of many if statements
+
+
+[expression]
+
+    A piece of syntax which can be evaluated to some value. In other words, an expression is an accumulation of expression elements like literals, names, attribute access, operators or function calls which all return a value.
+
+    In contrast to many other languages, not all language constructs are expressions.
+
+    There are also statements which cannot be used as expressions, such as if.
+
+    Assignments are also statements, not expressions.
+
+ [floor division]
+
+    Mathematical division that rounds down to nearest integer.
+
+    The floor division operator is //.
+
+    For example, the expression 11 // 4 evaluates to 2 in contrast to the 2.75 returned by float true division.
+
+    Note that (-11) // 4 is -3 because that is -2.75 rounded downward.
+
+[integer division]
+
+    also called as floor division.
+
+
+[GIL(global interpreter lock)]
+
+    The lock used by Python threads to assure that only one thread executes in the CPython virtual machine at a time. This simplifies the CPython implementation by assuring that no two processes can access the same memory at the same time. Locking the entire interpreter makes it easier for the interpreter to be multi-threaded, at the expense of much of the parallelism afforded by multi-processor machines. Efforts have been made in the past to create a "free-threaded" interpreter (one which locks shared data at a much finer granularity), but so far none have been successful because performance suffered in the common single-processor case.
+
+[hashable]
+
+    An object is hashable if it has a hash value which never changes during its lifetime (it needs a __hash__() method), and can be compared to other objects (it needs an __eq__() or __cmp__() method). Hashable objects which compare equal must have the same hash value.
+
+    Hashability makes an object usable as a dictionary key and a set member, because these data structures use the hash value internally.
+
+    Objects which are instances of user-defined classes are hashable by default; they all compare unequal, and their hash value is their id().
+
+[lambda]
+
+    An anonymous inline function consisting of a single expression which is evaluated when the function is called. The syntax to create a lambda function is lambda [arguments]: expression
+
+[key function]
+
+    A key function or collation function is a callable that returns a value used for sorting or ordering.
+
+    A number of tools in Python accept key functions to control how elements are ordered or grouped. They include min(), max(), sorted(), list.sort(), heapq.nsmallest(), heapq.nlargest(), and itertools.groupby().
+
+[metaclass]
+
+    The class of a class. Class definitions create a class name, a class dictionary, and a list of base classes. The metaclass is responsible for taking those three arguments and creating the class. Most object oriented programming languages provide a default implementation.
+
+    What makes Python special is that it is possible to create custom metaclasses. Most users never need this tool, but when the need arises, metaclasses can provide powerful, elegant solutions. They have been used for logging attribute access, adding thread-safety, tracking object creation, implementing singletons, and many other tasks.
+
+[named tuple]
+
+    Any tuple-like class whose indexable elements are also accessible using named attributes
+
+    For example, 'time.localtime()' returns a tuple-like object where the year is accessible either with an index such as t[0] or with a named attribute like t.tm_year .
+
+    A named tuple can be a built-in type such as time.struct_time, or it can be created with a regular class definition. A full featured named tuple can also be created with the factory function 'collections.namedtuple()'. The latter approach automatically provides extra features such as a self-documenting representation like Employee(name='jones', title='programmer').
+
+
+[nested scope]
+
+    The ability to refer to a variable in an enclosing definition.
+
+    Note: nested scopes work only for reference and not for assignment which will always write to the innermost scope.
+
+    In contrast, local variables both read and write in the innermost scope.
+    Likewise, global variables read and write to the global namespace.
+
+[type]
+
+    The type of a Python object determines what kind of object it is; every object has a type.
+
+    An object's type is accessible as its __class__ attribute or can be retrieved with type(obj).
+
+[view]
+
+    The objects returned from dict.viewkeys(), dict.viewvalues(), and dict.viewitems() are called dictionary views.
+
+    They are lazy sequences that will see changes in the underlying dictionary. To force the dictionary view to become a full list use list(dictview).
+
+[Zen of Python]
+
+    Listing of Python design principles and philosophies that are helpful in understanding and using the language. The listing can be found by typing "import this" at the interactive prompt.

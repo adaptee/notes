@@ -1,0 +1,78 @@
+            ubuntu              archlinux
+locale :    zh_CN.UTF-8         zh_CN.UTF-8
+
+amule:      2.2.6               2.2.6
+
+/*wxgtk:      2.8.10.1            2.8.11*/
+
+shared lib  libwx_baseu_net     libwx_baseu_net
+            libwx_baseu         libwx_baseu
+
+
+amule building parameter
+
+    ubutnu : (qutoted from ./debian/rules)
+
+
+    confflags = --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info \
+                --disable-dependency-tracking --disable-ccache --disable-debug              \
+                --enable-amule-daemon --enable-amulecmd --enable-ed2k --enable-webserver    \
+                --enable-amule-gui --enable-cas --enable-wxcas --enable-alc --enable-alcc   \
+                --disable-embedded-crypto --enable-geoip --enable-upnp --with-denoise-level=0
+
+    arch: (quoted from /var/abs/extra/amule/PKGBUILD)
+
+    ./configure --prefix=/usr \
+                --mandir=/usr/share/man \
+                --enable-cas \
+                --enable-wxcas \
+                --enable-amule-daemon \
+                --enable-amulecmd \
+                --enable-amule-gui \
+                --enable-alc \
+                --enable-alcc \
+                --enable-webserver \
+                --disable-debug \
+                --enable-optimize \
+                --enable-ccache \
+                --enable-geoip
+
+
+
+2. source diff
+
+
+amule-debian vs   amule-orig
+
+    [+] ./debian/* ( contain a few patches related with source code, which should be reviewed carefully )
+
+        alc_man_typo.diff(ignored)
+        ed2k_man_typo.diff(ignored)
+        cas_configfile.c_good_default_paths.diff(ignored)
+        use_xdg-open_as_preview_default.diff(ignored)
+
+        fallocate.diff(!!important!!)
+        configure_ignore_gdlib-config_garbage.diff(!!important!!)
+
+
+amule-orig  vs  amule-official
+
+    [same]  except that amule-orig rename ./debian to ./debian.upstream
+
+
+
+
+[Experiments]
+
+                POSIX    C      en_US.UTF-8   zh_CN.UTF-8  zh_CN.GBK      locale
+ubuntu          [Y]      [ ]    [Y]           [Y]          [ ]            en_US.UTF-8
+kubuntu         [ ]      [ ]    [ ]           [ ]          [ ]
+arch            [A]      [A]    [N]           [N]          [N]            zh_CN.UTF-8
+arch-new        [Y]      [Y]    [Y]           [Y]          [Y]            zh_CN.UTF-8
+
+[Y]:   both OK at adding and after hashing
+[N]:   both bad at adding and after hashing
+[A]:   OK at adding ,but bad after hashing
+
+
+

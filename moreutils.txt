@@ -1,0 +1,13 @@
+
+combine(1)  join files by lines based upon boolean operations
+ifdata(1)   script frinedly version of ifconfig
+ifne(1)     run command if stdin is not empty
+isutf8(1)   check whether file contains valid utf-8 data
+lckdo(1)    run command with lock held
+parallel(1) run commands in parallel
+pee(1)      tee for pipes
+sponge(1)   better version of redirection
+ts(1)       add timestamp in the beginning for eachline of input
+vidir(1)    invoke text editor to edit directory
+vipe(1)     edit the pipe
+zrun(1)     automatically uncompress files listed in the argument

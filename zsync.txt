@@ -1,0 +1,50 @@
+Chapter 1. The Problem
+
+The best existing solution from the point of view of minimising data transfer is rsync. rsync uses a rolling checksum algorithm that allows the checksum over a given block length at all points in a file to be calculated efficiently. Generally speaking, a checksum would have to be run at every possible start point to achieve this -- the algorithm used in rsync (see [Rsync1998]) allows the checksum window to be rolled forward over the file and the checksum for each new location to be trivially derived from the previous checksum and the values at the window edges. So rsync can calculate the checksum at all points in the input file by streaming through the file data just once. While doing so it compares each calculated checksum against the list of checksums for the existing data file, and spots any chunks from the old data file which can be reused.
+
+So rsync achieves a high level of data reuse. It comes at a high computational cost, however. The current rsync implementation calculates the checksums for a set of blocks on the client, then uploads these to the server; the server them uses the rsync algorithm to work out which blocks the client has and which it needs, and pushes back the blocks it needs. But this approach suffers many drawbacks:
+
+    * The server must reparse the data each time. It cannot save the computed checksums. This is because the client sends just the checksums for disjoint blocks of data from its pool of known data. The server must calculate the checksum at all offsets, not just at the block boundaries. The client cannot send the checksum at all points, because this would be four times larger than the data file itself -- and the server does not want to pre-compute the checksums at all points, because again it would be four times larger, and require four times as much disk activity, as reading the original data file. So CPU requirements on the server are high. Also the server must read the entire file, even if the final answer is that the client requires only a small fragment updated.
+
+    * Memory requirements for the server are high - it must store a hash table or equivalent structure of all the checksums received from the client while parsing its own data.
+
+    * The server must receive and act on a large volume of data from the client, storing it in memory, parsing data, etc -- so there is the opportunity for denial of service attacks and security holes. In practice rsync has had a remarkably good security record: there have been a few vulnerabilities in the past few years (although at least one of these was actually a zlib bug, if I remember rightly).
+
+The drawbacks with rsync have prevented it being deployed widely to distribute files to the general public. Instead, it has been used in areas closer to the existing use of cvs and sup, where a limited community of users use an rsync server to pull daily software snapshots. rsync is also very widely used inside organisations for efficient transfer of files between private systems, using rcp or scp as a tunnel. rsync also has very powerful functionality parallelling cp -a and tar's abilities, with transfers of file permissions, directory trees, special files, etc. But public releases are rarely made with rsync, as far as I can tell.
+
+
+
+
+Transferring partial content has some similarities to the compression problem, in that we must be able to spot data patterns that occur in both the target file and the existing copy known to the client. Perhaps as a consequence, it interacts very badly with files that are already compressed.
+
+In a compressed data stream, the representation of any particular fragment data will vary according to the overall compression algorithm, how aggressively the file has been compressed, options used to the compression tool, and, most importantly, the surrounding file content. For instance, the zip compression used in common compression tools uses backreferences in the compressed data stream to avoid duplicating data. The Huffman codes chosen by the compressor to represent individual bytes in the uncompressed stream will vary depending on the frequency of that character in the surrounding block of data, as well as just according to the arbitrary choice of the compression utility. From the first point at which two files differ, their compressed versions may have no data in common at all. The output of a compression program is, roughly speaking, not possible to compress further, because all redundancy and structure from the original file is gone -- precisely the structure that might have been useful for working out partial file transfers. For this reason, rsync is usually ineffective on compressed files.
+
+
+So what, ideally, would we want? A system requiring no special server support -- preferably nothing more complex than, say, HTTP Range: support. We want no per-client calculations at the server end at all. Anything that is required at the server end should be pre-calculated. It should also address the problem of compressed files.
+
+Chapter 2. zsync Theory
+
+2.1 Rsync on the Client Side
+
+Essentially, we already have a solution -- rsync. The problem is that rsync does the hard work on the server, and requires server support. This is not essential to its algorithm. The algorithm merely requires that one side calculates the checksums of each distinct block of data, and sends it to the other end; the other end then does a rolling checksum through its file, identifying blocks in common, and then working out which blocks are not in common and must be transmitted.
+
+So, we make it the server which calculates the checksums of each distinct block. Because it need calculate only one checksum per block of data, and this is not specific to any given client, the data can be cached. We can save this data into a metafile, and the client requests this data as the first step of the process. This metafile can simply be at another URL on the same -- or even a different -- server.
+
+The zsync client will pull this metafile. It then runs through the data it already has, applying the rsync rolling checksum and comparing with the downloaded checksum list. It thus identifies the data in the target file that it already has. It then requests the remaining data from the server. Since it knows which data it needs, it can simply use HTTP Range requests to pull the data.
+
+The server has no per-client calculations. The metafile can be calculated in advance. No state is needed on the server. An ordinary web server, plus a program to generate the metafile (the zsync control file, from now on), provides everything we need.
+
+2.2 The zsync Control File
+
+The blocksize must be transmitted, so that the client calculates the checksums on the same size of block. A fixed value could be hard-coded, but I prefer to keep it tunable until we can prove in common use that one value is always best.
+
+The file length must be transmitted, so that we know the total number of blocks. Also, the final block of data will often extend past the end of the file, which will need to be padded when calculating checksums. So zsync must truncate the file once the block downloading is done.
+
+The URL from which the unknown blocks are to be retrieved can also be part of the metafile. We could code in the assumption that the metafile is always alongside the normal content -- but this would be an unnecessary restriction. By putting the URL inside the control file, we give the chance to host the control file outside of the normal directory tree, which will be convenient at this early stage of zsync's development.
+
+2.3 Checksum Transmission
+
+The choice of the rsync algorithm gives us part of the answer: a weak checksum, which can be calculated in a rolling manner over the data already held by the client, must be transmitted, to allow the client to easily identify blocks. Then a stronger checksum, strong enough to prevent blocks being identified as in common with the target file incorrectly, must be used for verification.
+
+
+

@@ -1,0 +1,71 @@
+http://www.python.org/doc/essays/packages.html
+
+[An Example]
+
+    when using 'from package import item', the item can be either a submodule (or subpackage) of the package, or some other name defined in a the package, like a function, class or variable.
+
+    The import statement first tests whether the item is defined in the package; if not, it assumes it is a module and attempts to load it. If it fails to find it, ImportError is raised.
+
+    On the countrary, when using 'import item.subitem.subsubitem', each item except for the last must be a package; the last item can be a module or a package but can't be a class or function or variable defined in the previous item.
+
+[Importing * From a Package; the __all__ Attribute]
+
+    What happens when the user writes 'from Sound.Effects import *' ?
+
+    Ideally, one would hope that this somehow goes out to the filesystem, finds which submodules are present in the package, and imports them all. Unfortunately, this operation does not work very well on Mac and Windows platforms, where the filesystem does not always have accurate information about the case of a filename! On these platforms, there is no guaranteed way to know whether a file ECHO.PY should be imported as a module echo, Echo or ECHO.
+
+    The only solution is for the package author to provide an 'explicit index' of the package.
+
+    Convention: if a package's __init__.py defines a list named __all__, it is taken to be the list of module names that should be imported when 'from package import *' is encountered. It is up to the package author to keep this list up-to-date when a new version of the package is released.
+
+[Intra-package References]
+
+    The submodules often need to refer to each other.
+
+    In fact, such references are so common that the import statement first looks in the containing package before looking in the standard module search path.
+
+
+[Details]
+
+(Packages Are Modules, Too!)
+
+    Whenever a submodule of a package is asked to be load, Python makes sure that the package itself is loaded first, loading its __init__.py file if necessary. The same applies for subpackage.
+
+    Thus, when the statement 'import Sound.Effects.echo' is executed, it first ensures that Sound is loaded; then it ensures that Sound.Effects is loaded; and only then does it ensure that Sound.Effects.echo is loaded.
+
+    Once loaded, the difference between a package and a module is minimal. In fact, both are represented by module objects, and both are stored in the table of loaded modules, sys.modules.
+
+(The __path__ Variable)
+
+    The one distinction between packages and modules lies in __path__. This is only present for packages.
+
+    It is initialized to a list of single item, containing the directory name of the package. Changing __path__ changes the list of directories that are searched for submodules of the package.
+
+(What If I Have a Module and a Package With The Same Name under same folder?)
+
+   top-folder(contained in sys.path)
+      spam
+         __init.py
+         ....
+      spam.py
+
+    In this case, the package has precedence, and 'importing spam' will ignore the spam.py file, loading the package spam instead. If you want the module spam.py to have precedence, it must be placed in another directory that comes earlier in sys.path.
+
+    The order is determined by the list of suffixes returned by the function imp.get_suffixes(). Usually the suffixes are searched in the following order: ".so", "module.so", ".py", ".pyc". Directories don't explicitly occur in this list, but precede all entries in it.
+
+[A Proposal For Installing Packages]
+
+    In order for a Python program to use a package, the package must be findable by the import statement. In other words, the package must be a subdirectory of a directory that is on sys.path.
+
+    Since python 1.5, a extra directories are appened to default search path:
+
+        $prefix/lib/python2.x/site-packages
+
+    Recommended way of installing package is to place each package in a subdirectory of its own in site-packages/.
+
+[Subdirectories of the Standard Library Directory]
+
+    Since any subdirectory of a directory on sys.path is now implicitly usable as a package, one could easily be confused about whether these are intended as such. For example, assume there's a subdirectory called tkinter containing a module Tkinter.py. Should one write import Tkinter or import tkinter.Tkinter?
+
+    I have established a simple 'naming convention' that should remove this confusion: non-package directories must have a hyphen('-') in their name.
+

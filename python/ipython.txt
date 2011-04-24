@@ -1,0 +1,192 @@
+dreload()   recursive version of reload()
+
+%run    -t  timing
+        -d  debugging
+        -p  profiling
+[part 1]
+
+    %who [type]
+        Print all interactive variables, with some minimal formatting.
+
+        %who always excludes executed names loaded through your configuration
+        file and things which are internal to IPython.
+
+    %whos
+        Like %who, but gives some extra information about each variable.
+
+    %psearch  <name> <type>
+        Search for object in namespaces by wildcard.
+
+    %store <name>
+        Lightweight persistence for python variables.
+
+        -z  remove all variables from the storage
+
+    %reset
+
+    %logstart
+    %logstop
+    %logon
+    %logoff
+
+    %lsmagic
+        List curretny available magic functions.
+    %magic
+        Print brief introduction for all magic functions.
+
+    <name>?
+        get meta info about any object
+    <name>??
+        get more meta info about any object
+
+    /<callable>
+        Shortcut for calling <callable> .
+
+    %help '<keyword>'
+        show help about language keyword
+    %help()
+        enter help mode
+
+    %pdef
+    %pdoc
+    %pinfo
+    %pfile
+    %psource
+
+    %edit -x <object>
+        open the file contain the defininiton of <object> in external editor
+
+[part 2]
+
+    %pushd
+    %popd
+    %dir
+    %bookmark
+        persistant across ipython session
+    %dhist
+    %cd [dirname|bookmak|-number]
+
+    !<cmd>
+        execute external command
+        def go(patt='*'):
+            !ls -l $patt
+
+        x = !ls
+        x = !ls | sort
+
+    %alias
+    %unalias
+
+    %alias ls ls --color=auto
+
+    %less
+    %pycat
+
+    %run
+        -n  do not set __name__ to '__main__'
+[Part 3]
+
+    <Ctrl-p>    previous input
+    <Ctrl-n>    previous input
+
+    In[3
+    _i3
+    Out[3]]
+
+    hist 1 10
+    hist 10
+    hist -r
+    edit 1-3 5
+    save <file> 1-3
+
+    exec
+
+    macro
+    begin
+
+    paste   paste code directly from clipboard, then exeute
+    cpaste  paste code from user action, then execute
+
+
+
+[Extra]
+
+    %aimport
+    %autoreload
+
+    %ed = %edit
+
+    %env
+        list environment variables
+
+    %hist = %history
+        print input history, with most recent last
+
+        -r print the raw input
+
+    %page
+        pretty print the object and display it through a pager(if needed)
+
+    %pinfo <object> = <object>?
+
+
+    %profile
+         Print your currently active IPyhton profile.
+
+    %macro
+
+    %prun
+         Run a statement through the python code profiler.
+
+    %pycat
+        Show a syntax-highlighted file through a pager.
+
+    %quickref
+
+    %r
+        repeat previous input line.
+
+    %rep
+        super version of %r
+
+    %save
+        save a set of input lines into given file
+
+    %timeit
+        Time execution of a Python statement or expression
+
+    %upgrade
+        upgrade your personal configuration file for ipython
+
+
+    prun <expresion>
+    run -p <file>
+
+    jobs[N].status
+    jobs[N].result
+
+[ipipe]
+
+    all pipes are iterable
+
+    from ipipe import *
+
+    ils
+    ils | idump
+    iwalk
+
+    igrid
+    ibrowse
+
+    ifilter
+    isort
+    igrep
+    iglob
+    ieval
+    ienv
+    ipwd   passwd, not present working directory
+    igrp   group
+
+
+
+

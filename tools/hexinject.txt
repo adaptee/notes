@@ -1,0 +1,14 @@
+[option]
+
+    -s  sniff mode
+    -p  inject mode
+
+    -r  show data in raw form(binary), instread of the human-friendly hexdecimal form
+
+    -i  device to use
+
+    -f  use specific filter
+
+
+
+

@@ -1,0 +1,100 @@
+22.2. locale -- Internationalization services
+
+The locale module is implemented on top of the _locale module, which in turn uses an ANSI C locale implementation if available.
+
+locale.setlocale(category[, locale])
+
+    If locale is specified, it may be a string, a tuple of the form (language code, encoding), or None. If it is a tuple, it is converted to a string using the locale aliasing engine. If locale is given and not None, setlocale() modifies the locale setting for the category.
+
+    The value of <loclae> is the name of a locale. An empty string specifies the user's default settings.
+
+    If the modification of the locale fails, the exception Error is raised. If successful, the new locale setting is returned.
+
+    If locale is omitted or None, the current setting for category is returned.
+
+    Applications typically start with a call of
+
+    import locale
+    locale.setlocale(locale.LC_ALL, '')
+
+    This sets the locale for all categories to the user's default setting (typically specified in the LANG environment variable).
+
+locale.localeconv()
+
+    Returns the database of current local conventions as a dictionary.
+
+locale.nl_langinfo(option)
+
+    Return some locale-specific information as a string. This function is not available on all systems, and the set of possible options might also vary across platforms.
+
+    locale.CODESET
+        Get a string with the name of the character encoding used in the selected locale.
+
+
+locale.getdefaultlocale([envvars])
+
+    Tries to determine the default locale settings and returns them as a tuple of the form (language code, encoding).
+
+    According to POSIX, a program which has not called setlocale(LC_ALL, '') runs using the portable 'C' locale. Calling setlocale(LC_ALL, '') lets it use the default locale as defined by the LANG variable. Since we do not want to interfere with the current locale setting we thus emulate the behavior in the way described above.
+
+    To maintain compatibility with other platforms, not only the LANG variable is tested, but a list of variables given as envvars parameter. The first found to be defined will be used. envvars defaults to the search path used in GNU gettext; it must always contain the variable name LANG. The GNU gettext search path contains 'LANGUAGE', 'LC_ALL', 'LC_CTYPE', and 'LANG', in that order.
+
+
+locale.getlocale([category])
+
+    Returns the current setting for the given locale category as sequence containing language code, encoding. category may be one of the LC_* values except LC_ALL. It defaults to LC_CTYPE.
+
+locale.getpreferredencoding([do_setlocale])
+
+    Return the encoding used for text data, according to user preferences. User preferences are expressed differently on different systems, and might not be available programmatically on some systems, so this function only returns a guess.
+
+    On some systems, it is necessary to invoke setlocale() to obtain the user preferences, so this function is not thread-safe. If invoking setlocale is not necessary or desired, do_setlocale should be set to False.
+
+locale.normalize(localename)
+
+    Returns a normalized locale code for the given locale name. The returned locale code is formatted for use with setlocale(). If normalization fails, the original name is returned unchanged.
+
+locale.resetlocale([category])
+
+    Sets the locale for category to the default setting.
+
+    The default setting is determined by calling getdefaultlocale(). category defaults to LC_ALL.
+
+locale.strcoll(string1, string2)
+    Compares two strings according to the current LC_COLLATE setting.
+
+locale.strxfrm(string)
+
+    Transforms a string to one that can be used for the built-in function cmp(), and still returns locale-aware results. This function can be used when the same string is compared repeatedly, e.g. when collating a sequence of strings.
+
+locale.format(format, val[, grouping[, monetary]])
+
+    Formats a number val according to the current LC_NUMERIC setting.
+
+locale.format_string(format, val[, grouping])
+
+    Processes formatting specifiers as in format % val, but takes the current locale settings into account.
+
+locale.currency(val[, symbol[, grouping[, international]]])
+
+    Formats a number val according to the current LC_MONETARY settings.
+
+locale.str(float)
+    Formats a floating point number using the same format as the built-in function str(float), but takes the decimal point into account.
+
+locale.atof(string)
+    Converts a string to a floating point number, following the LC_NUMERIC settings.
+
+locale.atoi(string)
+    Converts a string to an integer, following the LC_NUMERIC conventions.
+
+22.2.1. Background, details, hints, tips and caveats
+
+    The C standard defines the locale as a program-wide property that may be 'relatively expensive to change'. On top of that, some implementation are broken in such a way that frequent locale changes may cause core dumps. This makes the locale somewhat painful to use correctly.
+
+    'Initially', when a program is started, the locale is the 'C locale,' no matter what the user's preferred locale is. The program 'must explicitly say' that it wants the user's preferred locale settings by calling setlocale(LC_ALL, '').
+
+    It is 'generally a bad idea' to call setlocale() in some library routine, since as a side effect it affects the entire program. Saving and restoring it is almost as bad: it is expensive and affects other threads that happen to run before the settings have been restored.
+
+    The only way to perform numeric operations according to the locale is to use the special functions defined by this module: atof(), atoi(), format(), str().
+

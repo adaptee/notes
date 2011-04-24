@@ -1,0 +1,1497 @@
+
+Git
+
+    tracking branch，也 就 是 .git/config 中 [branch] 节配置的那些分支
+
+    git checkout -b my origin/master 会自动在 .git/config 中把 my 分支配置为 tracking branch，
+
+
+gtypist:
+
+    One space always follows a comma.
+    The semicolon (;), like the comma, is followed by one space in a sentence.
+
+    Don't forget there are two spaces between sentences, no matter what
+    punctuation mark closes the sentence.
+
+    The colon (:) introduces a list and is followed by two spaces.
+
+
+TODD  ： investigate the gitbranch() function
+
+FIXME : vmap <  vmap > 这两个自定义的快捷键和默认功能冲突
+
+FIXME : in command line, Ctrl-p and Ctrl-N do not work as expected ; It just go to previous/next command, not doing matching
+FIXME : plugin cmdlinecomplete 覆盖了这两个默认键，需要考虑是否禁用该plugin
+c_Ctrl-p & c_Ctrl-n ，适用于 '/' 和 ':'，即迭代历史记录
+
+FIXME : 标准的英文标点符号是什么？句尾标点符号后留一个空格，还是两个空格？Q:    man、info、vim guide 等标准文档，使用两个空格
+      出版物似乎使用一个空格
+
+FIXME : 令 vim 像 less 一样，支持stdin读入的带有ANSI颜色的文本
+
+    yaourt -Ss vim | less
+    yaourt -Ss vim | vim -
+
+FIXME : make plugin manpageview support 'man -a'
+
+FIXME : refactor SaveSession()
+
+FIXME :    in normal mode, map <Up> <Down> to scroll the alternate window
+
+FIXME :    Ctrl-c  Ctrl-z 'Ctrl-m' Ctrl-q seems uesless
+
+FIXME :    Enter, Backspace : duplicated mapping vs, d, z
+
+
+版本
+    vim 7.2
+    干净的配置，除了 set nocompatible 没别的了
+
+
+操作：
+    :help optiots.txt， 在某个位置用 mA 创建一个 file mark；
+    关闭并重新打开vim后，用 'A 跳回这个 file mark
+
+症状：
+    位置是正确跳回了，但是在打开的帮助文件里没法用 Ctrl-] 跳转了，错误信息：E426: tag not found
+    用 :help options.txt 打开该帮助文件，Ctrl-] 没问题疑问：
+    帮助文件只有通过 :help 打开时，才能正确使用tag?
+
+大概是我描述的有歧义吧，你的解释和我的问题貌似没什么关系 :)
+
+我想要的：
+
+    $ vim
+    :help options.txt    ;;   总共7000行啊
+    .....                ;;   读了1234行，烦了，打算以后接着看
+    mA                   ;;   在当前位置建一个 file mark
+    :q                   ;;
+    .....                ;;
+    $ vim                ;;
+    'A                   ;;   从上次标记的位置继续看
+
+我得到的：
+
+    'A 能够跳回我想要的位置，但是我发现在浏览以这种方式打开的 $VIMRUNTIME/doc/options.txt 中，遇到 |:cwindow| 这样的tag, Ctrl-] 无法工作，提示 "E426: tag not found"
+
+
+疑问：
+
+    options.txt 只有通过:help 打开才能正常使用？
+
+
+
+NerdTree:  press 'm' to popup context menu
+
+There is a saying that "for every problem there is an answer that is simple, clear, and wrong."
+
+
+疑问：code/sercive/weak-symbol 为何共享库(相互无依赖关系)的constructor 被调用的顺序和加载顺序相反，而不是一致？
+
+疑问： code/service/link/  ，为何foo_int 会被解析成main中的bss数据？它应该是由libfoo提供定义才对？
+expand(1)  convert tab to spaces
+
+
+emacsclient
+    -c  open new frame
+    -t  open on terminal
+
+showkey(1)
+
+lastcomm(1)
+ac(1)
+accton(1)
+
+konsole(1)
+
+    Shift-Insert    paste from +
+    Alt-V           paste from *
+
+
+ogg : container format
+vorbis : audio codecs format
+theora : video codecs format
+
+
+: . w !bash        将本行的内容发往bash的stdin，即当作命令执行之
+: % ! sort         将本buffer的内容发往sort的stdin，并用其 stdout 替换当前内容
+
+X11-selection vs X11-cut-buffer
+
+    1). X11-selection  的数据存放在 App 中，一旦App消失，数据也就消失了；
+    2). X11-cut-buffer 的数据存放在 X Server中，即使App小时，数据依然还在
+
+write operation
+    :[range] w[!] [ [>>] file| !cmd ]
+    :saveas <file>
+    :update             write to file only when it really makes sense
+
+vimdiff(1)
+
+    -O  纵向窗口(默认)
+    -o  横向窗口
+
+vim(1)
+
+    -O  vertical-window-per-file
+    -o  horizontal-windwo-per-file
+    -p  tabpage-per-file
+
+vim client-server mode
+
+    1) 创建 server : vim --servername <foo>
+    2) 在 server 中打开文件： vim --servername <foo> --remote <file>
+
+:help motion.txt
+
+xp  交换当前字符和'后面'字符的位置
+Xp  交换当前字符和'前面'字符的位置
+
+
+
+=== user refence manual ===
+
+help
+
+    :help <pattern><Ctrl-D>     列出所有匹配 pattern 的关键字
+    :help +<feature>            查询编译选项
+    :help -<argument>           查询命令行参数
+    :help '<option>'            查询 Vim option
+    :help <function>()          查询 Vim function
+    :help :<command>            查询 Ex command
+    :help E<xxx>                  查询 Error number
+
+w vs b (exclusive)
+
+    w 的准确语义 ： 移动到下一个 "单词起始"，而不是 "下一个单词"的起始
+    b 的准确语义 ： 移动到上一个 "单词起始"，而不是 "上一个单词"的起始
+
+e vs ge (inclusive)
+
+    e  的准确语义 ： 移动到下一个 "单词结尾"，而不是 "下一个单词"的结尾
+    ge 的准确语义 ： 移动到上一个 "单词结尾"，而不是 "上一个单词"的结尾
+
+
+inclusive motion :   操作的有效区间：[left-point, right-point]
+exclusive motion :   操作的有效区间：[left-point, right-point)
+
+t vs f
+
+    f 光标移动到指定字符在当前行内下次出现位置
+    t 光标移动到指定字符在当前行内下次出现位置"之前"一位
+
+
+
+* vs g*
+
+    *   等价于 /\<cword\>，要求整词匹配
+    g*  等价于 /cword，允许部分匹配
+
+'nohlsearch' vs :nohlsearch
+
+    'nohlsearch'    option ; disable permanent
+    :nohlsearch     command; disable once
+
+Ctrl-o ( older position)
+
+
+marks [a-z] vs [A-Z]
+
+    [a-z]    per-buffer, lost when buffer is deleted
+    [A-Z]    global, remains even when buffer is deleted
+
+
+modifying pattern
+
+    {operator}{N}{motion}
+    {operator}{N}{text-object}
+
+
+'cw' 的实际效果等同于'ce'；这是VI时代的bug，为了保证兼容性，VIM 保留了这个bug....:)
+
+dd vs cc
+
+    dd  彻底的消除一行，包括换行符
+    cc  清除行的内容，但保留换行符
+
+
+as vs is
+
+    as : a sentence, including the tailing whitespaces
+    is : inner sentence, only include the visible text
+
+
+filetype plugin naming:
+
+    ~/.vim/ftplugin/<type>.vim
+    ~/.vim/ftplugin/<type>_<name>.vim
+    ~/.vim/ftplugin/<type>/<name>.vim
+
+
+:syntax on  vs :syntax enable
+:syntax off vs :syntax clear
+
+
+'background' : dark or light
+    Setting this option does not change the background color, it tells Vim what
+    the background color looks like.
+
+:hardcopy   send contents to printer
+
+:TOHtml     convert content to html
+
+
+following commands all operate based on files in command-line arguments
+:wnext  = :w + :next
+:next
+:previous
+:first
+:last
+
+:args   show or setup the list of file arguments
+:argdo
+:bufdo (this one should be used with caution)
+:windo
+:tabdo
+
+tip of :argdo
+    1).append '| update' after command which modify the contents
+    2).put /e after :s command, avoding non-matching errors
+
+Ctrl-6    jump to 'alternate' file
+
+
+'patchmode'     keep the original file as xxx.orig
+
+:view           open file in read/view only mode
+
+'modifiable'    local ; buffer is allowd for modification
+'modified'      local ; buffer is modified, or not
+'readonly'      local ; writing to file fails, unless '!' is append
+
+'write'         global; allow writing to files, or not
+
+'buftype'
+
+:file <newname>     change buffer's associated file name
+
+:only       close all other windows
+:tabonly    close all other tabpages
+
+:new   open a horizontal window with empty file
+:vnew  open a vertical window with empty file
+
+
+Ctrl-w +    increase window size
+Ctrl-w -    decrease window size
+
+Ctrl-w [hjkl]   move cursor among windows
+Ctrl-w [HJKL]   move window
+
+:vertical diffsplit <otherfile>     diff with other file
+:vertical diffpatch <patchfile>     diff with the result of applying patch
+
+'scrollbind'    scroll this window and other window at the same time, if possible
+                mostly used in vimdiff(1)
+
+:diffthis       put current buffer into diff mode
+:diffupdate     update the diff highlighting, manually
+
+'splitbelow' & 'splitright'
+by default, :split create new window above current window
+            :vsplit create new window to the left of current window
+            cursor will be put in the new window
+
+:tabnew == :tabedit
+
+position syntax : /pattern/[+-]offset
+
+" limit range to 5 lines
+5: ==> :.,.+4
+
+:global 只支持Ex命令；要执行普通模式下的操作，需要借助":normal"命令
+
+[恍然大悟]： :global 就是 Vim 版本的 map ，或者说是 foreach
+
+
+nice discovery
+
+    surround.vim 良好的支持 visual block 模式
+
+
+J vs gJ
+
+    J   insert and remove some spaces when joining 2 lines
+    gJ  do not change any spaces, just join
+
+:$read <content>   append the content after the end of buffer
+:0read <content>   insert the content before the start of buffer
+
+vim 中，paragraph 之间的分隔符是不包含任何字符(包括whitespace)的empty line
+
+empty line: contain nothing, nothing!
+blank line: contain no visible characters
+
+
+!{motion}       fileter the text covered by motion
+!!              filter current line
+
+normal 模式下的 '!'，实际上只是使用 ":!" 这个Ex命令的快捷方式
+
+:[range]!{extern-command}
+
+vim -r  列出本目录下的所有 .swp 文件
+
+:swapname   show the name of swap file of current buffer
+
+
+
+<INS> 键用于在 insert 和 repalce 模式之间切换
+
+commandline completion : Ctrl-D
+
+:history    show the hisotry of Ex command
+:history /  show the hisotry of searching
+:history =  show the hisotry of expression register
+
+在 q: 打开的窗口中，对命令完成必要的调整后，按下<CR>即可执行
+
+:!{program}             execute {program}
+:r !{program}           execute {program} and read its output
+:w !{program}           execute {program} and send text to its input
+:[range]!{program}      filter text through {program}
+
+:shell  create a new shell
+
+不带任何文件参数打开vim后， Ctrl-o o 或者 '0 都会将你带回上次退出Vim时的位置
+
+:wviminfo  vs :rviminfo
+
+:mksession vs :source
+
+    :mksession 不会被自动执行，而 viminfo 的保存则是vim自动完成的
+    seesion 可以有任意多个，而  viminfo 只有一份
+
+modeline 的格式： any-text vim:set {option}={value} ... : any-text
+
+:Explore    打开 Netrw的工作窗口
+
+:cd -   回到之前的目录
+
+set path+=./sub   vim will look up in  ./sub, where the base point is the file's folder
+set path+=sub     vim will look up in  ./sub, where the base point is current folder(:pwd)
+
+If you want to edit another file, but not write the changes in the current
+file yet, you can make it hidden: >
+
+    :hide edit foo.txt
+
+:bnext          go to next buffer
+:bprevious      go to previous buffer
+:bfirst         go to the first buffer
+:blast          go to the last buffer
+
+++{ff|enc}={value}
+
+    note : ++enc specifies 'fileencoding'; the naming here is a bit misleadng
+
+vim -x <file>    create encrypted file
+vim <file>       open encrypted file in the usual way
+
+set key=            turn off encryption
+:X                  turn on encryption
+
+vim -b <binary-file>
+:%!xxd      convert to hexdump
+....
+:%xxd -r    convert back to binary
+
+
+Tip
+
+    C-x C-f     文件名补全；输入部分以/开始时，可以补全路径，此时再次按下此外C-x C-f 来补全下一层路径；环境变量如$HOME也被支持
+
+i_Ctrl-a    插入上次插入模式中插入的文本
+i_Ctrl-@    类似，但插入后自动退出插入模式
+
+i_Ctrl-k    insert digraph
+
+
+'textwidth'  control how data is 'inserted'
+'wrap'       control how data is 'displayed'
+
+
+:left [left-margin]         make lines left aligned
+:center [line-length]       make lines center aligned
+:right [line-length]        make lines right aligned
+
+'comments' (local)
+'formatoptions' (local)
+'cpoptions' (global)
+
+
+$VIMRUNTIME/macros/justify.vim    fill extra space in line to make all line ends at the same column
+use _j to justify visually selected text
+
+[n]Ctrl-a   incrase number by n
+[n]Ctrl-x   decrase number by n
+
+|(<BAR>)    Ex command separator
+
+vim 的默认行为是从 stdin 读取键盘输入
+
+"-s" has different meaning when it is used with or without "-e".
+
+-s(with -e)     operate in silent/batch mode
+-s(without -e)  read normal mode command from specified file
+-S              read Ex commands from specified
+
+-w              record keystrokes into file
+
+
+
+\c  ignorecase (hint: 1 c, so lower)
+\C  match case (hint: 2 c, so upper)
+
+/pattern/N      put cursor at N line below first matching line
+
+/pattern/e      put cursor at the end of match
+/pattern/e+N    put cursor at N chars foward from the end of match
+/pattern/e-N    put cursor at N chars backword from the end of match
+
+/pattern/b      put cursor at the beginning of match
+/pattern/b+N    put cursor at N chars foward from the beginning of match
+/pattern/b-N    put cursor at N chars backword from the beginning of match
+
+\{-n, m}        like \{n, m}, but non-greedy
+\{-}            like \{}, but non-greedy
+
+
+\&  like \| , but require both alternative to match at the same position ; the latter will be choosed
+
+predefined  ranges, such as \d \w, can't work within [ ]
+
+character classes
+
+        item    matches                         option ~
+        \i      identifier characters           'isident'
+        \k      keyword characters              'iskeyword'
+        \p      printable characters            'isprint'
+        \f      file name characters            'isfname'
+
+\n  match line break
+
+\_s match whitespace -OR- line break
+
+manual folding
+
+    zf      create fold ; full-featured operator
+    zd      delete fold
+
+    zo      open fold
+    zc      close fold
+    zi      open/close fold
+
+    zr       fold recude
+    zm       fold more
+
+    :set foldopen=all
+    :set foldclose=all
+
+    fold is specific to window, not to buffer
+
+
+foldmethod = indent
+    create folds for every sequence of lines with the same indent.
+    Lines with a larger indent will become nested folds.
+
+    fold depth is influced by option 'shiftwidth'
+
+foldmethod = syntax
+    nice choice for source code
+
+foldmethod = expr
+    suitable for mail messages with quoted text
+
+foldmethod =  diff
+    used by vimdiff
+
+:tag /pattern
+
+preview window
+
+   :ptag == Ctrl-W }
+   :pclose
+   :pedit
+   :psearch ( very useful when using library )
+
+
+sum-up: first char control direction, second char control target
+
+    [[      jump backword to the first { at the first column
+    []      jump backword to the first } at the first column
+    ][      jump forward to the first } at the first column
+    ]]      jump forward to the first } at the first column
+
+    [m      jump to start of previous class method
+    [M      jump to end of previous class method
+    ]m      jump to start of next class method
+    ]M      jump to end of next class method
+
+
+    [{      jump to the enclosing {
+    ]}      jump to the enclosing }
+
+    [/      jump to previous comment
+    ]/      jump to next comment
+
+    [#
+    ]#
+
+    [I      search identifier under the cursor in file and included files
+    [D      like [I, but limit identifier to macro only
+    gD      like [I, but limit scope to current file; very useful for static variable
+    gd      like [I, but limit scope to current file; very useful for local variable
+
+
+    :checkpath   列出所有无法根据'path'找到的头文件
+    :checkpath!  列出所有需要的头文件
+
+
+    :clist  列出quickfix中的所有条目
+    :clist! 类似，但列出更详细的信息
+
+    vim can remember 10 error lists
+
+    :colder     switch to older error list
+    :cnewer     switch to newer error list
+
+    'makeprg'
+    'errorformat'
+    :compiler   a simpler way for seting-up 'makeprg' and 'errorformat' correctly
+
+    'cinoptions'   control how cindent is performed
+
+    'autoindent'(local)
+    'smartindent'(local)
+    'cindent'(local)
+    'comments'(local)
+
+
+    :browse <command>    open a file selection dialog to choose argument for fowlling command
+    'browsedir'
+
+    To avoid retyping the command with the !, you can make Vim give you a  dialog for choice
+
+
+Ex command prefix :
+    'tab'
+    'vertical'
+    'browse'
+    'confirm'
+
+
+    by default, gvim fork it self and disconnect from the shell it was started; '-f' can be used to preventing such disconnection.
+
+
+    :omap   operator-pending mode: effective only when a motion or text object is expected, such as d...
+
+    Tip : define a keymapping for normal and operator-pending, but not for visual mode
+    :map <C-A> /---><CR>
+    :vunmap <C-A>
+
+    :mapclear   clear all keymappings
+
+map prefix
+
+    <sciprt>  make the mapping definition ignore external mapping it the {rhs}
+    <buffer>  make the mapping effective only in current buffer
+    <unique>  fail when the mapping already exist
+    <silent>  no echo on the cmdline
+
+:command
+
+    -nargs=     control how many arguemnts the comand can accept
+    -range=     control how the command deals with ranges
+
+    <args>
+    <qargs>
+    <fargs>
+
+    :delcommand
+    :comclear
+
+    autocmd 执行的是Ex命令；可以利用normal 来执行普通模式的命令
+
+    'eventignore'   control while events are to be totally ingored
+
+
+    filetype.vim     detect filetype based upon filename
+    scripts.vim      detect filetype based upon contents
+
+    :help usr_41.txt
+
+$VIMRUNTIME vs 'runtimepath'
+
+    $VIMRUNTIME    a directory, which is the system level directory of vim
+    'runtimepath'  a list of directoreis, incluing $VIMRUNTIME
+
+Syntax
+
+        :syntax                     list all items
+        :syntax list {group}        list items belonging to specific group
+
+        :syntax case match          mactch case
+        :syntax case ignore         ignore case
+
+        :syntax keyword {group} {keyword...}     make these {keywords} belong to {group}
+        :syntax match   {group} {pattern}        make words matching the pattern belong to {group}
+        :syntax region  {group} start=.. end=..  make region belong to {group}
+
+        group 的命名惯例是将filetype 作为前缀
+        'keyword' always match whole words only
+        'keyword' has higher priority than 'match'
+
+        :highlight link {group} {std-group}      show the {group} in the style of {std-grop}
+
+
+:gui -f    turn vim into gvim !
+
+server-mode
+
+vim --servername foo
+vim --servername foo --remote-tab-silent 1.txt
+vim --serverlist
+
+all arugment after --remote wile be interpreted as filenames
+
+:drop   open buffer, like :edit, but better, reuse already existing window connected with that buffer
+
+:profile
+:sign
+
+:verbose
+'verbose'
+'verbosefile'
+
+
+I love and use VIM heavily too.  (Larry Wall)
+
+A previous girlfriend of mine switched to emacs.  Needless to say, the relationship went nowhere.  (Geoffrey Mann)
+
+
+
+vimball
+    :so %    vs :RmVimball <name>
+
+.vimrc  vs $MYVIMRC
+.gvimrc vs $MYGVIMRC
+
+ 'guicurosr'
+ 'guipty'
+ 'guiheadroom'
+
+
+:simalt     in win32, simulate the standard <Alt-?> menu shortcut
+
+
+GTK does _not_ use the traditional X resource settings.  Thus items in your ~/.Xdefaults are not used.
+
+
+Using Vim as a GTK+ plugin                              *gui-gtk-socketid*
+
+When the GTK+ version of Vim starts up normally, it creates its own top level
+window (technically, a 'GtkWindow').  GTK+ provides an embedding facility with
+its GtkSocket and GtkPlug widgets.  If one GTK+ application creates a
+GtkSocket widget in one of its windows, an entirely different GTK+ application
+may embed itself into the first application by creating a top-level GtkPlug
+widget using the socket's ID.
+
+If you pass Vim the command-line option '--socketid' with a decimal or
+hexadecimal value, Vim will create a GtkPlug widget using that value instead
+of the normal GtkWindow.  This enables Vim to act as a GTK+ plugin.
+
+
+X11 copy&paste
+
+The contents of selections are held by the originating application (e.g., upon
+a copy), and only passed on to another application when that other application
+asks for them (e.g., upon a paste).
+
+The contents of cut-buffers are immediately written to, and are then
+accessible directly from the X-server, without contacting the originating
+application.
+
+There are three documented X selections: PRIMARY (which is expected to
+represent the current visual selection - as in Vim's Visual mode), SECONDARY
+(which is ill-defined) and CLIPBOARD (which is expected to be used for
+cut, copy and paste operations).
+
+
+*   <==>   PRIMARY
++   <==>   CLIPBOARD
+
+There are, by default, 8 cut-buffers: CUT_BUFFER0 to CUT_BUFFER7.  Vim only
+uses CUT_BUFFER0, which is the one that xterm uses by default.
+
+Most newer applications will provide their current selection via PRIMARY ("*)
+and use CLIPBOARD ("+) for cut/copy/paste operations.  You thus have access to
+both by choosing to use either of the "* or "+ registers.
+
+
+
+digraphs        use two characters to represent one special character
+:digraph        list all digraphs
+
+[to be confirmed]
+has('gui_running')   true for only the real GUI version
+has('gui')           true for both GUI and xterm version
+has('gui')           false for linux console
+
+:filetype detect     detect filetype manually
+
+ <Leader>      < ==> g:mapleader
+ <LocalLeader> < ==> maplocalleader
+
+:DiffGitCached     when editing git commit messages, show the result of !git diff --cached in preview window
+
+
+in command line
+
+    Ctrl-r Ctrl-w       insert current word
+    Ctrl-r Ctrl-a       insert current WORD
+    Ctrl-r Ctrl-f       insert filename under cursor
+    Ctrl-r [register]   insert the content of some register
+
+g8      show current character's  UTF-8 encoding bytes
+8g8     find illegal utf-8 byte sequence
+
+
+access ftp files
+
+vim ftp://anonymous@kernel.org/pub/README
+:e ftp://anonymous@kernel.org/pub/README
+:r http://www.acfun.cn/index.html
+
+special pattern
+
+    \%xHH
+    \%uUUUU
+
+
+argdo
+
+    :argdo s/set/get/g | update
+    :silent argdo s/set/get/g | update        ;; do not show message, no prompt asking for continuation
+
+    Tips: combine :redir and :silent, you still can get the message, when you really need that
+
+
+add line number
+
+    :% !nl -ba
+    :% !cat -n
+    :[range] number
+
+
+commandline completion
+
+
+
+N:  ==  :.,.+N-1
+
+[range] 的分隔符通常是','，但也可以是';' ；区别在于，使用';'意味着在解释[last]前，光标会先移动到[first]
+
+:echohl    echo improved, with color
+
+:enew   create and open an unnamed, empty buffer
+:view       open file in readonly mode
+
+g<C-g>     show info about current positon in the terms of words and lines
+
+
+
+ftp://ftp.kernel.org/pub/README
+
+
+在需要文件名的地方，vim 支持 ` ` 这种形式的结果替换, 例如 ，:e `=tempname()`
+
+
+:argadd         add more entries into the arglist
+;argdelete      delete entry from arglist
+
+##              will be expanded into arglist
+#n              will be expaneed into the name of buffer #n
+
+
+:write >> <file>   append, not over-writing
+
+**[N]      match dir only ; multi level is possible
+
+
+==options.txt==
+
+:options        show all options with one-liner explanation
+:set            show all option that differs from default value
+:setlocal       show all local options that differ from default value
+:set all        show all options except terminal options
+:set termcap    show terminal options
+
+
+:setf           set filetype, only when it is not set set
+
+:set inv{option}
+:set {option}!      toggle boolean option
+:set  {option}&     restore option's default value
+:set all&           restore all options' default value
+:set {option}=<TAB>   插入option的当前值
+
+:setlocal  {option}<    set local value using its global value
+:setglobal              only change the global value
+
+    To include white space in a string option value it has to be preceded with a backslash.  To include a backslash you have to use two.
+
+
+    global			one option for all buffers and windows
+    local to window		each window has its own copy of this option
+    local to buffer		each buffer has its own copy of this option
+
+how to check whetheer one option is usable:
+    if exists('+foo')
+
+'antialias'     meaningful only in Mac OS X
+
+'bomb'          prepend BOM header?
+
+'browserdir'    last, buffer?
+
+'cdpath' vs $CDPATH
+
+
+'cindent'
+'cinkeys'       keys causing re-indentaion when press in insert mode
+'cinoptions'    control in details
+'cinwords'      keywords that cause extra indentation in next line
+
+'cpoptions'     HUGE container !!
+
+=  & equalprg
+gq & formatprg
+gw
+
+'confirm'       raise confirmation dialong when needed
+
+'dictionary'
+
+'diffopt'       split horizontally, or vertically?
+
+'exrc'
+
+'foldopen'
+'foldclose'
+
+'foldenable' & zi   enable/disable folding
+'foldignore'
+'foldlevel'
+
+
+'formatoptions'
+'gdefault'
+
+'grepprg'
+
+'include'
+'includeexpr'
+
+
+'isfname'
+'isindent'
+'iskeywod'
+'isprint'
+
+'pastetoggle'   keys for toggling 'paste' option
+
+'printfont'
+'printmbfont'
+
+'scrolljump'
+'scorlloff'
+
+highlight items related with spell checking
+
+    SpellBad
+    SpellCap
+    SpellLocal
+    SpellRare
+
+'suffixesadd'   used when opening file with gf
+
+'switchbuf'
+
+'tagrelative'
+
+'title' & 'titlestring'         control the content on window title
+
+
+
+
+==mbyte.txt==
+
+X-windows has its own locale stuff.  And unfortunately uses locale
+names different from what is used elsewhere.  This is confusing!  For Vim it
+matters what the setlocale() function uses, which is generally NOT the
+X-windows stuff.
+
+
+the input event is handled by either of the two ways: FrontEnd system
+and BackEnd system.  In the FrontEnd system, input events are snatched by
+the |IM-server| first, then |IM-server| give the application the result
+of input.  On the other hand, the BackEnd system works reverse order.
+MS Windows adopt BackEnd system.  In X, most of |IM-server|s adopt
+FrontEnd system.  The demerit of BackEnd system is the large overhead in
+communication, but it provides safe synchronization with no restrictions
+on applications.
+
+
+When inputting CJK, there are four areas:
+    1. The area to display of the input while it is being composed
+    2. The area to display the currently active input mode.  3. The
+    area to display the next candidate for the selection.  4. The area
+    to display other tools.
+
+The first and second areas are defined in international input of
+X with the names of "Preedit Area", "Status Area" respectively.
+The third and fourth areas are not defined and are left to be managed
+by the |IM-server|.  In the international input, four input styles
+have been defined using combinations of Preedit Area and Status Area:
+|OnTheSpot|, |OffTheSpot|, |OverTheSpot| and |Root|.
+
+Currently, GUI Vim support three style, |OverTheSpot|, |OffTheSpot|
+and |Root|.
+
+When using |OverTheSpot|, GUI Vim always connects to the IM Server even
+in Normal mode, so you can input your language with commands like "f"
+and "r".  But when using one of the other two methods, GUI Vim connects
+to the IM Server only if it is not in Normal mode.
+
+This |+multi_byte_ime| feature help this.  It reduce times of switch status of
+IME manually.  In normal mode, there are almost no need working IME, even
+editing multibyte text.  So exiting insert mode with ESC, Vim memorize last
+status of IME and force turn off IME.  When re-enter insert mode, Vim revert
+IME status to that memorized automatically.
+
+
+==messages.txt==
+
+:echo errmsg    show the latest error message
+:messages       show all error messages
+
+
+when encountering the message "more" or "press enter to continure", you can actually try j/k and :
+
+==mlang.txt==
+
+v:lang          the locale vim really use
+
+
+==recover.txt==
+
+:swapname       show the name of current swapfile
+:recover        recover the file
+
+
+==various.txt==
+
+:redrawstatus   force redrawing the statusline
+
+:print
+:list
+:number
+
+:z
+:=
+
+:normal
+:normal!
+:[range]normal
+
+
+
+:help :bar
+
+    :!{cmd}                 {cmd}中出现的 | 会交给shell，不会被Vim解释为命令分隔符
+    :command  CMD {cmd}     {cmd}中出现的 | 会被视为参数的一部分，不会被解释为命令分隔符
+    :autocmd  EVENT {cmd}   {cmd}中出现的 | 会被视为参数的一部分，不会被解释为命令分隔符
+
+
+:!!         repeat previous external command
+
+
+:redir => {var}     redirect output to a variable
+:redir END
+
+
+[n]K    ==>  man n ....
+
+
+:help {subject}     subject 支持使用 wildcard
+:tag {identity}    indenting 支持 regex
+
+==diff.txt==
+
+    if &diff
+        setup for diff mode
+    else
+        setup for non-diff mode
+    endif
+
+==print.txt==
+
+2 steps under linux :
+
+    text file  ==> postscript ==>  paper
+
+:hardcopy > {post-script-file}
+
+'printfont'         [Note] the postscript will ignore this option, always using 'courier'
+'printmbfont'
+'printmbcharset'
+
+==sign.txt==
+
+    When signs are defined for a file, Vim will automatically add a column of two
+characters to display them in.  When the last sign is unplaced the column
+disappears again.  The color of the column is set with the |SignColumn| group
+
+:sign define
+:sign undefine
+:sign place
+:sign unplace
+:sign jump
+
+==spell.txt==
+
+:spellgood <word>
+:spellbad <word>
+
+:mkspell        Generate a Vim spell file from word lists
+
+:spellrepall    repeate previous correction for all of the same words
+
+:runtime spell/cleanadd.vim     clean un-needed entries
+
+:spelldump      dump all the words the spellchecking can check
+
+Files that use syntax highlighting can specify where spell checking should be
+done:
+
+1.  everywhere			   default
+2.  in specific items		   use "contains=@Spell"
+3.  everywhere but specific items  use "contains=@NoSpell"
+
+==starting.txt==
+
+    vim -
+
+    Start editing a new buffer, which is filled with text that is read
+from stdin.  The commands that would normally be read from stdin will
+now be read from stderr.
+
+    On Unix, you would normally have one executable called Vim, and links
+from the different startup-names to that executable.
+
+
+--startuptime
+
+-c {Ex-commands}
+
+-E   Ex mode
+
+-S {file-containing-Ex-command}
+
+-s {input-file-containing-normal-command}
+
+-w {output-file-containing-normal-command}
+
+-V  verbose mode ;
+
+-D  debugging mode ;
+
+-f  nofork in gui mode
+
+vim will try to guess the value of $VIM
+
+
+==undo.txt==
+
+    Two ways of undo:  vim style vs vi style
+
+    'u'         goes up in the tree
+    'Ctrl-r'    goes donw in the tree;
+    but they never enter into other branch!
+
+    g-(:earlier)    move backword by the order of time, not by the order of tree topology
+    g+(:newer)      move forward by the order of time, not by the order of tree topology
+
+    using "u" and CTRL-R will not get you to all possible text states, while repeating "g-" and "g+" does.
+
+
+    :undo is useful if you know what change you want to jump to.  g- and g+ are useful if you don't know exactly what the change number is.
+
+    :earlier 10s
+    :newser 5m
+
+special feature of '.'
+
+    after performing "1p, you can press '.' to do  "2p, "3p, etc
+
+    looks a bit like the yank ring in emacs
+
+    TIPS:  "1pu.u.u.
+
+==tabpage.txt==
+
+    :tabnew
+    :tabfind
+    :tab {command}
+    :tabonly
+
+    :tabmove
+
+
+==window.txt==
+
+state		displayed	loaded		":buffers"
+active		  yes		 yes		  'a'
+hidden		  no		 yes		  'h'
+inactive	  no		 no		  ' '
+
+All CTRL-W commands can also be executed with :wincmd
+
+
+:new
+:vnew
+
+:hide
+:only
+
+:wincmd {args}
+:drop
+
+==visual.txt
+
+If Visual mode is not active and the "v", "V" or CTRL-V is preceded with a
+{count}, the size of the previously highlighted area is used for a start.
+
+1<C-v> is very useful in block replacement
+
+    o   other end
+    O   other end (block mode)
+
+    visual 模式下， gv 会在当前选中和上次选中之间来回切换。
+
+    ab	a () block (with parenthesis)
+    aB	a {} block (with braces)
+    a<	a <> block (with <>)
+    a[	a [] block (with [])
+
+    \%V 用来将范围限制在上次visually selected的文本区域，例如 :%s/\%Vabc/edf/g
+
+visual-block operator
+
+    I   prepend
+    A   append
+    c   change to other string
+    C   same as 'c', but till the end of line
+    r   fill the visual block with the same chars
+
+    Currently the ":" command works on whole lines only.  In a future
+release ":" may work on partial lines.
+
+
+==change.txt==
+
+To turn one line into title caps, make every first letter of a word
+uppercase: >
+	:s/\v<(.)(\w*)/\u\1\L\2/g
+
+
+&
+g&
+
+substitution flags
+
+/&      reuse the flags of last substitution
+/c      confirm for each operation
+/e      do not issue error, when pattern matching fails
+/i      ignore case for the pattern
+/n      report the number of substitution
+
+
+substitution-string
+
+&
+\0      the whole matched text
+
+\u
+\U
+\l
+\L
+
+\t      TAB
+\r      LINEFEED
+\n      NUL
+
+\=      expression
+
+submatch(0|1|2..)
+
+:retab!
+
+p vs gp
+
+
+"" 中总是会放入最新的内容，即使delete/yank 操作显式的指定了寄存器
+
+"/ 可以通过脚本修改，例如 :let @/="hello"
+
+:sort
+:sort!      order reversed
+
+When /{pattern}/ is specified the text matched with {pattern} is skipped,
+so that you sort on what comes after the match.
+
+==motion.txt==
+
+When a motion is not of the type you would like to use, you can force another
+type by using "v", "V" or CTRL-V just after the operator.
+
+Example : dvj   d<C-v>j
+
+
+set cpoptions+=J
+
+A sentence is defined as ending at a '.', '!' or '?' followed by either
+the end of a line, or by a space or tab.  If the 'J' flag is present in
+'cpoptions', at least two spaces have to follow the punctuation mark;
+
+Note the difference between using a movement command and an object.  The
+movement command operates from here (cursor position) to where the movement
+takes us.  When using an object the whole object is operated upon, no matter
+where on the object the cursor is.
+
+For the "it" and "at" text objects an attempt is done to select blocks between
+matching tags for HTML and XML.
+
+
+:keepj[umps] {command}   Moving around in {command} does not change the |''|,
+:lockmarks  {command}
+
+]'      jump to next mark in buffer
+['      jump to previous mark in buffer
+
+:jumps
+
+There is a separate jump list for each window.  The maximum number of
+entries is fixed at 100.
+
+The next CTRL-O command will use the entry above it, the next CTRL-I
+command will use the entry below it.
+
+the number in the "jump" column indicates the count for the CTRL-O or
+CTRL-I command that takes you to this position.
+
+When you split a window, the jumplist will be copied to the new window.
+
+:changes vs :undolist
+
+<N>g;   jump to the position of the Nth older change ; only jump, no modification!
+
+
+==map.txt==
+
+To avoid the abbreviation in Command-line mode: Type CTRL-V twice somewhere in
+the abbreviation to avoid it to be replaced.
+
+
+==repeat.txt==
+
+
+To repeat a non-Ex command, you can use the ":normal" command:
+    :g/pat/normal {commands}
+Make sure that {commands} ends with a complete normal command,
+
+The global command sets both the last used search pattern and the last used
+substitute pattern
+
+@{0-9a-z}   interpret the contents of register as normal commands
+:@{0-9a-z}  interpret the contents of register as Ex commands
+
+@:          repeat last comand line ; hint : it read the ": registers, interpreted as Ex command
+@@          repeat last register based repeat, no matter which kind of command it is
+
+:source vs :source!
+
+    :source             read Ex commands from file
+    :source!            read normal mode commands from file
+
+    :runtime {file}...  read Ex commands from {file} in each directory in 'runtimepath'.
+
+                        Each {file} is searched for in the first directory from 'runtimepath',
+                        then in the second directory, etc.
+
+                        When [!] is included, all found files are sourced.
+                        When it is not included only the first found file is
+                        sourced.
+
+    set verbose=2
+    :runtime! plugin/*.vim  (This is what Vim uses to load the plugin files when starting up.)
+
+    :finish     stop sourcing current file; a quick way to skip the rest of the file.
+
+    <sfile>     current vim script filename
+
+    Most programs use a 'trailing' backslash to indicate line
+continuation.  Vim use the unusual 'leading' backslash .
+
+    Vim offers a debug mode, which  allows you to step through a sourced file or user function and set breakpoints.
+
+    An alternative to debug mode is setting the 'verbose' option.  With a bigger number it will give more verbose messages about what Vim is doing.
+
+    Run a command with ":debug" prepended.  Debugging will only be done while this command executes.
+
+    'Profiling' means that Vim measures the time that is spend on executing functions and/or scripts.
+
+
+:ilist
+
+==eval.txt==
+
+*function-search-undo*
+The last used search pattern and the redo command "."
+will not be changed by the function.  This also
+implies that the effect of |:nohlsearch| is undone
+when the function returns.
+
+
+:[range]call
+:[range]normal
+
+
+
+==map.txt ==
+
+:map {lhs} {rhs}
+
+Map the key sequence {lhs} to {rhs} for the modes where the map command
+applies.  The result, including {rhs}, is then further scanned for
+mappings.  This allows for nested and recursive use of mappings.
+
+To define a mapping which will not be echoed on the command line, add
+"<silent>" as the first argument.  Example: >
+	:map <silent> , h /Header<CR>
+The search string will not be echoed when using this mapping.  Messages from
+the executed command are still given though.  To shut them up too, add a
+":silent" in the executed command: >
+	:map <silent> , h :exe ":silent normal /Header\r"<CR>
+
+For abbreviations |v:char| is set to the character that was typed to trigger
+the abbreviation.  You can use this to decide how to expand the {lhs}.  You
+can't change v:char and you should not insert it.
+
+
+There are five sets of mappings
+- For Normal mode: When typing commands.
+- For Visual mode: When typing commands while the Visual area is highlighted.
+- For Operator-pending mode: When an operator is pending (after "d", "y", "c",
+  etc.).  See below: |omap-info|.
+- For Insert mode.  These are also used in Replace mode.
+- For Command-line mode: When entering a ":" or "/" command.
+
+Operator-pending mappings can be used to define a movement command that can be
+used with any operator.  Simple example: ":omap { w" makes "y{" work like "yw"
+and "d{" like "dw".
+
+1.4 LISTING MAPPINGS					*map-listing*
+
+Just before the {rhs} a special character can appear:
+	*	indicates that it is not remappable
+	&	indicates that only script-local mappings are remappable
+	@	indicates a buffer-local mapping
+
+Note that the value of "mapleader" is used at the moment the mapping is
+defined.  Changing "mapleader" after that has no effect for already defined
+mappings.
+
+In a global plugin <Leader> should be used and in a filetype plugin
+<LocalLeader>.
+
+In the GUI Vim handles the Alt key itself, thus mapping keys with ALT should
+always work.  But in a terminal Vim gets a sequence of bytes and has to figure
+out whether ALT was pressed or not.
+
+By default Vim assumes that pressing the ALT key sets the 8th bit of a typed
+character.  Most decent terminals can work that way, such as xterm, aterm and
+rxvt.
+
+As of this writing, some mainstream terminals like gnome-terminal and konsole
+use the ESC prefix.  There doesn't appear a way to have them use the 8th bit
+instead.
+
+On the Linux console, this behavior can be toggled with the "setmetamode"
+command.  Bear in mind that not using an ESC prefix could get you in trouble
+with other programs.
+
+An abbreviation is only recognized when you type a non-keyword character.
+
+Just like mappings, abbreviations can be local to a buffer.
+:ab <buffer> FF for (i = 0; i < ; ++i)
+
+==autocmd.txt==
+
+
+The special pattern <buffer> or <buffer=N> defines a buffer-local autocommand.
+
+When your .vimrc file is sourced twice, the autocommands will appear twice.
+
+When executing the commands, there is no hit-enter prompt.
+
+For READING FILES there are four kinds of events possible:
+
+    BufNewFile			starting to edit a non-existent file
+    BufReadPre	BufReadPost	starting to edit an existing file
+    FilterReadPre	FilterReadPost	read the temp file with filter output
+    FileReadPre	FileReadPost	any other file read
+
+Vim ignores the case of event names
+
+The environment variable is expanded when the autocommand is defined, not when
+the autocommand is executed.  This is different from the 'command'!
+
+
+==if_pyth.txt==
+
+
+:[range]py[thon] {stmt}
+
+:[range]py[thon] << {endmarker}
+{script}
+{endmarker}
+
+:[range]pyf[ile] {file}
+
+:python import vim
+
+vim.command(EX-command-str)
+vim.eval(expression-str)
+
+vim.buffers
+vim.windows
+vim.current
+
+You can treat buffer objects as sequence objects.  In this context, they
+act as if they were lists of 'mutable' of strings, with each
+element being a line of the buffer.
+
+

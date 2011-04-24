@@ -1,0 +1,122 @@
+/usr/share/vim/vim72/doc/arabic.txt       : nouse
+/usr/share/vim/vim72/doc/autocmd.txt      : done
+/usr/share/vim/vim72/doc/change.txt       : done
+/usr/share/vim/vim72/doc/cmdline.txt      : done
+/usr/share/vim/vim72/doc/debugger.txt     : nouse
+/usr/share/vim/vim72/doc/debug.txt        : nouse
+/usr/share/vim/vim72/doc/develop.txt      : done
+/usr/share/vim/vim72/doc/diff.txt         : done
+/usr/share/vim/vim72/doc/digraph.txt      : done
+/usr/share/vim/vim72/doc/editing.txt      : done
+/usr/share/vim/vim72/doc/eval.txt
+/usr/share/vim/vim72/doc/farsi.txt        : nouse
+/usr/share/vim/vim72/doc/filetype.txt     : done
+/usr/share/vim/vim72/doc/fold.txt
+/usr/share/vim/vim72/doc/ft_ada.txt       : nouse
+/usr/share/vim/vim72/doc/ft_sql.txt       : nouse
+/usr/share/vim/vim72/doc/gui.txt          : done
+/usr/share/vim/vim72/doc/gui_w16.txt      : nouse
+/usr/share/vim/vim72/doc/gui_w32.txt      : done
+/usr/share/vim/vim72/doc/gui_x11.txt      : done
+/usr/share/vim/vim72/doc/hangulin.txt     : nouse
+/usr/share/vim/vim72/doc/hebrew.txt       : nouse
+/usr/share/vim/vim72/doc/help.txt         : done
+/usr/share/vim/vim72/doc/howto.txt        : done
+/usr/share/vim/vim72/doc/if_cscop.txt
+/usr/share/vim/vim72/doc/if_mzsch.txt     : nouse
+/usr/share/vim/vim72/doc/if_ole.txt       : nouse
+/usr/share/vim/vim72/doc/if_perl.txt
+/usr/share/vim/vim72/doc/if_pyth.txt      :done
+/usr/share/vim/vim72/doc/if_ruby.txt      : nouse
+/usr/share/vim/vim72/doc/if_sniff.txt     : nouse
+/usr/share/vim/vim72/doc/if_tcl.txt       : nouse
+/usr/share/vim/vim72/doc/indent.txt
+/usr/share/vim/vim72/doc/index.txt        : done
+/usr/share/vim/vim72/doc/insert.txt
+/usr/share/vim/vim72/doc/intro.txt        : done
+/usr/share/vim/vim72/doc/map.txt          : done
+/usr/share/vim/vim72/doc/mbyte.txt        : done
+/usr/share/vim/vim72/doc/message.txt      : done
+/usr/share/vim/vim72/doc/mlang.txt        : done
+/usr/share/vim/vim72/doc/motion.txt       : done
+/usr/share/vim/vim72/doc/netbeans.txt
+/usr/share/vim/vim72/doc/options.txt      : done
+/usr/share/vim/vim72/doc/os_mac.txt       : nouse
+/usr/share/vim/vim72/doc/os_unix.txt      : done
+/usr/share/vim/vim72/doc/os_win32.txt     : done
+/usr/share/vim/vim72/doc/pattern.txt
+/usr/share/vim/vim72/doc/pi_getscript.txt : done
+/usr/share/vim/vim72/doc/pi_gzip.txt      : done
+/usr/share/vim/vim72/doc/pi_netrw.txt
+/usr/share/vim/vim72/doc/pi_paren.txt     : done
+/usr/share/vim/vim72/doc/pi_spec.txt      : done
+/usr/share/vim/vim72/doc/pi_tar.txt       : done
+/usr/share/vim/vim72/doc/pi_vimball.txt   : done
+/usr/share/vim/vim72/doc/pi_zip.txt       : done
+/usr/share/vim/vim72/doc/print.txt        : done
+/usr/share/vim/vim72/doc/quickfix.txt
+/usr/share/vim/vim72/doc/quickref.txt     : done
+/usr/share/vim/vim72/doc/quotes.txt       : done
+/usr/share/vim/vim72/doc/recover.txt      : done
+/usr/share/vim/vim72/doc/remote.txt       : done
+/usr/share/vim/vim72/doc/repeat.txt       : done
+/usr/share/vim/vim72/doc/rileft.txt       : nouse
+/usr/share/vim/vim72/doc/russian.txt      : nouse
+/usr/share/vim/vim72/doc/scroll.txt       : done
+/usr/share/vim/vim72/doc/sign.txt         : done
+/usr/share/vim/vim72/doc/spell.txt        : done
+/usr/share/vim/vim72/doc/sponsor.txt      : done
+/usr/share/vim/vim72/doc/starting.txt     : done
+/usr/share/vim/vim72/doc/syntax.txt
+/usr/share/vim/vim72/doc/tabpage.txt      : done
+/usr/share/vim/vim72/doc/tagsrch.txt
+/usr/share/vim/vim72/doc/term.txt         : done
+/usr/share/vim/vim72/doc/tips.txt         : done
+/usr/share/vim/vim72/doc/todo.txt         : nouse
+/usr/share/vim/vim72/doc/uganda.txt       : nouse
+/usr/share/vim/vim72/doc/undo.txt         : done
+/usr/share/vim/vim72/doc/usr_01.txt       : done
+/usr/share/vim/vim72/doc/usr_02.txt       : done
+/usr/share/vim/vim72/doc/usr_03.txt       : done
+/usr/share/vim/vim72/doc/usr_04.txt       : done
+/usr/share/vim/vim72/doc/usr_05.txt       : done
+/usr/share/vim/vim72/doc/usr_06.txt       : done
+/usr/share/vim/vim72/doc/usr_07.txt       : done
+/usr/share/vim/vim72/doc/usr_08.txt       : done
+/usr/share/vim/vim72/doc/usr_09.txt       : done
+/usr/share/vim/vim72/doc/usr_10.txt       : done
+/usr/share/vim/vim72/doc/usr_11.txt       : done
+/usr/share/vim/vim72/doc/usr_12.txt       : done
+/usr/share/vim/vim72/doc/usr_20.txt       : done
+/usr/share/vim/vim72/doc/usr_21.txt       : done
+/usr/share/vim/vim72/doc/usr_22.txt       : done
+/usr/share/vim/vim72/doc/usr_23.txt       : done
+/usr/share/vim/vim72/doc/usr_24.txt       : done
+/usr/share/vim/vim72/doc/usr_25.txt       : done
+/usr/share/vim/vim72/doc/usr_26.txt       : done
+/usr/share/vim/vim72/doc/usr_27.txt       : done
+/usr/share/vim/vim72/doc/usr_28.txt       : done
+/usr/share/vim/vim72/doc/usr_29.txt       : done
+/usr/share/vim/vim72/doc/usr_30.txt       : done
+/usr/share/vim/vim72/doc/usr_31.txt       : done
+/usr/share/vim/vim72/doc/usr_32.txt       : done
+/usr/share/vim/vim72/doc/usr_40.txt       : done
+/usr/share/vim/vim72/doc/usr_41.txt
+/usr/share/vim/vim72/doc/usr_42.txt       : done
+/usr/share/vim/vim72/doc/usr_43.txt       : done
+/usr/share/vim/vim72/doc/usr_44.txt
+/usr/share/vim/vim72/doc/usr_45.txt       : done
+/usr/share/vim/vim72/doc/usr_90.txt       : done
+/usr/share/vim/vim72/doc/usr_toc.txt      : done
+/usr/share/vim/vim72/doc/various.txt      : done
+/usr/share/vim/vim72/doc/version4.txt     : nouse
+/usr/share/vim/vim72/doc/version5.txt     : nouse
+/usr/share/vim/vim72/doc/version6.txt     : nouse
+/usr/share/vim/vim72/doc/version7.txt     : nouse
+/usr/share/vim/vim72/doc/vi_diff.txt      : nouse
+/usr/share/vim/vim72/doc/visual.txt       : done
+/usr/share/vim/vim72/doc/windows.txt      : done
+/usr/share/vim/vim72/doc/workshop.txt     : nouse
+
+
+    /*vim:tw=78:ts=8:ft=help:norl:*/

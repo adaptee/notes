@@ -1,0 +1,13 @@
+
+Display contents of the README file in a specific revision:
+
+    $ tig show 0.8.1:README
+
+TIG_DIFF_CMD
+    The command used for the diff view. By default, git show is used as a backend.
+
+TIG_LOG_CMD
+    The command used for the log view. If you prefer to have both author and committer shown in the log
+    view be sure to pass --pretty=fuller to git log.
+
+

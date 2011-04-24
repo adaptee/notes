@@ -1,0 +1,20 @@
+#1 clone the svn repo
+git svn clone --stdlayout [SVN-URL]
+
+#2 checkout git branch base upon svn
+git checkout -b mine trunk
+
+#3 do various devel work on git branch, as normal
+true
+
+#4 commit the changes you have done, as normal
+git commit
+
+#5 push those new commit into remote svn repo
+git svn dcommit
+
+#6 make sure you get new commit by others from svn repo
+git svn fetch
+
+
+

@@ -1,0 +1,407 @@
+[is None]
+    PEP 8 says:
+    "Comparisons to singletons like None should always be done with 'is' or 'is not', never the equality operators."
+
+    besides, 'is None' is faster than '== None'
+
+[FAQ]
+http://docs.python.org/faq/index.html
+
+1.  Why am I getting an UnboundLocalError when the variable has a value?
+
+    >>> x = 10
+    >>> def bar():
+    ...     print x
+    >>> bar()
+    10
+
+    >>> x = 10
+    >>> def foo():
+    ...     print x
+    ...     x += 1
+    >>> foo()
+    Traceback (most recent call last):
+    ...
+    UnboundLocalError: local variable 'x' referenced before assignment
+
+
+
+
+2. What are the rules for local and global variables in Python?
+
+    In Python, variables that are only 'referenced' inside a function are implicitly global. If a variable is 'assigned' a new value 'anywhere' within the function's body, it's assumed to be a local.
+
+
+3. How do I share global variables across modules?
+
+    The canonical way to share information across modules within a single program is to create a special module (often called config or cfg). Just import the config module in all modules of your application; the module then becomes available as a global name.
+
+    Because there is only one instance of each module, any changes made to the module object get reflected everywhere.
+
+4. What are the "best practices" for using import in a module?
+
+    In general, don't use 'from modulename import *'. Doing so clutters the importer's namespace.
+
+    It's good practice if you import modules in the following order:
+
+   1. standard library modules - e.g. sys, os, re
+   2. third-party library modules (anything installed in Python's site-packages directory) - e.g. mx.DateTime, ZODB, PIL.Image, etc.
+   3. locally-developed modules
+
+    Never use 'relative package imports'. If you're writing code that's in the package.sub.m1 module and want to import package.sub.m2, do not just write 'import m2', even though it's legal. Write 'from package.sub import m2' instead.
+
+    Relative imports can lead to a module being initialized twice, leading to confusing bugs.
+
+    It is sometimes necessary to move 'import' into a function or class to avoid problems with circular imports.
+
+    If only instances of a specific class use a module, then it is reasonable to import the module in the class's __init__ method and then assign the module to an instance variable so that the module is always available (via that instance variable) during the life of the object.
+
+
+5. How do I copy an object in Python?
+
+    In general, try 'copy.copy()' or 'copy.deepcopy()'. Not all objects can be copied, but most can.
+
+    Some objects can be copied more easily.
+
+    Dictionaries have a copy() method:
+
+        newdict = olddict.copy()
+
+    Sequences can be copied by slicing:
+
+        new_l = l[:]
+
+6. How can I find the methods or attributes of an object?
+
+    dir(x) returns an alphabetized list of the names containing the instance attributes and methods and attributes defined by its class.
+
+
+8. What's up with the comma operator's precedence?
+
+    Comma is 'not an operator' in Python. Consider this session:
+
+    >>> "a" in "b", "a"
+    (False, 'a')
+
+    Since the comma is not an operator, but a separator between expressions the above is evaluated as if you had entered:
+
+    >>> ("a" in "b"), "a"
+
+    not:
+
+    >>> "a" in ("b", "a")
+
+    The same is true of the various assignment operators (=, += etc). They are not truly operators but syntactic delimiters in assignment statements.
+
+
+9. How do I convert a string to a number?
+
+    For integers, use 'int()' , e.g. int('144') == 144.
+
+    Similarly, 'float()' converts to floating-point, e.g. float('144') == 144.0.
+
+    By default, these interpret the number as decimal, so that int('0144') == 144 and int('0x144') raises ValueError. int(string, base) takes the base to convert from as a second optional argument, so int('0x144', 16) == 324. If the base is specified as 0, the number is interpreted using Python's rules: a leading '0' indicates octal, and '0x' indicates a hex number.
+
+10. How do I convert a number to a string?
+
+    use 'str().' If you want a hexadecimal or octal representation, use the 'hex()' or 'oct()'.
+
+11. How do I modify a string in place?
+
+    You can't, because strings are immutable.
+
+    If you need an object with this ability, try converting the string to a list or use the array module:
+
+12. How do I use strings to call functions/methods?
+
+    The best is to use a dictionary that maps strings to functions.
+
+    Or, Use the built-in function getattr():
+
+    import foo
+    getattr(foo, 'bar')()
+
+13. Is there an equivalent to Perl's chomp() for removing trailing newlines from strings?
+
+    you can use S.rstrip("\r\n") to remove all occurrences of any line terminator from the end of the string S without removing other trailing whitespace.
+
+14. How do I convert between tuples and lists?
+
+    'tuple(seq)' converts any sequence (actually, any iterable) into a tuple with the same items in the same order.
+
+    'list(seq)' converts any sequence or iterable into a list with the same items in the same order.
+
+15. What's a negative index?
+
+    Think of seq[-n] as the same as seq[len(seq)-n].
+
+16. How do I iterate over a sequence in reverse order?
+
+    Use the 'reversed()'
+
+    for x in reversed(sequence):
+            ... # do something with x...
+
+    This won't touch your original sequence, but build a new copy with reversed order to iterate over.
+
+17. How do you remove duplicates from a list?
+
+    In Python 2.5 and later, the following is possible :
+
+    mylist = list(set(mylist))
+
+    If all elements of the list are all hashable, this is often faster:
+
+    d = {}
+    for x in mylist:
+    d[x] = 1
+    mylist = list(d.keys())
+
+18. How do I create a multidimensional list?
+
+    replicating a list with * doesn't create copies, it only creates references to the existing objects.
+
+19. How can I get a dictionary to display its keys in a consistent order?
+
+    You can't. Dictionaries store their keys in an unpredictable order, so the display order of a dictionary's elements will be similarly unpredictable.
+
+    workaround: use the 'pprint' module to pretty-print the dictionary; the items will be presented in order sorted by the key.
+
+
+20. How can I sort one list by values from another list?
+
+    Merge them into a single list of tuples, sort the resulting list, and then pick out the element you want.
+
+21. How do I check if an object is an instance of a given class or of a subclass of it?
+
+    use isinstance()
+
+22. What is delegation?
+
+    delegation can be achieved easily in python through class and __getattr__ and __setattr__
+
+    Most __setattr__() implementations must modify self.__dict__ to store local state for self without causing an infinite recursion.
+
+23. How do I call a method defined in a base class from a derived class that overrides it?
+
+    If you're using new-style classes, use super()
+
+    If you're using classic classes: For a class definition such as class Derived(Base): ... you can call method meth() defined in Base (or one of Base's base classes) as Base.meth(self, arguments...). Here, Base.meth is an unbound method, so you need to provide the self argument explicitly.
+
+24. How do I create static class data and static class methods?
+
+    For static data, simply define a class attribute. To assign a new value to the attribute, you have to explicitly use the class name in the assignment.
+
+    Rebinding of a class-static data name must always specify the class whether inside a method or not:
+
+    With Python 2.4's decorators, static class method can also be written as
+
+    class C:
+        @staticmethod
+        def static(arg1, arg2, arg3):
+            # No 'self' parameter!
+            ...
+
+25. How can I overload constructors (or methods) in Python?
+
+    python does not support function/method overloading.
+
+26. I try to use __spam and I get an error about _SomeClassName__spam.
+
+    Variable names with double leading underscores are "mangled" to provide a simple but effective way to define class private variables. Any identifier of the form __spam (at least two leading underscores, at most one trailing underscore) is textually replaced with _classname__spam, where classname is the current class name with any leading underscores stripped.
+
+27. My class defines __del__ but it is not called when I delete the object.
+
+    The 'del' statement does not necessarily call __del__() - it simply decrements the object's reference count, and if this reaches zero __del__() is called.
+
+    Despite the cycle collector, it's still a good idea to define an explicit close() method on objects to be called whenever you're done with them. The close() method can then remove attributes that refer to subobjecs. Don't call __del__() directly - __del__() should call close() and close() should make sure that it can be called more than once for the same object.
+
+    Another way to avoid cyclical references is to use the 'weakref' module, which allows you to point to objects without incrementing their reference count. Tree data structures, for instance, should use weak references for their parent and sibling references (if they need them!).
+
+28. How do I create a .pyc file
+
+    Running Python on a top level script is not considered an import and no .pyc will be created.
+
+    If you need to create abc.pyc manually,  you can use the 'py_compile' and 'compileall' modules.
+
+
+29. How do I find the current module name?
+
+    Look at the predefined global variable __name__. If its value is '__main__', the program is running as a script.
+
+
+30. __import__('x.y.z') returns <module 'x'>; how do I get z?
+
+    Try:
+    __import__('x.y.z').y.z
+
+    For more realistic situations, you may have to do something like
+
+    m = __import__(s)
+        for i in s.split(".")[1:]:
+            m = getattr(m, i)
+
+    See 'importlib' for a convenience function called import_module().
+
+
+31. Why must 'self' be used explicitly in method definitions and calls?
+
+    The idea was borrowed from Modula-3. It turns out to be very useful, for a variety of reasons.
+
+    First, it's more obvious that you are using a method or instance attribute instead of a local variable. Reading self.x or self.meth() makes it absolutely clear that an instance variable or method is used even if you don't know the class definition by heart. In C++, you can sort of tell by the lack of a local variable declaration (assuming globals are rare or easily recognizable) - but 'in Python, there are no local variable declarations,' so you'd have to look up the class definition to be sure. Some C++ and Java coding standards call for instance attributes to have an m_ prefix, so this explicitness is still useful in those languages, too.
+
+    Second, it means that no special syntax is necessary if you want to explicitly reference or call the method from a particular class. In C++, if you want to use a method from a base class which is overridden in a derived class, you have to use the :: operator - in Python you can write baseclass.methodname(self, <argument list>). This is particularly useful for __init__() methods, and in general in cases where a derived class method wants to extend the base class method of the same name and thus has to call the base class method somehow.
+
+    Finally, for instance variables it solves a syntactic problem with assignment: since local variables in Python are (by definition!) those variables to which a value is assigned in a function body (and that aren't explicitly declared global), there has to be some way to tell the interpreter that an assignment was meant to assign to an instance variable instead of to a local variable, and it should preferably be syntactic (for efficiency reasons). C++ does this through declarations, but Python doesn't have declarations and it would be a pity having to introduce them just for this purpose. Using the explicit self.var solves this nicely. Similarly, for using instance variables, having to write self.var means that references to unqualified names inside a method don't have to search the instance's directories. To put it another way, 'local variables and instance variables live in two different namespaces', and you need to tell Python which namespace to use.
+
+32. Why can't I use an assignment in an expression?
+
+    Many people used to C or Perl complain that they want to use this C idiom:
+
+    while (line = readline(f)) {
+            // do something with line
+    }
+
+    where in Python you're forced to write this:
+
+    while True:
+        line = f.readline()
+        if not line:
+            break
+        ... # do something with line
+
+33. Why is join() a string method instead of a list or tuple method?
+
+34. How fast are exceptions?
+
+    A try/except block is extremely efficient.
+
+    But, actually catching an exception is expensive.
+
+
+35. Why are there separate tuple and list data types?
+
+    Lists and tuples, while similar in many respects, are generally used in 'fundamentally different ways'.
+
+    Tuples can be thought of as being similar to  C structs; they're small collections of related data which are operated on as a group.
+
+    Lists, on the other hand, are more like arrays in other languages.
+
+
+35. How are lists implemented?
+
+    Python's lists are really variable-length arrays, not Lisp-style linked lists.
+
+    The implementation uses a contiguous array of references to other objects, and keeps a pointer to this array and the array's length in a list head structure.
+
+
+36. How are dictionaries implemented?
+
+    Python's dictionaries are implemented as resizable hash tables.
+
+    Compared to B-trees, this gives better performance for lookup (the most common operation by far) under most circumstances, and the implementation is simpler.
+
+37. Why must dictionary keys be immutable?
+
+38. How do you specify and enforce an interface spec in Python?
+
+    Python 2.6 adds an 'abc' module that lets you define Abstract Base Classes (ABCs). You can then use isinstance() and issubclass() to check whether an instance or a class implements a particular ABC.
+
+    The 'collections' modules defines a set of useful ABCs such as Iterable, Container, and MutableMapping.
+
+39. Why are default values shared between objects?
+
+    It is often expected that a function call creates new objects for default values. This is not what happens. Default values are created exactly once, when the function is defined/compiled.
+
+    Because of this feature, it is good programming practice to not use mutable objects as default values. Instead, use None as the default value and inside the function, check if the parameter is None and create a new list/dictionary/whatever if it is.
+
+40. Where is the source file for math.py(posix.py regex.py etc.) ?
+
+There are (at least) three kinds of modules in Python:
+
+    modules written in Python (.py);
+
+    modules written in C and dynamically loaded (.dll, .pyd, .so, .sl, etc);
+
+    modules written in C and linked with the interpreter; to get a list of these, type:
+
+    'print sys.builtin_module_names'
+
+41. How do I test a Python program or component?
+
+    Python comes with two testing frameworks. The 'doctest' module finds examples in the docstrings for a module and runs them, comparing the output with the expected output given in the docstring.
+
+    The 'unittest' module is a fancier testing framework modelled on Java and Smalltalk testing frameworks.
+
+42. How do I program using threads?
+
+    Be sure to use the 'threading' module, not the 'thread' module.
+
+    The threading module builds convenient abstractions on top of the low-level primitives provided by the thread module.
+
+43. How do I delete a file and ... ?
+
+    Use os.remove(filename) or os.unlink(filename). The two functions are identical; unlink() is simply the name of the Unix system call for this function.
+
+    use os.rmdir() to remove a directory,
+    use os.mkdir() to create one.
+
+    os.makedirs(path) will create any intermediate directories in path that don't exist.
+    os.removedirs(path) will remove intermediate directories as long as they're empty;
+
+    if you want to delete an entire directory tree and its contents, use shutil.rmtree().
+
+44. How do I copy a file?
+
+    use shutil.copyfile()
+
+45. How do I read (or write) binary data?
+
+    To read or write complex binary data formats, it's best to use the 'struct' module.
+
+    It allows you to take a string containing binary data (usually numbers) and convert it to Python objects; and vice versa.
+
+
+46. Why doesn't closing sys.stdout (stdin) really close it?
+
+    Python file objects are a high-level layer of abstraction on top of C streams, which in turn are a medium-level abstraction on top of (among other things) low-level C file descriptors.
+
+    file.close() marks the Python file object as being closed from Python's point of view, and also arranges to close the underlying C stream.
+
+    But stdin, stdout and stderr are 'treated specially' by Python, because of the special status also given to them by C. Running sys.stdout.close() marks the Python-level file object as being closed, but does not close the associated C stream.
+
+47. How do I generate random numbers in Python?
+
+    The standard module 'random' implements a random number generator. Usage is simple:
+
+    import random
+    random.random()
+
+    This returns a random floating point number in the range [0, 1).
+
+
+[IAQ]
+
+1. why doesn't Python allow x++?
+
+    I believe it is the same reason why Python does not allow assignments in expressions: Python wants to clearly separate statements and expressions.
+
+2. The f(*m) trick is cool. Does the same syntax work with method calls like x.f(*y)?
+
+    This question reveals a common misconception. There is no syntax for method calls!
+
+    There is a syntax for calling a function, and there is a syntax for extracting a field from an object, and there are bound methods. Together these three features conspire to make it look like x.f(y) is a single piece of syntax, when actually it is equivalent to (x.f)(y), which is equivalent to (getattr(x, 'f'))(y).
+
+3. Q: Can I do the equivalent of (test ? result : alternative) in Python?
+
+    Python 2.5 added the form (result if test else alternative). It undermines Python's clear distinction between expressions and statements, but it is a compromise that many people have asked for.
+
+5. Q: How do I time the execution of my functions?
+
+Here's a simple answer:
+
+def timer(fn, *args):
+    "Time the application of fn to args. Return (result, seconds)."
+    import time
+    start = time.clock()
+    return fn(*args), time.clock() - start

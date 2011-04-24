@@ -1,0 +1,32 @@
+[2flac] [done...]
+    split and/or convert other lossless audio format into flac
+
+    support embeded cue
+
+[pycue] [done...]
+    python native cue parser
+
+    [tip]  use ply(python lex/yacc) to do the hardwork
+
+[pychmviewer] [doing...]
+
+
+[arcman/aurman] [slicent...]
+
+    write a nice python replacement for pacman/yaourt
+
+    [aim]
+    1. replace yaourt nicely
+    2. support search/install/upload/ with AUR
+    3. the supported options should be a superset of pacman
+
+    [helper]
+        a. the colorful output can make use of portage.output provided by gentoo
+        b. the PKGBUILD parser can use parched
+        c. pyalpmm provided high level api to access alpm database
+
+
+[pyamule] [silent....]
+
+
+

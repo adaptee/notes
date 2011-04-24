@@ -1,0 +1,37 @@
+#color theme
+highland mist   my choice! nice green!
+norway          good
+zion(revised)   cool but not practical
+terra           just acceptable
+oxygen          system default
+whitewater      good
+steel           good
+
+[kwin shortcut]
+
+keep window above others                <Win>-A
+show desktoo                            <Win>-D
+
+sound volume up                         <Win><Right>
+sound volume down                       <Win><Left>
+
+zoom in (large)                         <Win>=
+zoom out(small)                         <Win>-
+
+swith to next workspace                 <Ctrl><Alt><Right>
+switth to previous workspace            <Ctrl><Alt><Left>
+
+move window to next workspace           <Shift><Ctrl><Alt><Right>
+move window to previous workspace       <Shift><Ctrl><Alt><Left>
+
+run command                             <Alt><F2>
+minimize window                         <Alt><F3>
+close  window                           <Alt><F4>
+maximize window                         <Alt><F5>
+
+
+open system main menu                   <Shift><F1>
+
+make window fullscreen                  <F12>
+toggle snow effect of desktop           <Win><Ctrl><F12>
+

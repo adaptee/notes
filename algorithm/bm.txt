@@ -1,0 +1,57 @@
+
+[BM 算法的基本思路]：
+
+1. 匹配基点的移动方向仍是从左向右
+
+2. pattern的当前匹配位置则按从右至左的方向移动
+
+3. 匹配失败时计算匹配基点向右安全移动的最大距离
+
+3.1  基于失败字符的 " Bad character heuristics"
+
+    基点向右移动的距离，应保证下轮匹配中:
+
+        这个bad character 与它在模式中的最右侧出现呈"对齐"状态。
+
+    优点：逻辑简洁易懂，计算很容易
+    缺点：计算出的移动距离可能不是最有效的；结果可能为负，导致基点向左移动
+
+3.2  基于已匹配部分的 "Good suffix heuristics "
+
+    基点向右移动的距离，应保证下轮匹配满足以下情形之一:
+
+        a. good suffix 与其在 pattern 中的最右侧存在(当然，不考虑good suffix自身)呈"对齐"
+
+        b. 若good suffix 未在 pattern 的其它位置存在，且good suffix 的 某个
+        subsuffix 也是 pattern 的 prefix，则该 subsufix 应与其对应prefix 呈"对齐"
+
+    优点：计算出的移动距离不会出现负值
+    缺点：逻辑复杂
+
+[Sunday 算法与BM算法的区别]
+
+    Sunday 在计算移动距离时，不考虑复杂的"good parts heuristics"，只考虑类似
+    "bad character heuristics" 的 "[next] character heuristics"，即基于当前基点
+    [右侧]的字符来计算移动距离。
+
+
+[Horspool 算法与BM算法的区别]
+
+    Sunday 在计算移动距离时，不考虑复杂的"good parts heuristics"，只考虑类似
+    "bad character heuristics" 的 "[base] character heuristics"，即基于当前基点
+    的字符来计算移动距离。
+
+
+[Sunday & Horspool 的安全性证明]：
+
+    假设pattern 长度为p, BM算法计算出的移动距离为s, Sunday算法计算出的移动距离为s'
+
+    a. 若 s < p, 这意味着按照BM算法，base-char 会参与下一轮匹配; 因此真正合理的移
+    动距离至少应保证"base-char"被对齐，否则下一轮匹配必然失败，可见Sunday的结
+    果是安全的
+
+    b. 若 s ＝p, 这意味着按照BM算法，base-char 不参与下一轮匹配; 而 s' <= p =
+    s，意味着Sunday的结果虽然不如BM的结果好，但还是安全的。
+
+    类似的，可以证明 Horspool 算法的安全性
+

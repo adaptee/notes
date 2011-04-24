@@ -1,0 +1,69 @@
+1. What's Dbus
+
+    D-Bus has several layers:
+
+    * A library, libdbus, that allows two applications to connect to each other and exchange messages.
+
+    * A message bus daemon executable, built on libdbus, that multiple applications can connect to. The daemon can route messages from one application to zero or more other applications.
+
+    * Wrapper libraries or bindings based on particular application frameworks. For example, libdbus-glib and libdbus-qt. There are also bindings to languages such as Python. These wrapper libraries are the API most people should use, as they simplify the details of D-Bus programming. libdbus is intended to be a low-level backend for the higher level bindings. Much of the libdbus API is only useful for binding implementation.
+
+    libdbus only supports one-to-one connections, just like a raw network socket.
+    The message bus daemon forms the hub of a wheel; Think of the daemon as a router.
+
+    The bus daemon has multiple instances on a typical computer. The first instance is a machine-global singleton, that is, a system daemon similar to sendmail or Apache. The other instances are created one per user login session.
+
+2. Concept
+
+    The low-level D-Bus protocol, and corresponding libdbus API, does not care about native objects. However, it provides a concept called an object path.
+
+    The object path looks like a filesystem path, for example an object could be named /org/kde/kspread/sheets/cells/4/5
+
+    Each object has members; the two kinds of member are methods and signals
+
+    Each object supports one or more interfaces;
+
+    DBus identifies interfaces with a simple namespaced string, something like org.freedesktop.Introspectable
+
+    When each application connects to the bus daemon, the daemon immediately assigns it a name, called the unique connection name.
+
+    A unique name begins with a ':' (colon) character. These names are never reused during the lifetime of the bus daemon.
+
+    You could think of the unique names as IP addresses, and the bus names as domain names. So com.mycompany.TextEditor might map to something like :34-907 just as mycompany.com maps to something like 192.168.0.5.
+
+    Names have a second important use, other than routing messages. They are used to track lifecycle. When an application exits (or crashes), its connection to the message bus will be closed by the operating system kernel. The message bus then sends out notification messages telling remaining applications that the application's names have lost their owner. By tracking these notifications, your application can reliably monitor the lifetime of other applications.
+
+    Applications using D-Bus are either servers or clients. A server listens for incoming connections; a client connects to a server. Once the connection is established, it is a symmetric flow of messages; the client-server distinction only matters when setting up the connection.
+
+    A D-Bus address specifies where a server will listen, and where a client will connect; the underlying transporting mechanism is irrelevalant, socket or whatever
+
+    When using D-Bus with a message bus daemon, libdbus automatically discovers the address of the per-session bus daemon by reading an environment variable.
+
+    Pulling all these concepts together, to specify a particular method call on a particular object instance, a number of nested components have to be named:
+
+        Address -> Bus Name -> Object Path -> Interface -> Method
+
+
+    D-Bus works by sending messages between processes. If you're using a sufficiently high-level binding, you may never work with messages directly.
+
+There are 4 message types:
+
+    * 'Method call' messages ask to invoke a method on an object.
+    * 'Method return' messages return the results of invoking a method.
+    * 'Error' messages return an exception caused by invoking a method.
+    * 'Signal' messages are notifications that a given signal has been emitted (that an event has occurred). You could also think of these as "event" messages.
+
+    A method call in DBus consists of two messages; a method call message sent from process A to process B, and a matching method reply message sent from process B to process A. Both the call and the reply messages are routed through the bus daemon.
+
+    The method call message contains: a bus name belonging to the remote process; the name of the method; the arguments to the method; an object path inside the remote process; and optionally the name of the interface that specifies the method.
+
+    The bus daemon looks at the destination bus name. If a process owns that name, the bus daemon forwards the method call to that process. Otherwise, the bus daemon creates an error message and sends it back as the reply to the method call message.
+
+    The bus daemon never reorders messages. That is, if you send two method call messages to the same recipient, they will be received in the order they were sent.
+
+    A signal in DBus consists of a single message, sent by one process to any number of other processes. That is, a signal is a unidirectional broadcast.
+
+    The emitter (aka sender) of a signal has no knowledge of the signal recipients. Recipients register with the bus daemon to receive signals based on "match rules" - these rules would typically include the sender and the signal name. The bus daemon sends each signal only to recipients who have expressed interest in that signal.
+
+    D-Bus objects may support the interface org.freedesktop.DBus.Introspectable. This interface has one method Introspect() which takes no arguments and returns an XML string. The XML string describes the interfaces, methods, and signals of the object.
+

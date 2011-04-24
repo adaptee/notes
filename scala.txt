@@ -1,0 +1,355 @@
+1. A Scalable Language
+
+    Scala是一种混合了OOP和FP的静态类型语言。
+
+    Scala 中的 Map 并不属于核心语言特性，而是由library提供的。
+
+    Scala 中，函数同时也是对象。
+
+    虽然OOP成为主流已经有很长一段时间，但是大部分OOP语言没有跟随Smalltalk的设计理念：所有的值的都是对象；相反，几乎每种语言中都包含了特殊的、不是对象的值。这种不统一性看起来无关紧要，却潜在的增大了复杂度，限制了可扩展性。
+
+    Scala 则坚持了纯OO的设计理念：所有的值都是对象，所有的操作都是method。
+
+    例如，1 + 2 的 实质是： 1.+(2)
+
+    除了是一门纯OO语言外，Scala同时还是特性完备的FP语言。
+
+    FP 的两个基本理念：
+
+    1). 函数是 first-class value
+    2). 函数应该是纯函数，不具备side effect。
+
+
+    immutable data 是 FP 的重要基石。
+
+
+    " I'm not against types, but I don't know of any type systems that aren't a complete pain, so I still like dynamic typing."  ---Alan Kay
+
+    静态类型系统的两个常见缺点：冗长的代码，以及灵活性不足。
+
+    Scala 拥有强大的 type inference 系统，允许程序员省略大部分看起来显而易见的类型信息。
+
+    "testing can only prove the presence of errors, never their absence."  --Edsger Dijkstra
+
+2. First Steps in Scala
+
+    Scala 支持两种 variable： var 和 val 。
+
+    val 类似于Java中的final variable，或者C++中的const variable ：初始化后，就不允许再次赋值。
+
+    var 类似于大部分语言中的普通变量，可以多次赋值。
+
+    Scala 中，类型信息出现在变量名之后(: 作为分隔符)，而不是Java程序员熟悉的之前。
+
+    'def' 用于定义函数。程序员必须为函数参数提供类型信息，因为type inference 在这里不起作用。此外，函数还需要指明返回类型。
+
+    figure 2.1
+
+    返回类型为'Unit'，语义是函数的返回值没有意义，可以忽略；类似于Java中的'Void'
+
+    Scala 中，数组索引以 0 为基点。
+
+    Scala 不支持 '++' 操作符，但支持'+='等操作符。
+
+    figure 2.2
+
+3. Next Steps in Scala
+
+    创建新对象时，'( )' 内包含的是与值相关的参数，而 '[ ]'内包含的是与类型相关的参数。
+
+    准确的说，Scala 中不存在operator的概念，因为所有的 operator 实际都是 method call。
+
+    数组同样是对象，下标访问实际上也是method call；例如，array(1) 的实质是 array.apply(1)
+
+    实际上，这一转换适用于所有对象，即 obj(args) 的实质是 obj.apply(args)
+
+    array(1) = "hello" 的实质是 array.update(1, "hello")
+
+
+    Scala 中的 List 总是 immutable data ；只能存放同类型元素
+
+
+    '::'   cons 操作符
+    ':::'  concat 操作符，合并两个List
+
+
+    Nil 表示 空的List
+
+
+    Tuple 和 List 很相似，区别在于 Tuple 可存放不同类型的元素。
+
+    另外，List 的下标以 0 为基点，而 Tuple 的下标以 1 为基点。
+
+    Scala 为 Set 和 Map 分别提供了两个版本：immutable(default) 和 mutable
+
+    '->' 操作符的结果是返回一个包含两个元素的Tuple
+
+    FP 风格Scala 代码的基本特征：不包含 var
+
+    若函数的返回类型为 Unit，通常意味着该函数具备 side effect 。
+
+4. Classes and Objects
+
+    Class 的 field 和 method，被合称为member；field 也被称为 instance variable 。
+
+    Class member 的默认访问控制是 public 。
+
+    Procedure 风格的函数定义形式：省略返回类型和'='；这种形式常用于具备side effect 的函数。
+
+    Scala 代码总通常不需要使用';' 来分隔语句，因为Scala能够正确的分隔语句。例外情况，一行中包含多条语句。
+
+    Scala 中的Class 无法拥有 static member，这是 Scala 比之 Java 更加 OO 的表现之一。
+
+    Scala 提供了名为"Singleton Object" 的特性。
+
+    Singleton Object 的定义和 Class 的定义非常相似，区别只在于用关键字'object' 替换了 'class'
+
+    如果某个Singleton Object 和 某个Class 同名，那么它们被称为对方的 companion object 和 companion class
+    另一方面，若不存在与某个Singleton Object 同名的 Class，该 Singleton Object 被称为 standalone object。
+
+    companion object/ class 可以访问对方的 private member 。
+
+    companion object，可以用来模拟Java中的static member。
+
+    Singleton Object 和 Class 的另一个区别： Singleton  Object 无法接受参数。
+
+    任意具备"main" method 的 standalone singleton object 都可以充当程序的入口点。
+
+
+5. Basic Types and Operations
+
+    ' '             字符
+    " "             字符串
+    """  """        原始字符串
+
+    'XXXXX          Symbol literal
+
+5.3 Operators are methods
+
+
+    Scala 中的操作符都是method call；另一方面，能够以操作符形式使用的 method 并不只限于" + - * " 这些常见符号，实际上，任何method 都能以操作符形式调用。
+
+    Scala 中的操作符并不是特殊语言特性，而只是method的一种调用形式。
+
+    操作符形式可分为三种：infix，prefix，postfix
+
+    无参数的method被调用时，可以省略 '( )'；然而，如果method具备side effect，习惯上仍保留 '( )'
+
+5.7 Object equality
+
+    == /!=      object equality
+
+    "a == b"   ==>  a.equals(b)
+
+
+5.8 Operator precedence and associativity
+
+
+    因为操作符的实质是method，所以它们的优先级法则也比较独特：由操作符的首字符决定。
+
+6. Functional Objects
+
+    所谓 functional object，就是不具备任何可变状态的object。
+
+    class parameter & primary constructor
+
+    class 的定义中可以直接使用 class paramerter，而不用像Java代码一样定义为了存放参数而特意定义field。
+
+    class 定义中，凡是不属于field 或 method 定义的部分，都会被自动放入 primary constructor
+
+
+    'override' 关键字用于重新实现 method。
+
+    'require'  关键字可以为 primary constructor 添加 precondition validator，避免创建非法的对象。
+
+    'this' 关键字 总是引用 method  所作用的对象。
+
+
+    Class 只能有一个 primary constructor，但可以有多个 auxiliary constructor。
+
+    Auxiliary constructor 的语法标志是 'def this(...)' ; 每个 auxiliary constructor 都必须调用另一个 auxiliary constructor，或者 primary constructor 。
+
+    只有 primary constructor 有权调用 父类的构造函数。
+
+    因此，primary constructor 实际上是创建对象的单一入口。
+
+6.10 Identifiers in Scala
+
+
+    Scala 中identifier的命名方式可分为4类：
+
+    1). alphanumeric identifer； Scala的习惯是遵循 Camel-Case
+    2). operator identifier
+    3). mixed identifer
+    4). literal identifer，形式为 `XXXX `
+
+    'implicit' 关键字用于定义从类型A到类型B的隐式转换。
+
+7. Built-in Control Structures
+
+    绝大部分control stucture 都有返回值，这是典型的FP风格。
+
+    'while' 和 'do-while' 被称为loop，而不是expression，因为它们不生成有意义的返回值。
+
+    '()' 被称为 unit value，其类型是 Unit；更准确的说，它是唯一的类型为Unit的值。
+
+    assignment 的返回值是 unit value，而不是C/Java程序员习惯的右侧操作数。
+
+
+7.3 For expressions
+
+    'for' 是 Scala中完成迭代操作的瑞士军刀。
+
+    'for' 可用于迭代任何 collection；它属于expression，因为它可以具备返回值(总是一个collection)。
+
+    for ( arg <- args)
+    for ( i   <- 1 to 4)
+
+    'for' 中可附加任意数量的 'if'，以充当filter。
+
+    如果 'for' 中包含多个'<-'，就构成了嵌套的迭代。
+
+    'for' 中还可以包含 val binding，不过绑定中 'val'关键字不能出现
+
+    'yield' 关键字令'for' 中每次迭代的结果被保存起来，并且合起来构成一个collection，称为 'for' 这个expression 的返回值。
+
+    for clauses yield body
+
+
+7.4 Exception handling with try expressions
+
+    'throw' 也是一个expression，其返回值类型为'Nothing'；这对于Java程序员来说有些新奇。
+
+    'catch' 的语法形式很类似Scala的另一个重要特性: pattern matching
+
+    'try-catch-finally' 同样具备返回值。
+
+7.5 Match expressions
+
+    'match' 的作用类似于其他语言中的 switch 语句，但要强大的多，因为它支持 pattern matching
+
+    'match' 的各分支之间不会发生 fall-through 现象，这避免了很多难以察觉的bug。
+
+    'match' 也具有返回值。
+
+7.6 Living without break and continue
+
+
+    Scala 没有提供 break 和 continue ，因为它们难以同function literal 和谐共处。
+
+7.7 Variable scope
+
+    Scala 的 scoping rule 和 Java 几乎完全一样。
+
+    在REPL中，解释器会针对用户输入的每条语句创建新的嵌套scope。
+
+8. Functions and Closures
+
+8.3 First-class functions
+
+    所有的collection 都具备 foreach 和 filter 这两个method
+
+8.4 Short forms of function literals
+
+    大多数情况下，书写 function literal 时可以省略参数的类型信息，因为编译器的tyep inference系统一般能自动推导出正确的类型的信息。
+
+8.8 Repeated parameters
+
+    定义可变参数的方法，是为参数的类型信息添加 '*' 后缀。
+
+8.9 Tail recursion
+
+    尾递归的定义：递归函数的最后一个动作是递归调用。
+
+9. Control Abstraction
+
+9.3 Currying
+
+    curry化的函数，依次作用于多个参数列表，而不是单个参数列表。
+
+    def plainOldSum(x: Int, y: Int) = x + y
+
+    def curriedSum(x: Int)(y: Int) = x + y
+
+9.5 By-name parameters
+
+    Scala 支持 by-name 语义的参数传递，即参数不被求值就被传入。
+
+
+10. Composition and Inheritance
+
+10.2 Abstract classes
+
+    未提供定义的 member 被称为 abstract member，而包含 abstract member 的 class 被称为 abstract class 。
+
+    abstract class 的语法标志是'class' 关键字之前的 'abstract' 关键字。
+
+    注意，'abstract' 关键字用于修饰class，而不是 member 。
+
+10.3 Defining parameterless methods
+
+    所谓 parameterless method，是指定义不带参数的method时，不提供空参数列表；这样的method，能够以 obj.member 的形式被调用。
+
+    这样的好处是统一了访问接口：某个属性的实现从field改为method，或者相反，对客户代码不会造成影响。
+
+10.4 Extending classes
+
+    'extends'关键字表示继承关系。
+
+10.5 Overriding methods and fields
+
+    与Java不同，Scala中 field 和 member 属于同一个namespace，这意味着子类用 field 来 override 父类的同名 parameterless method 是可能的。
+
+    反过来说，Scala 禁止在同一个class 中定义同名的 field 和 member，而这在 Java 中是允许的。
+
+    Java 提供了 4个 namespace ：field, method, type, package
+    Scala提供了 2个 namespace ：value(field,method,package), type(class, trait)
+
+10.6 Defining parametric fields
+
+    code smell： 某些 field 实际是 constuctor paramter 的复制品；为了一个值，程序员要提供两个相关、相似的名字。
+
+    解决方案: 将同名 constuctor paramter 和 field 的定义合并在一个 val 定义中。
+
+10.7 Invoking superclass constructors
+
+    要掉用父类的constructor, 方法很简单，为 'extends' 关键字后的父类名提供调用参数。
+
+10.8 Using override modifiers
+
+    为子类编写 override 性质的 method 时，必须为 method  添加 'override' 关键字。
+
+    fragile base class 问题：为基类添加新的member后， 可能导致使用了派生类的客户代码不再正常工作。
+
+    例子：
+
+    derived :
+        hidden () { //hide the entity}
+
+    old base :
+        def draw () { do_draw ()}
+
+    new base:
+
+        def hidden() { // is the object hidden?}
+        def draw () { if not hidden() then do_draw () }
+
+    now, when draw() is called on a derived object, the hidden got called is the derived version, making the object hidden, which is not the expected bahaviour of calling draw().
+
+10.10 Declaring final members
+
+    要保证某个 member 不被子类override，可以为其添加'final' 关键字。
+
+    'final' 修饰整个class时，该class无法被继承。
+
+10.13 Defining a factory object
+
+    常见选择是在class的 companion object  中定义 factory method.
+
+11. Scala’s Hierarchy
+
+
+
+
+
+

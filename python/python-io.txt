@@ -1,0 +1,341 @@
+[The I/O Problem]
+
+    Of all of the changes made in Python 3, it is my observation that I/O handling changes are the most problematic for porting:
+
+    Python 3 re-implements the entire I/O stack
+    Python 3 introduces new programming idioms
+    I/O handling issues can't be fixed by automatic code conversion tools (2to3)
+
+[Part 1 New Changes]
+
+[ Many New Features ]
+
+    Python 3 introduces many new features
+
+    Composite string formatting
+        "{0:10s} {1:10d} {2:10.2f}".format(name, shares, price)
+
+    Dictionary comprehensions
+        a = {key.upper():value for key,value in d.items()}
+
+    Function annotations
+            def square(x:int) -> int:
+                return x*x
+
+[Changed Built-ins]
+
+    Many of the core built-in operations change
+
+    Examples : range(), zip(), etc.
+        >>> a = [1,2,3]
+        >>> b = [4,5,6]
+        >>> c = zip(a,b)
+        >>> c
+        <zip object at 0x100452950>
+        >>>
+
+    Typically related to iterators/generators
+
+[Part 2 Work with text]
+
+[Making Peace with Unicode]
+
+    In Python 3, all text is Unicode
+
+    All strings are Unicode
+    All text-based I/O is Unicode
+
+    You really can't ignore it or live in denial
+
+    \N{name} - Embeds a named unicode character
+
+[Unicode Representation]
+
+    You can find out how unicode characters are represented internally in python interpreter:
+
+    >>> sys.maxunicode
+    65535 # 16-bits
+
+    >>> sys.maxunicode
+    1114111 # 32-bits
+
+
+[Performance Impact]
+
+    sys.getsizeof('a')
+
+    Increased memory use does impact the performance of string operations that make copies of large substrings:
+        slice, join, split, strip, etc
+
+
+
+    Operations that process strings character often run at the same speed (or are faster) :
+        lower, upper, find, regex, etc
+
+[Issue : Text Encoding]
+
+    The internal representation of characters is now almost never the same as how text is transmitted or stored in files
+
+[I/O Encoding]
+
+    All text is now encoded and decoded
+
+    If reading text, it must be decoded from its source format into Python strings
+    If writing text, it must be encoded into some kind of well-known output format
+
+    This is a major difference between Python 2 and Python 3. In Python 2, you could write programs that just ignored encoding and read text as bytes (ASCII).
+
+[Reading/Writing Text]
+
+    Built-in open() function has an optional encoding parameter
+        f = open("somefile.txt","rt",encoding="latin-1")
+
+    If you omit the encoding, UTF-8 is assumed
+        >>> f = open("somefile.txt","rt")
+        >>> f.encoding
+        'UTF-8'
+        >>>
+
+
+[Standard I/O]
+
+    Standard I/O streams also have encoding
+
+    Be aware that encoding might change depending on the locale settings
+
+[Binary File Modes]
+
+    Writing text on binary-mode files is an error
+
+    You must either use a text-mode file or explicitly encode (str.encode('encoding'))
+
+[New Printing]
+
+    Here is a mini porting guide
+
+        Python 2                Python 3
+        print x,y,z             print(x,y,z)
+        print x,y,z,            print(x,y,z,end=' ')
+        print >>f,x,y,z         print(x,y,z,file=f)
+
+[Printing Enhancements]
+
+    Picking a different item separator:     print(1,2,3,sep=':')
+
+    Picking a different line ending:        print("What?",end="!?!\n")
+
+[New String Formatting]
+
+    Python 3 has completely revised formatting
+
+    Here is old Python (%)
+    s = "%10s %10d %10.2f" % (name, shares, price)
+
+    Here is Python 3
+    s = "{0:10s} {1:10d} {2:10.2f}".format(name,shares,price)
+
+[First, Some History]
+    String formatting is one of the few features of Python 2 that can't be customized
+
+    Classes can define __str__() and __repr__() .  However, they can't customize % processing
+
+    Python 2.6/3.0 adds a __format__() special method that addresses this in conjunction with some new string formatting machinery
+
+[format() function]
+
+    format(obj, fmt) calls __format__()
+
+
+[String .format() Method]
+
+    Strings have .format() method for formatting multiple values at once (replacement for %)
+
+    format() method looks for formatting specifiers enclosed in { } and expands them
+
+[Format Specifiers]
+
+    Each specifier has the form : {what:fmt}
+
+    Each {what:fmt} gets replaced by the result of format(what,fmt)
+
+[Container lookup and Attribute access]
+
+    Format specifier support indexing sequences and dictionaries, and also attribute access of object.
+
+
+[Part 3 Binary Data Handling and Bytes]
+
+[Bytes and Byte Arrays]
+
+    Python 3 has support for "byte-strings"
+    Two new types : bytes and bytearray
+    They are quite different than Python 2 strings
+
+[Bytes as Strings]
+
+    Bytes have standard "string" operations, and they are immutable like strings
+
+[Bytes as Integers]
+
+    Unlike in Python 2, bytes are actually arrays of integers
+
+[bytearray objects]
+
+    A bytearray is a mutable bytes object, which also gives you various list operations
+
+[Bytes and Strings]
+
+    Bytes are not meant for text processing
+
+    In fact, if you try to use them for text, you will run into weird problems
+
+    Python 3 strictly separates text (unicode) and bytes everywhere
+
+    This is probably the most major difference between Python 2 and 3.
+
+[Printing Bytes]
+
+    Printing and text-based I/O operations do not work in a useful way with bytes
+
+    There's no way to fix this. print() should only be used for outputting text (unicode)
+
+[Formatting Bytes]
+
+    Bytes do not support operations related to formatted output (%, .format)
+
+    You might think that bytes are exactly the same as the familiar Python 2 string object
+
+    This is wrong. Bytes are not text. Using bytes as text will lead to convoluted non-idiomatic code
+
+[How to Use Bytes]
+
+    To use the bytes objects, focus on problems related to low-level I/O handling (message passing, socket, distributed computing, etc.)
+
+
+[Part 4 System Interfaces]
+
+[The Problem]
+
+    To carry out system operations, the Python interpreter executes standard C system calls
+
+    However, names used in system interfaces (e.g., filenames, program names, etc.) are specified as byte strings (char *)
+
+    Bytes also used for environment variables and command line options
+
+[Name Encoding]
+
+    Standard practice is for Python 3 to UTF-8 encode all names passed to system calls.
+
+    This is usually a safe bet; ASCII is a subset and UTF-8 is an extension that most operating systems support.
+
+    Similarly, Python decodes arguments and environment variables using UTF-8
+
+
+[Surrogate Encoding]
+
+    In Python 3.1, non-decodable (bad) characters in filenames and other system interfaces are translated using "surrogate encoding" as described in PEP 383.
+
+    This is a Python-specific "trick" for getting characters that don't decode as UTF-8 to pass through system calls in a way where they still work correctly
+
+[Surrogate Encoding]
+
+    Idea :
+        Any non-decodable bytes in the range 0x80-0xff are translated to Unicode characters U+DC80-U+DCFF
+        Similarly, Unicode characters U+DC80-U+DCFF are translated back into bytes 0x80-0xff when presented to system interfaces
+
+    Why :
+        This uses a range of Unicode dedicated for a feature known as "surrogate pairs". A pair of Unicode characters encoded like this (U+D800-U+DBFF, U+DC00-U+DFFF)
+        In Unicode, you would never see a U+DCxx character appearing all on its own
+
+    Caution:
+        Such Invalid Surrage Characters will break print()
+
+    Implementation
+        Surrogate encoding is implemented as an error handler for encode() and decode().
+
+
+
+[Part 5 The io module]
+
+[I/O Implementation]
+
+    I/O in Python 2 is largely based on C I/O; For example, the "file" object is just a thin layer over a C "FILE *" object
+
+    Python 3 changes this In fact, Python 3 has a complete ground-up reimplementation of the whole I/O system
+
+[The open() function]
+
+    For files, you still use open() as you did before• However, the result of calling open() varies depending on the file mode and buffering.
+
+
+
+[The io module]
+
+    The core of the I/O system is implemented in the io library module.
+
+    It consists of a collection of different I/O classes. Each class implements a different kind of I/O and get layered to add features.
+
+[FileIO Objects]
+
+    An object representing raw unbuffered binary I/O.
+
+    Under the covers, a FileIO object is directly layered on top of operating system functions such as read(), write() .
+
+    FileIO is the most critical object in the I/O stack; Everything else depends on it
+
+[I/O Performance]
+
+    For binary, the Python 3 I/O system is comparable to Python 2 in performance
+
+    Text based I/O has an unavoidable penalty:
+        Extra decoding (UTF-8)
+        An extra memory copy, because the final read/write always involves bytes, not text string.
+
+[Text I/O Optimization]
+
+    Perform all I/O in binary/bytes and defer Unicode conversion to the last moment
+
+
+[Part 6 Standard Library Issues]
+
+[Rules of Thumb]
+
+    All incoming text data must be decoded
+
+    All outgoing text data must be encoded
+
+    Code most affected : anything that's directly working with low-level network protocols (HTTP, SMTP, FTP, etc.)
+
+[Part 7 Memory Views and I/O]
+
+    Many objects in Python consist of contiguously allocated memory regions: byte strings, Arrays, etc
+
+    These objects have a special relationship with the I/O system
+
+    Objects consisting of contiguous memory regions can be used with I/O operations without making extra buffer copies.
+
+[memoryview Objects]
+
+    Direct I/O, in-place packing, and other features are tied to the buffer API (C) and memoryviews.
+
+    A memory view directly exposes data as a buffer of bytes that can be used in low-level operations.
+
+    A memory view is a memory overlay; If you read or modify the view, you're working with the same memory as the original object.
+
+    Memory views make zero-copy slices, which differs from the usual copy-slice.
+
+    memoryviews are not something that casual Python programmers should be using. However, memoryviews have great potential for programmers building libraries, frameworks, and low-level infrastructure.
+
+
+[Part 8 Porting to Python 3]
+
+[Python 2 Backport]
+
+    Almost everything discussed in this tutorial has been back-ported to Python 2.
+
+    So, you can actually use most of the core Python 3 I/O idioms in your Python 2 code now.
+
+
+
+
+

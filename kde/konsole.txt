@@ -1,0 +1,80 @@
+[howto-debug]
+1). start konsole as normal
+2). run "psg konsole" to get the pid of that konsole process, more procisely, a weired process named as
+    "kdeinit4: konsole "
+3). run "gdb /usr/lib/libkdeinit4_konsole.so -p PID"
+
+
+[guess] after pressing "Alt + N" to add new tab:
+
+    enum "Profile::Property.StartInCurrentSessionDir"  is the key point !
+
+
+[signal]
+    void newSessionRequest(Profile::Ptr profile,
+                            const QString& directory,
+                            ViewManager* view);
+
+[slot]
+
+    Session* Application::createSession(Profile::Ptr profile, const QString& directory , ViewManager* view)
+    {
+        if (!profile)
+            profile = SessionManager::instance()->defaultProfile();
+
+        Session* session = SessionManager::instance()->createSession(profile);
+
+        if (!directory.isEmpty() && profile->property<bool>(Profile::StartInCurrentSessionDir))
+            session->setInitialWorkingDirectory(directory);
+
+        .....
+    }
+
+[connection]
+
+Application.cpp
+
+    connect( window , SIGNAL(newSessionRequest(Profile::Ptr,const QString&,ViewManager*)),
+                      this , SLOT(createSession(Profile::Ptr,const QString&,ViewManager*)));
+
+[trigger]
+
+MainWindow.cpp
+
+    void MainWindow::newTab()
+    {
+        emit newSessionRequest( _defaultProfile , activeSessionDir() , _viewManager);
+    }
+
+    QString MainWindow::activeSessionDir() const
+    {
+        if ( _pluggedController )
+            return _pluggedController->currentDir();
+        else
+            return QString();
+    }
+
+[continue]
+
+SessionConoller.cpp
+
+    QString SessionController::currentDir() const
+    {
+        return _session->currentWorkingDirectory();
+    }
+
+Session.cpp
+
+    QString Session::currentWorkingDirectory()
+    {
+        // only returned cached value
+        if (_currentWorkingDir.isEmpty()) updateWorkingDirectory();
+        return _currentWorkingDir;
+    }
+
+
+
+
+
+
+

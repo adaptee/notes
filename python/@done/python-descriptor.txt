@@ -1,0 +1,92 @@
+quoted from http://docs.python.org/howto/descriptor.html
+
+[Definition and Introduction]
+
+    In general, a descriptor is an object attribute with "binding behavior", one whose attribute access has been overridden by methods in the descriptor protocol. Those methods are __get__(), __set__(), and __delete__(). If 'any' of those methods are defined for an object, it is said to be a descriptor.
+
+    The default behavior for attribute access is to get, set, or delete the attribute from an object's dictionary. For instance, a.x has a lookup chain starting with a.__dict__['x'], then type(a).__dict__['x'], and continuing through the base classes of type(a) excluding metaclasses. If the looked-up value is an object defining one of the descriptor methods, then Python may override the default behavior and invoke the descriptor method instead.
+
+    Descriptors are a powerful, general purpose protocol. They are the mechanism behind properties, methods, static methods, class methods, and super().
+
+    Note: descriptors are only invoked for new style objects or classes.
+
+[Descriptor Protocol]
+
+    descr.__get__(self, obj, type=None) --> value
+    descr.__set__(self, obj, value) --> None
+    descr.__delete__(self, obj) --> None
+
+    If an object defines both __get__() and __set__(), it is considered a 'data descriptor'.
+    Descriptors that only define __get__() are called 'non-data descriptors' .
+
+    Data and non-data descriptors differ in their priorities:
+
+    If an instance's dictionary has an entry with the same name as a data descriptor, the data descriptor takes precedence.
+    If an instance's dictionary has an entry with the same name as a non-data descriptor, the dictionary entry takes precedence.
+
+
+[Invoking Descriptors]
+
+    It is more common for a descriptor to be invoked automatically upon attribute access.
+
+    The details of invocation depend on whether the descriptor is accress through instance or class.
+
+    For objects, the machinery is in object.__getattribute__() which transforms b.x into type(b).__dict__['x'].__get__(b, type(b)). The implementation works through a precedence chain that gives data descriptors priority over instance variables, instance variables priority over non-data descriptors, and assigns lowest priority to __getattr__() if provided. The full C implementation can be found in 'PyObject_GenericGetAttr()' in Objects/object.c.
+
+    For classes, the machinery is in type.__getattribute__() which transforms B.x into B.__dict__['x'].__get__(None, B)
+
+    The important points to remember are:
+
+        * descriptors are invoked by the __getattribute__() method
+        * overriding __getattribute__() prevents automatic descriptor calls
+        * object.__getattribute__() and type.__getattribute__() make different calls to __get__().
+        * data descriptors always override instance dictionaries.
+        * non-data descriptors may be overridden by instance dictionaries.
+
+
+    The object returned by super() also has a custom __getattribute__() method for invoking descriptors. The call super(B, obj).m() searches obj.__class__.__mro__ for the base class A immediately following B and then returns A.__dict__['m'].__get__(obj, A). If not a descriptor, m is returned unchanged. If not in the dictionary, m reverts to a search using object.__getattribute__().
+
+    The details above show that the mechanism for descriptors is embedded in the '__getattribute__()' methods for object, type, and super(). Likewise, classes can turn-off descriptor invocation by overriding __getattribute__().
+
+[Property]
+
+    Calling property() is a succinct way of building a 'data descriptor' that triggers function calls upon access to an attribute. Its signature is:
+
+    property(fget=None, fset=None, fdel=None, doc=None) -> property attribute
+
+[Functions and Methods]
+
+    Python's object oriented features are built upon a function based environment. Using 'non-data descriptors', the two are merged seamlessly.
+
+    Class dictionaries store ordinary functions. In class definition, methods are written using def and lambda, the usual tools for creating functions. The only difference from regular functions is that the first argument is reserved for the object instance.
+
+    To support method calls, functions include the __get__() method for binding methods during attribute access. This means that 'all functions are non-data descriptors' which return bound or unbound methods depending whether they are invoked from an instance or a class.
+
+    >>> class D(object):
+            def f(self, x):
+                return x
+
+    >>> d = D()
+    >>> D.__dict__['f'] # Stored internally as a function
+    <function f at 0x00C45070>
+    >>> D.f             # Get from a class becomes an unbound method
+    <unbound method D.f>
+    >>> d.f             # Get from an instance becomes a bound method
+    <bound method D.f of <__main__.D object at 0x00B18C90>>
+
+[Static Methods and Class Methods]
+
+    This chart summarizes functions and its two most useful variants:
+
+        Transformation  Called from an Object       Called from a Class
+        function        f(obj, *args)               f(*args)
+        staticmethod    f(*args)                    f(*args)
+        classmethod     f(type(obj), *args)         f(klass, *args)
+
+    Static methods return the underlying function without changes. As a result, the function becomes identically accessible from either an object or a class.
+
+    Good candidates for static methods are methods that do not reference the self variable.
+
+    Unlike static methods, class methods prepend the class reference to the argument list before calling the function. This format is the same for whether the caller is an object or a class.
+
+    One use for classmethods is to create 'alternate class constructors'.

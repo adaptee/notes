@@ -1,0 +1,60 @@
+
+[qatom]
+    parsing atom expression , useful in script
+
+[qcache]
+
+    search metadata cache
+
+[qcheck]
+    check the integrity of package
+
+[qdepends]
+
+    query the dependency/reverse-dependency of specifed package
+
+[qfile]
+
+    find out which package own the specified file
+
+    -e  show package version
+
+[qgrep]
+
+    grep ebuilds quickly
+
+[qlist]
+
+    although qlist is much faster then "equery files", one drarback is the
+    resulting list of qlist is not strickly ordered
+
+    -I          only show installed packages
+    -U          show USE flag
+    -D          show package with multi slot installed( python2/python3)
+
+[qloq]
+
+    analyze emerge log
+
+    -g
+
+    -Ht
+
+    -l  history of merging <pkg>
+    -u  history of unmerging <pkg>
+    -s  history of syncing
+
+
+[qsearch]
+
+    search package by name
+
+[qsize]
+
+    show the size of package
+
+[quse]
+
+    find packages using specified USE flag
+
+

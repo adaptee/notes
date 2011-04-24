@@ -1,0 +1,20 @@
+[anti-idioms ]
+
+    from <module> import  *
+    from <module> import name1, name2..
+
+    The reason it is usually bad idea is because you suddenly have an object which lives in two separate namespaces. When the binding in one namespace changes, the binding in the other will not, so there will be a discrepancy between them.
+
+[exception]
+
+    You should learn to 'raise them whenever' something unexpected occurs, and "catch them only" where you can do something about them.
+
+[list.sort() vs sorted()]
+
+    list.sort()     in-place
+    sorted()        return a new sequence
+
+    list.reverse()  in-place
+    reversed()      return a new sequence
+
+

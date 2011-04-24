@@ -1,0 +1,57 @@
+===== 基本用法 =====
+
+script [options]  <session-file>
+
+===== 常用选项 =====
+
+<code>  -a              append，而不是覆盖记录中的已有文件    </code>
+<code>  -c <command>    运行指定的命令，而不是启动交互式的shell </code>
+<code>  -t              将时间信息输出到stderr  </code>
+
+===== 录制 =====
+
+<code>
+    script -t demo.session 2> demo.timing
+    ....
+    Ctrl-D
+</code>
+
+===== 回放 =====
+
+<code> scriptreplay demo.timing demo.session </code>
+
+
+<code> mplayer   <URL>  直接播放 </code>
+
+
+查看 object file 中的符号信息
+
+===== 基本用法 =====
+
+<code> nm [options] <file>... </code>
+
+===== 常用选项 =====
+
+<code> -E               启用 POSIX extended regex </code>
+
+<code> -i <>       提供 regex </code>
+
+<code> -C   对symbol 执行 demangle 操作，改善可读性 </code>
+<code> -o   每行结果前加上文件名 </code>
+<code> -S   列出symbol的大小 </code>
+<code> -f   定制输出格式；推荐使用 sysv 风格，而不是默认的 bsd 风格 </code>
+<code> -n   按照地址排序，而不是名字排序 </code>
+<code> -g   只列出external symbol </code>
+<code> -u   只列出未定义的symbol </code>
+
+===== 应用实例  =====
+
+<code> lsof -i :80      列出使用了指定端口的进程 </code>
+
+
+# new stuff
+# new stuff 2
+
+
+
+

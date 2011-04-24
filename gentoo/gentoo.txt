@@ -1,0 +1,154 @@
+[source code tarball]
+    你可以使用app-portage/gentoolkit里的eclean脚本来管理/usr/portage/distfiles/和其他几个路径下的文件。请阅读man eclean来学习它的使用。
+
+[meta-package]
+
+    代码 3.13: 移除孤立依赖的软件包
+# emerge --update --deep --newuse world
+# emerge --depclean
+# revdep-rebuild
+
+[mask]
+
+    *   ~arch keyword 意味着这个软件没有经过充分的测试，不能进入稳定分支，请等待一段时间后在尝试使用它。
+    * -arch keyword或-* keyword 意味着这个软件不能工作在您机器的体系结构中。如果您确信它能工作那么请到我们的bugzilla网站提交一个bug报告。
+    * missing keyword 意味着这个软件还没有在您机器的体系结构中进行过测试。您可以咨询相应体系结构移植小组是否能对它进行测试，或者您自己为他们进行这样的测试并将您得到的结论提交到我们的bugzilla网站。
+    * package.mask 意味着这个软件被认为是损坏的，不稳定的或者有更严重的问题，它被故意标识为"不应使用"。
+    * profile 意味着这个软件不适用于您的profile。安装这样的应用软件可能会破坏您的系统，或者只是不能与您使用的profile相兼容。
+
+
+[priority]
+
+USE设定的优先级顺序是（由低到高）：
+
+   1. make.defaults里面的USE默认设定
+   2. 用户在/etc/make.conf里面的USE设定
+   3. 用户在/etc/portage/package.use里面的USE设定
+   4. 作为环境变量的USE设定
+
+运行emerge --info可以看到Portage识别的最终的USE设定
+# emerge --info
+
+
+[init]
+
+首先，init会运行所有/etc/runlevels/boot目录下的符号链接所指向的/etc/init.d目录下的脚本。通常，它会按照字母顺序执行这些脚本，但是有些脚本中含有依赖关系，意味着系统要在执行另一个脚本之后才能运行此脚本。
+
+当/etc/runlevels/boot目录所引用的脚本都执行完毕后，init将继续运行/etc/runlevels/default目录下的符号链接所指向的脚本。同样它们会按照字母顺序执行这些脚本，除非一个脚本有依赖关系，那样的话现有次序就会被改变以使启动顺序更加合理。
+
+[rc-update]
+
+使用rc-update你可以从一个运行级别中添加或删除初始化脚本。rc-update工具会自动调用/sbin/depscan.sh 重新创建依赖关系树。
+
+# rc-update [add|del] <service> [boot|default]
+# rc-update show -v
+# rc-update show
+
+[service-configuratio]
+
+每一个可以配置的初始化脚本在/etc/conf.d里有一个文件。比如：apache2的初始化脚本（叫做/etc/init.d/apache2）有一个配置文件叫/etc/conf.d/apache2，它包含了Apache 2服务器启动时你要给它的选项：
+
+
+[environment]
+
+Gentoo采用了/etc/env.d目录来集中定义全局变量。在这个目录里，你会发现很多类似00basic、05gcc等等这样的文件，它们包含了文件名中提到的应用程序需要的变量。
+
+举个例子，当你安装gcc时，一个名为05gcc的文件就会被ebuild所创建
+
+env-update脚本
+
+/etc/env.d中的好几个文件都定义了PATH变量。这并没有错：当你运行env-update的时候，它会在更新环境变量之前把这些定义都追加到PATH里，因此对于软件包（或者用户）来说将会很容易地设置他们自己的环境变量，而不影响到现有变量的值。
+
+env-update脚本会根据/etc/env.d里文件的字母顺序来附加变量的值。这些文件名必须要以两位数字开头。
+
+[/etc/portage]
+在/etc/portage目录中，你可以创建下列文档：
+
+    * package.mask它列出了你永远不希望Portage安装的软件包。
+    * package.unmask它列出了本来Gentoo的开发者不建议安装的，但是你希望能安装的软件包。
+    * package.keywords它列出了还未被确认适合你的系统或架构，但是你希望能安装的软件包。
+    * package.use它列出了你希望某些特定软件包使用的而不是整个系统使用的USE标记。
+
+    这些并不需要一定是文件；它们也可以是有包含单个软件包信息文件的目录。更多关于/etc/portage目录的信息及你能创建的文件的完整列表可以在Portage的手册页中找到：
+
+    # man portage
+
+
+[portage location]
+
+Portage树
+
+    Portage树的默认位置是/usr/portage。这是PORTDIR变量定义的
+
+预编译二进制包
+
+    虽然Portage并不默认使用预编译的二进制包，但却对其有多方面的支持。当你要求Portage使用预编译的二进制包时，它就会在/usr/portage/packages中寻找它们。这个位置是通过PKGDIR变量定义的。
+
+源代码
+
+    程序的源代码默认保存于/usr/portage/distfiles。这个位置是通过DISTDIR变量定义的。
+
+Portage数据库
+
+    Portage将你系统的状态（装了哪些软件包，什么文件属于哪个软件包......）保存在/var/db/pkg。不要手动改变这些文件！它可能破坏Portage对你系统的了解。
+
+Portage缓存
+
+    Portage缓存（包括修改时间、虚拟包、依赖关系树信息......）储存在/var/cache/edb。这个位置就是一个缓存：如果你没有正在运行portage相关的程序，你就可以清空它。
+
+编译目录
+
+    Portage为每一个它所安装的软件包在/var/tmp/portage里创建特定的编译目录。这一位置是通过BUILD_PREFIX变量定义的。
+
+Live文件系统位置
+
+    默认情况下，Portage将所有的文件安装到当前文件系统（/）里。但是你可以通过改变环境变量ROOT来改变它。这在你想要创建一个新的编译镜像时是很有用的。
+
+
+
+    可以通过设定EMERGE_DEFAULT_OPTS变量以使emerge每次运行时都使用某些特定的选项。一些常用的选项是--ask，--verbose，--tree，等等。
+
+Portage的保护位置
+
+    Portage一般会用新文件覆盖掉旧文件，除非这些旧文件位于受保护的位置里。这些受保护的位置由CONFIG_PROTECT变量设定，通常是配置文件的位置。在设置时，多个目录间用空格分开。
+
+分支的选择
+
+    Gentoo提供了一个ACCEPT_KEYWORDS变量来定义您系统所使用的软件分支。默认情况下，系统会选择您的体系结构的稳定软件分支。例如x86。
+
+    如果您想用最新版本的软件，您可以考虑转向使用测试分支。要让Portage转而使用测试分支的软件，您只需在您的体系结构名称前加上一个~符号。
+
+例如，要选择针对x86体系结构的测试分支，请修改/etc/make.conf文件并设定如下内容：
+
+    ACCEPT_KEYWORDS="~x86"
+
+之后如果您更新系统，您将会发现有大量的包需要更新。要提醒您注意的是：您使用测试分支更新系统后，再想转回使用官方的稳定分支将不是一件容易的事情（当然您使用系统的备份的情况除外）。
+
+测试特定版本
+
+    如果您希望Portage使用测试分支中某软件的特定版本，但后续版本不再这么做，你可以在package.keywords里加入相应的版本号来实现这个目的。在此情况下您必须使用 = 运算符。您也可以通过使用<=，<，>或>=运算符来指定一个要使用的版本范围。
+
+    任何情况下，如果您添加了版本号，您必须使用一个运算符；如果您忽略了版本号，您就不能使用运算符。
+
+屏蔽特定版本
+
+当您希望Portage忽略一个特定的软件包或者一个软件包的特定版本，您可以在/etc/portage/package.mask文件（或者此目录下的一个文件）中加入一行适当的内容来屏蔽它。
+
+例如，当您不希望Portage安装比gentoo-sources-2.6.8.1更新版本的内核时，您只需要在package.mask文件里加入下面一行内容：
+
+代码 3.2: /etc/portage/package.mask的例子
+
+>sys-kernel/gentoo-sources-2.6.8.1
+
+[quickpkg]
+
+利用quickpkg可以对系统中已安装的包进行打包归档。这些归档文件可以作为预编译包使用。运行quickpkg非常简单：只要加上你想要制作的软件包的名字就可以了。
+
+预编译包会保存在$PKGDIR/All（默认为/usr/portage/packages/All)
+
+
+[自己维护的软件]
+
+尽管Portage已经提供了某些软件，但是某些情况下你还是想自己配置、安装和维护这些软件，而不是希望Portage为你自动完成这些过程。典型的例子是内核源码和nvidia驱动程序。你可以配置一下Portage让它知道某个软件包已经通过手动安装到系统中了。这个过程叫做注入"，Portage是通过/etc/portage/profile/package.provided文件来实现这个功能的。
+
+

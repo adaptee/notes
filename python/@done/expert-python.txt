@@ -1,0 +1,280 @@
+[Chp 1 Getting Started]
+
+    ${PYTHONSTARTUP} :  where the startup script is located
+
+    A technology similar to CPAN has been used in the Python world for the past few years, and is becoming the standard way to install extensions. It is based on:
+
+    1. centralized repository called the Python Package Index (PyPI),
+    2. packaging system called 'setuptools' which is based on 'distutils', to deliver the code in archives and interact with PyPI.
+
+    'distutils' is limited to the package, and doesn't provide a way to define its dependencies over other packages. 'setuptools' enhances this by adding a basic dependency system and a lot of other features.
+
+    In other words, setuptools is to Python what apt is to Debian.
+
+    EasyInstall  is a package downloader and installer, which knows howto handle packages built by setuptools.
+
+    After installing  EasyInstall, you have a new command : easy_install
+
+
+[Chp 2 Syntax Best Practices: Below the Class Level]
+
+2.1 List Comprehensions
+
+    'enumerate()' provides a convenient way to get an index when a sequence is used in a loop.
+
+    Whenever you find  a 'for' loop is used to massage the contents of a sequence, try to replace it with a list comprehension.
+
+
+2.2 Iterators and generators
+
+2.2.1 iterator
+
+    An iterator is nothing more than a object that implements the iterator protocol. It is based on two methods:
+
+    next,     which returns the next item of the container; raise StopIteration when exhausted.
+    __iter__, which returns the iterator itself
+
+    'iter() ' can be used to create a iterator based upon a sequence.
+
+    Iterator itself is a low-level feature and concept, but it provides the base for a much more interesting feature: generator.
+
+2.2.2 generator
+
+    If you really want to understand generator, the first thing to realize is that 3 entities are involved:
+
+    1. source function; it creates the generator and provide data one by one, not all at once.
+    2. generator; it behaves as the bridge betwen client code and source function
+    3. client code; it communicate with source function through generator: obtain data or send data back.
+
+    Generators provide an elegant way to write simple and efficient code for functions that return a list of elements. Based on the 'yield' keyword, they allow you to pause a function and return just one element. The function saves its execution context and can be resumed later if necessary and return next element.
+
+    Generator is also iterator, but its specialairty lies in that when its next() method is called , it will awaken the previously pauseed source function.
+
+    In the community, generators are not used so often because the developers are not used to thinking this way. generators should be considered every time you deal with a function that returns a sequence or works in a loop. Returning the elements one at a time can improve the overall performance, when they are passed to another function for further work.
+
+    Keep the code simple, not the data:
+
+    The last feature regarding generators is the ability to interact with the code of source function. 'yield' becomes an expression, and a value can be passed along through generator.send()
+
+    send() acts like next(), but makes yield return the value passed to send().
+
+    yield can not only be used to provide element as output, but can also be used to obtain input from client code. Better even, these two jobs can be accomplished at the same time:
+
+    while True:
+        ...
+        input = yield elem
+        ...
+
+    generator also provide the throw() and close() method, which are used to send exception into source function, thus terminating the source function.
+
+2.2.3 Coroutines[TODO]
+
+2.2.4 Generator Expressions
+
+    It's a shortcut for writing simple generators over a sequence without using 'yield'
+
+    Its syntax is quite similar to list comprehension : ( f(x) for x in seq if ....)
+
+2.2.5 itertools module
+
+    this module is add to provide common patterns using iterator.
+
+    islice()    -> iterate only specified sub-sequence
+
+    tee()       -> create mutiple equivalent iterators.
+
+    chain()     -> create iteratror which iterate multiple sequences.
+
+    cycle()     -> create iterator iterating in circular way, never ending
+
+2.3 Decorators
+
+    Decorators are added to make function/method wrapping easier to read and understand.
+
+2.5 with and contextlib
+
+    'with' is introduced to factor out the common cases of 'try..finally..'
+
+    If a class wants to be used together with 'wich', it needs to implement the with protocol:
+
+    1. __enter__(self)
+    2. __exit__(self, exception_type, exception_value, exception_trackback)
+
+    In most cases, the right behaviour in __exit__() is to do some cleanup work, but do NOTHING about the exception.
+
+    'contextlib' module provides helpers for 'with' statement. The most useful one is 'contextmanager', a decorator which transform a generator function into a class supporting with protocol.
+
+[Chp 3 Syntax Best Practices: Above the Class Level]
+
+3.1 Subclassing Built-in Types
+
+    'object' is added as the common ancestor of all built-in types.
+
+    'colletions' module provides some extra data types , such as deque, OrderedDict, Counter
+
+3.2 Accessing Methods of Superclasses
+
+    'super' is actually a built-in type, not a built-in function.
+
+    super(type[, object-or-type])
+
+    Return a proxy object that delegates method calls to a parent or sibling class of <type>. This is useful for accessing inherited methods that have been overridden in a class. The search order is same as that used by getattr() except that <type> itself is skipped.
+
+    The __mro__ of <type> specifies the method resolution search order used by both getattr() and super().
+
+    If the second argument is omitted, the super object returned is unbound. If the second argument is an object, isinstance(obj, type) must be true. If the second argument is a type, issubclass(type2, type) must be true (this is useful for classmethods).
+
+    There are two typical use cases for super. In a class hierarchy with single inheritance, super can be used to refer to parent classes without naming them explicitly, thus making the code more maintainable. This use closely parallels the use of super in other programming languages.
+
+    The second use case is to support  multiple inheritance in a dynamic execution environment. This use case is unique to Python and is not found in statically compiled languages or languages that only support single inheritance. This makes it possible to implement "diamond diagrams" where multiple base classes implement the same method. Good design dictates that this method should have the same calling signature in every case (because the order of calls is determined at runtime, because that order adapts to changes in the class hierarchy, and because that order can include sibling classes that are unknown prior to runtime).
+
+    a typical usage looks like this:
+
+    class C(B):
+        def method(self, arg):
+            super(C, self).method(arg)
+
+
+3.2.1 Understanding Python's Method Resolution Order (MRO)
+
+    Essentially, MRO is a sorted list of ancestors
+
+    The algoithm used to calculate MRO is C3 algorithm, borrowed from Dylan language.
+
+
+3.2.2 super Pitfalls
+
+    using 'super' can be quite dangerous in the follwing context of multiple inheritance( mainly because of __init__ ）
+
+    1. mix 'super' way and classic way in calling method of superclass.
+
+    2. method of superclass of chidlclass has differencet signature.
+
+3.3 Best Practices
+
+    Multiple inheritance should be avoided.
+
+    super() has to be consistent in the whole class hierarchy. Anywhere, or Nowhere
+
+    Don't mix old-style and new-style classes
+
+3.4 Descriptors and Properties
+
+    attribute is a generic concept in Python.  method is attritue,  data member is attribute.
+
+    Property is a much more specialized concept. It refers to special attribute implementing the Property protocol.
+
+    attribute prefix:
+
+        __  cause interpreter to perform name mangling
+        _   no name mangling, just a convention for private attribute
+
+3.4.1 Descriptors
+
+    A descriptor lets you customize what should be done when you access an attribute
+
+    Essentially, Descriptors are class that define how attributes of another class can be accessed.
+
+    Descriptor classes are based on three special methods they have to implement :
+
+    __set__
+    __get__
+    __delete__
+
+
+[Chp 4 Choosing Good Names]
+
+4.2 Naming Styles
+
+    The various naming styles used in Python are:
+
+    CamelCase;
+    mixedCase;
+    UPPER_CASE;
+    lowercase;
+    lower_case;
+    _leading;
+    tailing_;
+
+4.2.1 Variables
+
+    There is no real constants in Python like those in C/C++.
+
+4.2.2 Functions and Methods
+
+    should be in lower case with underscores
+
+4.2.4 Classes
+
+    Their Name are always in CamelCase.
+
+4.2.5 Modules and Packages
+
+    Module names are in lowercase with no underscore.
+
+    Packages follows the same rule.
+
+4.3 Naming Guide
+
+    Use "has" or "is" Prefix for Boolean Elements
+
+    Use Plural for Elements That Are Sequences
+
+    Use Explicit Names for Dictionaries
+
+    Avoid Generic Names
+
+    Avoid Existing Names; use 'cls' instead of class
+
+4.4 Best Practices for Arguments
+
+4.4.1 Build Arguments by Iterative Design
+
+    When new arguemnt is appended, try to give it a default value to avoid any regression.
+
+4.4.2 Trust the Arguments and Your Tests
+
+    Do not use 'assert' to check the validality of argument . This is Python, not C/C++
+
+    "python -o"     remove assertions from code before generating byte codes.
+
+4.4.3 Use *args and **kw Magic Arguments Carefully
+
+4.5 Class Names
+
+    Try to avoid redundancy between class and its attribute names;
+
+    SMTP.send() is better than SMTP.stmp_send()
+
+4.6 Modules and Package Names
+
+    When a module is getting complex, and contains a lot of classes, it is a good practice to create a package and split the module's elements into other modules.
+
+    The __init__ module can also be used to put back some APIs at the top level, as it will not impact its usage but will help re-organizing the code in smaller parts.
+
+4.7 Working on APIs
+
+    'Python Eggs' provides a way to build namespaced package.
+
+    'Eggs are to Pythons as Jars are to Java...'
+
+    When API is changed, you should follow a 'deprecation process' where intermediate release contain both versions.
+
+    warnings.warn() will warn the user on the first call and do nothing on the next calls.
+
+4.7 tools
+
+    Pylint          check coding style, potential problem and possible improvement
+    CloneDigger     check duplication of python code.
+
+[Chp 5 Writing a Package]
+
+5.1 A Common Pattern for All Packages
+
+    FIGURE 5-1 a package called acme.sql
+
+5.1.1  setup.py: the Script That Controls Everything
+
+    The boundary between 'distutils' and 'setuptools' is getting fuzzy, and they might merge one day.
+
+

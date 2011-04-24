@@ -1,0 +1,81 @@
+ED2KLinkParser.cpp                  code for command 'ed2k'
+    main()
+
+ED2KLink.cpp                        parsing valid ed2k links
+
+
+amuleAppCommon.cpp
+
+    InitCommon()
+    AddsLinksFromFile()             read new task from file 'ED2KLinks'
+                                        theApp->downloadqueue->AddLink(line, category);
+
+
+amule-remote-gui.cpp
+
+    CamuleRemoteGuiApp::OnPollTimer() Check for new links once per second.
+
+DownloadQueue.cpp
+
+    CDownloadQueue::Process()       Check for new links once per second.
+
+    CDownloadQueue::AddLink()       (wrapper) add new ed2k link into download queue
+
+    CDownloadQueue::AddED2KLink( const CED2KLink* link, uint8 category )    dispatcher
+
+    CDownloadQueue::AddED2KLink( const CED2KFileLink* link, uint8 category )  do the real work
+
+        file = new CPartFile(link);
+
+
+
+
+building command ed2k
+
+    export CPLUS_INCLUDE_PATH=/usr/include/wx-2.8/
+
+    g++ -c -D USE_STD_STRING MagnetURI.cpp
+    g++ -c -D USE_STD_STRING MuleCollection.cpp
+    g++ -o ed2k -D USE_STD_STRING MagnetURI.o MuleCollection.o ED2kLinkParser.cpp
+
+
+
+[amulecmd]
+
+TextClient.cpp:
+
+
+    int CamulecmdApp::ProcessCommand(int CmdId)
+    {
+        ...
+        SendRecvMsg_v2()
+        ...
+    }
+
+ExternalConnector.h
+
+    class CECPacket;
+
+    CRemoteConnect*	m_ECClient;
+
+    const CECPacket * SendRecvMsg_v2(const CECPacket *request) { return m_ECClient->SendRecvPacket(request); }
+
+./libs/ec/cpp/RemoteConnect.cpp
+
+    class CRemoteConnect : public CECMuleSocket {
+
+libs/ec/cpp/ECMuleSocket.h
+
+    class CECMuleSocket : public CECSocket,  public wxSocketClient {
+
+libs/ec/cpp/ECSocket.h
+
+    class CECSocket {
+
+	const CECPacket *SendRecvPacket(const CECPacket *request);
+
+    }
+
+
+
+

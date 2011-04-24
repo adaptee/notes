@@ -1,0 +1,76 @@
+[idea]
+
+    interface 'TerminalInterfaceV2' provide a method called "foregroundProcessId()" .
+    Most time the fg process of konsole is a interactive shell, such as bash
+    so we can get the pid of that shell, then with the help of /proc , we can know the cwd of
+    that shell. now the very info we need is ontained
+
+
+
+
+
+[1] after pressing 'Alt + N' to create new session
+
+#0  Terminal::Terminal (this=0xa0c09d0, parent=0xa3d4de0)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/terminal.cpp:57
+#1  0x0806f519 in Session::addTerminal (this=0x9ff0048, parent=0xa3d4de0)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/session.cpp:144
+#2  0x0806fdff in Session::setupSession (this=0x9ff0048, type=Session::Single)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/session.cpp:57
+#3  0x0806d740 in SessionStack::addSession (this=0xa043678, type=Session::Single)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/sessionstack.cpp:49
+#4  0x080574bb in SessionStack::qt_metacall (this=0xa043678, _c=QMetaObject::InvokeMetaMethod, _id=12, _a=0xbffe3e18)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/moc_sessionstack.cpp:179
+
+
+[2] after clicking the "+" sign on tabbar
+
+#0  Terminal::Terminal (this=0xa497108, parent=0xa432520)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/terminal.cpp:57
+#1  0x0806f519 in Session::addTerminal (this=0xa3f83a0, parent=0xa432520)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/session.cpp:144
+#2  0x0806fdff in Session::setupSession (this=0xa3f83a0, type=Session::Single)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/session.cpp:57
+#3  0x0806d740 in SessionStack::addSession (this=0xa043678, type=Session::Single)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/sessionstack.cpp:49
+#4  0x080574bb in SessionStack::qt_metacall (this=0xa043678, _c=QMetaObject::InvokeMetaMethod, _id=12, _a=0xbffe405c)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/moc_sessionstack.cpp:179
+#5  0xb644ceba in QMetaObject::metacall(QObject*, QMetaObject::Call, int, void**) () from /usr/lib/libQtCore.so.4
+#6  0xb645bf9b in QMetaObject::activate(QObject*, QMetaObject const*, int, void**) () from /usr/lib/libQtCore.so.4
+#7  0x08056c69 in TabBar::newTabRequested (this=0xa080b78)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/moc_tabbar.cpp:154
+#8  0x08056e5a in TabBar::qt_metacall (this=0xa080b78, _c=QMetaObject::InvokeMetaMethod, _id=0, _a=0xbffe41b8)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/moc_tabbar.cpp:117
+
+
+[3] when terminating one session
+
+#0  Session::prepareShutdown (this=0xa554208)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/session.cpp:388
+#1  0x08056a6c in Session::qt_metacall (this=0xa554208, _c=QMetaObject::InvokeMetaMethod, _id=22, _a=0xbffe46b8)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/moc_session.cpp:135
+
+
+[4] after pressing "Alt + <-" to select previous tab
+
+#0  TabBar::selectPreviousTab (this=0xa080b78)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/tabbar.cpp:704
+#1  0x08056f9d in TabBar::qt_metacall (this=0xa080b78, _c=QMetaObject::InvokeMetaMethod, _id=13, _a=0xbffe3e18)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/moc_tabbar.cpp:130
+
+[5] after pressing "Shift + <-" to move current tab to the left
+
+#0  TabBar::moveTabLeft (this=0xa080b78, sessionId=7)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/tabbar.cpp:720
+#1  0x08059207 in MainWindow::handleContextDependentAction (this=0xa06cf98, action=0xa094540, sessionId=<value optimized out>)
+    at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/mainwindow.cpp:389
+#2  0x0805636f in MainWindow::qt_metacall (this=0xa06cf98, _c=QMetaObject::InvokeMetaMethod, _id=<value optimized out>,
+    _a=0xbffe3e18) at /home/whodare/code/abs/yakuake-svn/src/yakuake/app/moc_mainwindow.cpp:142
+
+
+[titlebar.cpp]   responbile for the very bottom extra title bar
+
+
+
+
+

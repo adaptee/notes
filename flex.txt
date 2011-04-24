@@ -1,0 +1,24 @@
+   Start conditions are declared in the definitions (first) section of
+the input using unindented lines beginning with either `%s' or `%x'
+followed by a list of names.  The former declares "inclusive" start
+conditions, the latter "exclusive" start conditions.  A start condition
+is activated using the `BEGIN' action.  Until the next `BEGIN' action
+is executed, rules with the given start condition will be active and
+rules with other start conditions will be inactive.  If the start
+condition is inclusive, then rules with no start conditions at all will
+also be active.  If it is exclusive, then _only_ rules qualified with
+the start condition will be active.  A set of rules contingent on the
+same exclusive start condition describe a scanner which is independent
+of any of the other rules in the `flex' input.  Because of this,
+exclusive start conditions make it easy to specify "mini-scanners"
+which scan portions of the input that are syntactically different from
+the rest (e.g., comments).
+
+%s   inclusive
+%x   exclusive
+
+
+[Python-lex-yacc]
+
+The tokens returned by lexer.token() are instances of LexToken. This object has attributes tok.type, tok.value, tok.lineno, and tok.lexpos.
+

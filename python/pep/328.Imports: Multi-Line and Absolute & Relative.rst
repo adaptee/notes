@@ -1,0 +1,96 @@
+===========================================
+PEP 328
+===========================================
+
+-------------------------------------------
+Imports: Multi-Line and Absolute/Relative
+-------------------------------------------
+
+
+
+Rationale for Parentheses
+===========================
+
+Example code::
+
+    from Tkinter import (Tk, Frame, Button, Entry, Canvas, Text,
+        LEFT, DISABLED, NORMAL, RIDGE, END)
+
+Rationale for Absolute Imports
+=================================
+
+Before Python 2.4, if you're reading the code of a module located inside
+a package, it is not clear whether::
+
+    import foo
+
+refers to a **top-level** module or to another **intra-package** module.
+
+To resolve the **ambiguity**, it is proposed that foo will **always** refer to
+a **top-level** module or package which is reachable from `sys.path`. This is
+called **absolute import**.
+
+The python-dev community choose absolute imports as the **default** because
+they're the more common use-cases and can provide all the functionality of
+intra-package imports, although it comes at the cost of difficulty when
+renaming package pieces higher up in the hierarchy or when moving one package
+inside another.
+
+Because this represents a **change of semantics**, **absolute imports** is
+**turned off** in Python 2.x and can be **turn on** through the use of::
+
+    from __future__ import absolute_import
+
+Rationale for Relative Imports
+==================================
+
+Although **absolute import** is the default behaviou, **relative import** is
+still **needed** and should also be **allowed**.
+
+Several use cases were presented, the most important of which is being able to
+rearrange the structure of large packages without having to edit sub-packages.
+
+There is an agreement that **relative imports** should use **special syntax**
+(that is, `import foo` as a bare term should always be an absolute import).
+
+
+Guido's Decision
+==================================
+
+Guido has Pronounced that relative imports will use **leading dots**.
+
+A single leading dot indicates a import relative to the current package.
+Two or more leading dots indicates a import relative to the parent(s) of
+the current package, one level per dot after the first.
+
+Here's a sample package layout::
+
+    package/
+        __init__.py
+        subpackage1/
+            __init__.py
+            moduleX.py
+            moduleY.py
+        subpackage2/
+            __init__.py
+            moduleZ.py
+        moduleA.py
+
+Assuming that the current file is either moduleX.py or subpackage1/__init__.py, following are correct usages of the new syntax::
+
+    from .moduleY import spam
+    from .moduleY import spam as ham
+    from . import moduleY
+    from ..subpackage1 import moduleY
+    from ..subpackage2.moduleZ import eggs
+    from ..moduleA import foo
+    from ...package import bar
+
+
+Relative Imports and __name__
+===============================
+
+Relative imports use a module's `__name__` attribute to determine that module's
+position in the package hierarchy.
+
+

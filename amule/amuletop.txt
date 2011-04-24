@@ -1,0 +1,192 @@
+[pyamule]
+
+    A python library which implement the aMule EC protocol.
+
+    aim:
+    1. fully support for all kinds of EC packet
+    2. simple, only responbile for communicating, do not care about operation semantics
+
+[amulecmd]
+
+       -h, --host=<host>
+              Host where aMule is running (default: localhost).  <host> might be an IP address or a DNS name
+
+       -p, --port=<port>
+              aMule's port for External Connections, as set in Preferences->Remote Controls (default: 4712)
+
+       -P, --password=<passwd>
+              External Connections password
+
+       -f, --config-file=<path>
+              Use the given configuration file.  Default configuration file is ~/.aMule/remote.conf
+
+       -q, --quiet
+              Do not print any output to stdout. This seems to be a very much useless option with amulecmd.
+
+       -v, --verbose
+              Be verbose - show also debug messages
+
+       -l, --locale=<lang>
+              Sets program locale (language).  See section LANGUAGES for the description of the <lang> parameter.
+
+       -w, --write-config
+              Write command line options to config file and exit
+
+       -c, --command=<command>
+              Execute <command> as if it was entered at amulecmd's prompt and exit.
+
+       --create-config-from=<path>
+              Create config file based upon <path>, which must point to a valid aMule config file, and then exit
+
+       --help Prints a short usage description.
+
+       --version
+              Displays the current version number.
+
+       ----------------------------------------
+
+       -s  --summary
+              display the summary of current state( server, highID, speed,
+                      running time )
+
+
+
+
+
+[amuletop]
+
+    A ncurses base amule UI, relying upon pyamule to do the underlying communication.
+
+    aim:
+    1. the UI is inspired by htop
+        a. top half show the overall status: running time, overall download speed, number of active download, etc
+        b. bottom half show detail info of each task : number, name, size, percentage, speed, sources
+
+    2. the basic keybinding is inspired by vim
+
+        a. j,k for down/up, gg go to top,  G go to bottom
+        b. a for adding, d for deleting, i for detail info, r for refresh
+        c. q or esc for going back to previous context
+        d. s for sorting
+
+[amule-qt]
+
+    A complete pyqt based gui  for amule, also relying upon pyamule for communication
+
+    aim : 100% clone of current amule/amulegui
+
+[TextClient.cpp]
+
+    if ( ! request_list.empty() ) {
+            std::list<CECPacket *>::iterator it = request_list.begin();
+            while ( it != request_list.end() ) {
+                    CECPacket *curr = *it++;
+                    const CECPacket *reply = SendRecvMsg_v2(curr);
+                    delete curr;
+                    if ( reply ) {
+                            Process_Answer_v2(reply);
+                            delete reply;
+                    }
+            }
+            request_list.resize(0);
+    }
+
+
+[libs/ec/cpp/ECSocket.cpp ]
+
+    const CECPacket *CECSocket::ReadPacket()
+    {
+        ......
+
+            packet = new CECPacket();
+
+            if (!packet->ReadFromSocket(*this)) {
+                    AddDebugLogLineN(logEC, wxT("ReadPacket: error in packet read"));
+                    cout << "ReadPacket: error in packet read" << endl;
+                    delete packet;
+                    packet = NULL;
+                    CloseSocket();
+            }
+
+        ......
+
+
+    }
+
+
+[ECPacket.cpp]
+
+    bool CECPacket::ReadFromSocket(CECSocket& socket)
+    {
+            return socket.ReadNumber(&m_opCode, sizeof(ec_opcode_t))
+                    && ReadChildren(socket);
+    }
+
+[ECTag.cpp]
+
+    bool CECTag::ReadChildren(CECSocket& socket)
+    {
+            uint16 tmp_tagCount;
+            if (!socket.ReadNumber(&tmp_tagCount, sizeof(uint16))) {
+                    return false;
+            }
+            m_tagList.clear();
+            for (int i = 0; i < tmp_tagCount; i++) {
+                    m_tagList.push_back(CECTag());
+                    CECTag& tag = m_tagList.back();
+                    if (!tag.ReadFromSocket(socket)) {
+                            return false;
+                    }
+            }
+            return true;
+    }
+
+
+    bool CECTag::ReadFromSocket(CECSocket& socket)
+    {
+            ec_tagname_t tmp_tagName;
+            if (!socket.ReadNumber(&tmp_tagName, sizeof(ec_tagname_t))) {
+                    return false;
+            }
+            m_tagName = tmp_tagName >> 1;
+            bool hasChildren = (tmp_tagName & 0x01) != 0;
+
+            if (!socket.ReadNumber(&m_dataType, sizeof(ec_tagtype_t))) {
+                    return false;
+            }
+
+            if (!socket.ReadNumber(&m_dataLen, sizeof(ec_taglen_t))) {
+                    return false;
+            }
+
+            if (hasChildren && !ReadChildren(socket)) {
+                    return false;
+            }
+
+            unsigned int tmp_len = m_dataLen;
+            m_dataLen = 0;
+            m_dataLen = tmp_len - GetTagLen();
+            if (m_dataLen > 0) {
+                    NewData();
+                    if (!socket.ReadBuffer(m_tagData, m_dataLen)) {
+                            return false;
+                    }
+            } else {
+                    m_tagData = NULL;
+            }
+
+            return true;
+    }
+
+
+
+    /**
+    * An empty TAG
+    *
+    * Note, that an "empty" tag is empty because it contains no data, but it still
+    * may contain children.
+    */
+    class CECEmptyTag : public CECTag {
+            public:
+                    CECEmptyTag(ec_tagname_t name = 0) : CECTag(name, 0, (const void *) NULL) {}
+    };

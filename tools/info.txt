@@ -1,0 +1,53 @@
+Info
+
+每个文件可以包含多个node，并且node之间可以存在层次关系。
+
+Space       向下翻页，而 BackSpace 则向上翻页 ；这两个键的移动操作是可以跨node的。
+PageDown    向下翻页，而 PageUp 则向上翻页 ；这两个键的移动操作是局限在node内部
+
+HOME        移动到本node的头部，END 移动到本node的尾部
+'b'         跳到当前node的起始处，
+
+
+'n'         跳到同级的后一个node
+'p'         跳到同级的前一个node
+'u'         跳到上级 node
+
+']'         跳到后一个node，
+'['         跳到前一个node；这两个键的特点是，不考虑是否同级，只考虑是否逻辑上相邻
+
+'l'         跳回之前阅读的node
+'r'         'l' 的逆操作
+
+TAB         讲光标移动到下一个Cross reference
+'f'         跳到用户指定的Cross reference
+'f?'        列出当前node内的所有Cross reference
+
+'i'         列出index
+'d'         跳到 directory node，即打开info时看到的node
+'t'         跳到该文件的top node
+
+C-q         充当转义字符
+
+'s'         在整个文件中搜索字符串
+C-s         前向的增量搜索
+C-r         后向的增量搜索
+
+'h'         弹出命令提示
+
+Menu item 的格式 ：   * <subtopic name> : <node name>  <description >
+subtopic name 对用户友好，而 node name 则对机器友好。
+
+Cross reference 的格式：* .......
+Cross reference 是可以跨文件的
+
+'m' 跳到用户指定的某个subnode；可以使用'1'、'2'这样的编号，以方便输入
+
+
+info 的习惯是将文件名写在 "( )"里，例如 (bash)
+
+info(1) 的意图是充当tutorial，而不是reference manual ；后一个任务更适合man(1)
+
+猜想：emacs 的常用操作在 info(1) 中依然有效，例如 C-x 0 、 C-x 1
+
+M-x visible-mode
