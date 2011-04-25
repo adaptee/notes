@@ -1,0 +1,1363 @@
+chp 3 After LFS
+
+    blfs-bootscripts[installed]
+
+    autofs[skipped]
+
+chp 4 Security
+
+    openssl[installed]
+        bc[optional][installed]
+
+    guntls[installed]
+        libgcrypt[required][installed]
+            libgpg-error[required][installed]
+        libtasn[optional][insatlled]
+
+    cracklib[installed]
+
+    linuxpam[installed]
+        cracklib[optional][installed]
+        berkeleydb[optional][installed]
+
+    shadow[installed]
+        cracklib[required][installed]
+        linuxpam[required][installed]
+
+    iptables[installed]
+
+    config-iptables[todo]
+
+    gnupg[installed]
+        libusb-compat[optional][installed]
+            libusb[required][installed]
+
+    gnupg2[installed](3 test failure)
+        pth[required][installed]
+        libassuan[required][installed]
+        libgcrypt[required][installed]
+        libksba[required][installed]
+        pin-entry[recommended][installed]
+
+    gpgme[installed]
+        libassuan[required][installed]
+        libgpg-error[required][installed]
+
+    tripwire[skipped]
+
+    heimdal[skipped]
+        berkeleydb[required][installed]
+        openssl[recommended][installed]
+        sqlite[optional][installed]
+
+    mit-kerberos[skipped]
+
+    cyrus-sasl[installed]
+        openssl[required][installed]
+        berkeleydb[optional][required]
+
+    stunnel[skipped]
+        tcp-wrapper[optional][installed]
+
+    sudo[installed]
+
+    nss[installed]
+        nspr[required][installed]
+        sqlite[recommended]
+            unzip[optional][installed]
+
+    policykit[skipped]
+
+    polkit[installed]
+        intltool[optional][installed]
+        gobject-introspection[optional][installed]
+        eggdbus[optional][installed]
+
+    polkit-gnome[skipped]
+
+    consolekit[installed]
+        xorg-lib[required][installed]
+        dbus-glib[required][installed]
+        pam[optional][installed]
+
+    attr[installed](a lot of test failure)
+
+    acl[installed](a lot of test failure)
+        attr[required][installed]
+        coreutils[required][reinstalled]
+
+chp 5 FileSystem
+
+    reiserfsprogs[installed]
+
+    xfsprogfs[skipped]
+
+chp 6 Editors
+
+    vim[skipped]
+
+    emacs[todo]
+
+    nano[installed]
+
+    jeo[skipped]
+
+    ed[installed]
+
+    bluefish[skipped]
+
+chp 7 Shells
+
+    tcsh[skipped]
+
+    zsh[installed]
+        pcre[optional][installed]
+            grep[resintalled]
+
+    dash[skipped]
+
+    ksh[skipped]
+
+
+chp 8 General Libraries
+
+    pcre[installed]
+
+    popt[installed]
+
+    gamin[installed]
+        glib[required][installed]
+            pcre[recommended][installed]
+            attr[optional][installed]
+            gamin[optional][circular]
+            desktop-file-utils[optional][installed]
+
+    libxml2[installed]
+        python[optional][installed]
+            libffi[optional][installed]
+
+    libxslt[installed]
+        libxml2[required][installed]
+        python[optional][installed]
+        libgcrypt[optional][installed]
+
+    libgtkhtml[skipped]
+
+    glib[installd]
+
+    glibmm[installed]
+        glib[installed]
+        libsigc++[installed]
+
+    libidl[installed]
+        glib[required][installed]
+
+    libcroco[installed]
+        glib[required][installed]
+        libxml2[required][installed]
+
+    libgsf[installed]
+        glib[required][installed]
+        libxml2[required][installed]
+        XML::Parser[required][installed]
+
+    libglade[installed]
+        libxml2[required][installed]
+        gtk[required][installed]
+        python[optional][installed]
+
+    expat[installed]
+
+    libESMTP[skipped]
+
+    aspell[installed]
+        which[required][installed]
+
+    enchant[installed]
+        glib[required][installed]
+        aspell[recommended][installed]
+
+    slib[skipped]
+
+    lzo[installed]
+
+    libusb[installed]
+    libusb-compat[installed]
+
+    icu[installed]
+
+    iso-codes[installed]
+        python[installed]
+
+    gmime[skipped]
+
+    libidn[installed]
+
+    xcb-proto[installed]
+        python[required][installed]
+        libxml2[required][installed]
+
+    libxcb[installed]
+        libXau[required][installed]
+        libXdmcp[required][installed]
+        libpthread-stubs[required][installed]
+        xcb-proto[required][installed]
+        libxslt[required][installed]
+        check[optional][installed]
+
+    libatomic-ops[installed]
+
+    libdrm[installed]
+        cairo[required][installed]
+        libpthread-stubs[required][installed]
+        libatomic-ops[required][installed]
+
+    dbus-glib[installed]
+        dbus[required][installed]
+            expat[required][installed]
+        glib[required][installed]
+        expat[required][installed]
+
+    dbus-python[installed]
+        python[required][installed]
+        dbus-glib[required][installed]
+        py-gobject[optional][installed]
+            gobject-introspection[optional][installed]
+
+    dbus-qt3[skipped]
+
+    eggdbus[installed]
+        dbus-glib[required][installed]
+        docbook-xsl[required][installed]
+
+    libpthread-stubs[skipped]
+
+    pth[installed]
+
+    libassuan[installed]
+
+    libgpg-error[installed]
+
+    libgcrypt[installed]
+
+    libksba[installed]
+
+    libmowgli[installed]
+
+    libmcs[installed]
+        libmowgli[required][installed]
+
+    libtasn[installed]
+
+    libunique[skipped]
+
+    liboil[installed]
+
+    nspr[installed]
+
+    libffi[installed]
+
+    gobject-introspection[installed]
+        glib[required][installed]
+        libffi[required][installed]
+
+    gir-repository[skipped]
+
+    libical[installed]
+
+    libelf[installed]
+
+    libggz[skipped]
+
+    libsigc++[installed]
+
+    libdaemon[installed]
+
+    ptlib[skipped]
+
+    libatasmart[installed]
+
+    talloc[installed]
+
+    telepathy-glib[]
+        dbus-glib[required][installed]
+        libxslt[required][installed]
+        python[required][installed]
+
+    wv[skipped]
+
+    clucene[installed]
+
+    boost[installed]
+
+    qca[installed]
+        qt4[required][installed]
+
+    libdbusmenu-qt[installed]
+        qt4[required][installed]
+
+chp 9 Graphics and Font Libraries
+
+    libjpeg[installed]
+
+    libpng[installed]
+
+    libtiff[installed]
+
+    giflib[installed]
+
+    littlecms[installed]
+        swig[optional][installed](version 2.0.2 + patch)
+
+    libmng[installed]
+        libjpeg[required][installed]
+        littlecms[required][installed]
+
+    freetype[installed]
+
+    fontconfig[installed](--without-add-fonts)
+        freetype[required][installed]
+        expat[required][installed]
+
+    libart-lgpg[skipped]
+
+    librsvg[installed]
+        gtk[required][installed]
+        libxml2[required][installed]
+        libcroco[recommended][installed]
+        libgsf[recommended][installed]
+
+    aalib[installed]
+        slang[optional][installed]
+            libpng[optional][installed]
+            pcre[optional][installed]
+        gpm[optional][installed](boot)
+
+    imlib2[installed]
+        freetype[required][installed]
+        libjpeg[required][installed]
+        libpng[required][installed]
+        xwindow-system[optional][installed]
+
+    libexif[installed]
+
+    exiv2[installed]
+        expat[installed]
+
+    fribidi[installed]
+
+    poppler[installed]
+        fontconfig[required][installed]
+        libjpeg[recommended][installed]
+        cairo[recommended][installed]
+        glib[recommended][installed]
+        openjpeg[optional][installed]
+        gtk[optional][installed]
+        qt4[optional][installed]
+
+    jasper[installed]
+        unzip[required][installed]
+        libjpeg[recommended][installed]
+        xwindow-system[recommended][installed]
+        freeglut[recommended][installed]
+
+    pixman[installed]
+
+    clutter[skipped]
+
+    clutter-gtk[skipped]
+
+    babl[installed]
+
+    gegl[installed]
+        babl[required][installed]
+        glib[required][installed]
+        gtk[required][installed]
+
+chp 10 General Utilities
+
+    bc[installed]
+
+    rep-gtk[skipped]
+
+    compface[installed]
+
+    imagemagick[todo]
+
+    hd2u[installed]
+
+    gtk-doc[skipped]
+        docbook-xml[required][installed]
+            libxml2[required][installed]
+            unzip[required][installed]
+        docbook-xsl[installed]
+            libxml2[required][installed]
+
+    scrollkeeper[skipped]
+
+    intltool[installed]
+        XML::Parser[installed]
+
+    screen[installed]
+
+    html-tidy[installed]
+
+    desktop-file-utils[installed]
+
+    xscreensaver[installed]
+        bc[required][installed]
+        libglade[required][installed]
+
+
+
+    pilot-link[skipped]
+
+    unixodbc[installed]
+
+    libiodbc[installed]
+
+    graphivz[todo]
+
+    xcb-util[installed]
+        libxcb[required][installed]
+        gperf[required][installed]
+
+    xterm[skipped]
+
+    rman[skipped]
+
+    recode[installed]
+
+    icon-naming-utils[installed]
+       XML::Simple[required][installed]
+
+    rxvt-unicode[skipped]
+
+    pin-entry[installed]
+
+    gperf[installed]
+
+    rarian[skipped]
+
+chp 11 System Utilities
+
+    gpm[installed]
+
+    fcron[skipped]
+
+    which[installed]
+
+    unzip[installed]
+
+    zip[installed]
+
+    unrar[installed]
+
+    xz-utils[installed]
+
+    pci-utils[installed]
+
+    usb-utils[installed]
+        libusb-compat[required][installed]
+
+    cpio[installed]
+
+    mc[skipped]
+
+    sysstat[installed]
+
+    apache-ant[skipped]
+
+    dbus[installed]
+
+    hal[todo]
+        dbus-glib[required][installed]
+        pci-utils[recommended][installed]
+        usb-utils[recommended][installed]
+        parted[optional][installed]
+            device-mapper[optional][installed]
+
+    udev[re-installed]
+        acl[required][installed]
+        glib[required][installed]
+        gperf[required][installed]
+        pci-uitls[required][installed]
+        usb-uitls[required][installed]
+        gobject-introspection[optional][installed]
+
+    devicekit[skipped][deprecated]
+
+    upower[installed]
+        polkit[required][installed]
+        udev-blfs[required][installed]
+
+
+    hdparm[installed]
+
+    sg3-utils[installed]
+
+    device-mapper[installed]
+
+    parted[installed]
+
+    udisks[installed]
+        dbus-glib[required][installed]
+        libatasmart[required][installed]
+        parted[required][installed]
+        polkit[required][installed]
+        sg3-utils[required][installed]
+        udev-blfs[required][installed]
+
+    eject[installed]
+
+    gvfs[todo]
+
+    libarchive[install]
+
+    cmake[install]
+        curl[required][install]
+        libarchive[required][installed]
+        expat[required][installed]
+
+    raptor[installed]
+        expat[required][installed]
+        curl[required][installed]
+
+    rasqal[installed]
+        net-tools[required][installed]
+
+    redland[installed]
+        rasqal[required]
+        libiodbc[optional][installed]
+        berkeleydb[optional][installed]
+        sqlite[optional][installed]
+
+    strigi[installed]
+        cmake[required][installed]
+        expat[required][installed]
+        clucene[required][installed]
+        gamin[recommended][installed]
+        exiv2[recommended][installed]
+        qt4[recommended][installed]
+
+chp 12 Programming
+
+    dejaGnu[installed]
+        expect[recommended][installed]
+            tcl[required][installed]
+
+    doxygen[todo]
+
+    expect[installed]
+        tcl[required][installed]
+
+    gc[installed]
+
+    gcc[todo]
+
+    guile[skipped]
+
+    IcedTea[skipped]
+
+    JDK[skipped]
+
+    Junit[skipped]
+
+    librep[skipped]
+
+    nasm[installed]
+
+    perl-pdl[skipped]
+
+    perl-modules[skipped]
+        XML::Parser[installed]
+
+    php[skipped]
+
+    python[installed]
+
+    python-modules[skipped]
+
+    pycario[installed]
+
+    pygtk[installed]
+        py-gobject[required][installed]
+        atk[required][installed]
+        pango[required][installed]
+        pycairo[required][installed]
+        gtk[required][installed]
+
+
+    ruby[skipped]
+
+    slang[installed]
+
+    tcl[installed](test failure)
+
+    tk[todo]
+
+    other-prog-langs[skipped]
+
+chp 13  Connecting to network
+
+    ppp[skipped]
+        libpcap[optional][installed]
+
+    dhcpcd[installed](not configured)
+
+    dhcp[skipped]
+
+chp 14 Networking Libraries
+
+    curl[installed]
+        openssl[optional][installed]
+        libidn[optional][installed]
+        libssh2[optional][installed]
+
+    libpcap[installed]
+
+    libnice[installed]
+        glib[required][installed]
+        gstreamer[optional][installed]
+
+    libproxy[half done]
+        gconf[recommended][installed]
+        xwindow-system[optional][installed]
+        python[optional][installed]
+        xulrunner[optional][]
+        webkit[optional][]
+
+    libsoup[installed]
+        glib[required][installed]
+        libxml2[required][installed]
+        gnutls[recommended][installed]
+        gconf[optional][installed]
+        libproxy[optional][installed]
+
+chp 15 Text Web Browsers
+
+    links[skipped]
+
+    lynx[skipped]
+
+    w3m[installed]
+        gc[required][installed]
+        openssl[optional][installed]
+        imlib2[optional][installed]
+        compface[optional][installed]
+        gpm[optional][installed]
+
+chp 16 Basic Networking Programs
+
+    cvs[skipped]
+
+    inetutils[re-installed]
+        pam[optional][installed]
+        tcp-wrapper[optional][installed]
+
+    ncftp[skipped]
+
+    net-tools[installed]
+
+    nfs-utils-client[skipped]
+
+    ntp[installed](boot)
+        openssl[openssl][installed]
+
+    openssh-client[installed]
+        pam[optional][installed]
+        tcp-wrapper[optional][installed]
+        libedit[optional][installed]
+
+    portmap[skipped]
+
+    rsync-client[installed]
+        popt[optional][installed]
+        attr[optional][installed]
+        acl[optional][installed]
+
+    samba-client[not configured]
+        popt[optional][installed]
+        pam[optional][installed]
+        gamin[optional][installed]
+        avahi[optional][installed]
+
+
+    subversion[installed]
+        sqlite[required][installed]
+        swig[optional][installed]
+
+    tcp-wrapper[installed]
+
+    wget[installed]
+
+    wireless-tools[installed]
+
+    ggz-client-libs[skipped]
+
+chp 17 Basic Networking Utilities
+
+    traceroute[installed]
+
+    nmap[installed]
+        openssl[optional][installed]
+        pcre[optional][installed]
+        libpcap[optional][installed]
+
+    whois[installed]
+
+    bind-utils[installed]
+
+    wiresharek[skipped]
+
+    avahi[installed]
+        glib2[required][installed]
+        intltool[required][installed]
+        gtk[optional][installed]
+        dbus-python[optional][installed]
+        libdaemon[optional][installed]
+        libglade[optional][installed]
+        pygtk[optional][installed]
+
+    mod-dnssd[skipped]
+
+chp 18 Mail/News Clients
+
+    heirloom-mailx[skipped]
+
+    procmail[skipped]
+
+    fetchmail[skipped]
+
+    mutt[todo]
+
+    pine[skipped]
+
+    tin[skipped]
+
+chp 23  X Window System Environment
+
+    xorg-proto[installed]
+
+    xorg-util[installed]
+        xorg-proto[required][installed]
+
+    libXau[installed]
+        xorg-proto[required][installed]
+
+    libXdmcp[installed]
+        xorg-proto[required][installed]
+
+    xorg-lib[installed]
+        xorg-proto[required][installed]
+        libXdmcp[required][installed]
+        libxcb[required][installed]
+        fontconfig[required][installed]
+
+    xorg-app[installed]
+        xorg-lib[required][installed]
+        xcb-util[required][installed]
+        libpng[required][installed]
+        mesa[optional][installed]
+
+    xcursor-themes[installed]
+        xorg-app[required][installed]
+
+    xorg-font[installed]
+        xorg-app[required][installed]
+        xcursor-themes[required][installed]
+
+    xkeyboard-config[installed]
+        xorg-app[required][installed]
+        intltool[required][installed]
+
+    xorg-server[installed]
+        openssl[required][installed]
+        pixman[required][installed]
+        xorg-font[required][installed]
+        xkeyboard-config[required][installed]
+        dbus[optional][installed]
+        mesa[optional][installed]
+
+    xorg-driver[installed]
+        xorg-server[required][installed]
+        masa[optional][installed]
+
+    xorg-compoment[half done]
+
+    xorg-configuration[todo]
+
+chp 24  X Libraries
+
+    qt3[skipped]
+
+    qt4[installed][skeptical]
+        xwindow-system[required][installed]
+        libjpeg[recommended][installed]
+        libpng[recommended][installed]
+        libmng[recommended][installed]
+        libtiff[recommended][installed]
+        dbus[optional][installed]
+        gstreamer-base-plugins[optional][installed]
+        glib[optional][installed]
+        gtk[optional][installed]
+        openssl[optional][installed]
+        unixOdbc[optional][installed]
+        sqlite[optional][installed]
+        mysql[optional][installed]
+        xdg-utils[optional][installed]
+
+
+    gtk1[skipped]
+
+    cairo[installed]
+        libpng[required][installed]
+        pixman[required][installed]
+        fontconfig[required][installed]
+        xwindow-system[recommended][installed]
+        xcb-util[optional][installed]
+        directfb[optional][installed]
+        gtk[optional][installed]
+        poppler[optional][installed]
+        librsvg[optional][installed]
+
+    cairomm[installed]
+        cairo[required][installed]
+
+    pango[installed]
+        glib[required][installed]
+        cairo[required][installed]
+        fontconfig[required][installed]
+        gobject-introspection[optional][installed]
+
+    pangomm[installed]
+        pango[required][installed]
+        cairomm[required][installed]
+        glibmm[required][installed]
+
+    atk[installed]
+        glib[required][installed]
+
+    gtk[installed]
+        cairo[required][installed]
+        pango[required][installed]
+        atk[required][installed]
+        libjpeg[recommended][installed]
+        libtiff[recommended][installed]
+
+    gtkmm[installed]
+        gtk[required][installed]
+        pangomm[required][installed]
+
+    lesstif[skipped]
+
+    startup-notification[installed]
+        xwindow-system[required][installed]
+
+    libwnck[skipped]
+
+    shared-mime-info[installed]
+        glib[required][installed]
+        intltool[required][installed]
+        libxml2[required][installed]
+
+    hicolor-icon-theme[installed]
+
+    libxklavier[installed]
+        glib[required][installed]
+        xwindow-system[required][installed]
+        libxml2[required][installed]
+        iso-codes[required][installed]
+
+    freeglut[installed]
+        mesalib[required][installed]
+
+    goffice[skipped]
+
+    mesa[installed]
+        xorg-lib[required][installed]
+        xorg-util[required][installed]
+        libdrm[required][installed]
+        expat[required][installed]
+        talloc[required][installed]
+
+    xulrunner[todo]
+
+    webkitgtk[skipped]
+
+    libsexy[skipped]
+
+    libnotify[installed]
+        gtk[required][installed]
+        dbus-glib[required][installed]
+
+
+    notification-daemon[skipped]
+
+    gtk-vnc[skipped]
+
+
+chp 25 Window Manager
+
+    sawfish[skipped]
+
+    fluxbox[skipped]
+
+    metacity[skipped]
+
+
+chp 26 KDE Core packages
+
+    git[todo]
+
+    automoc[installed]
+
+    akonadi[installed][test failure]
+        shared-mime-info[required][installed]
+        boost[required][installed]
+        mysql[required][installed]
+        sorpano[required][installed]
+
+
+    oxygen-icons[half-done]
+
+    kdelibs[temp]
+        strigi[required][installed]
+        attica[required][installed]
+        libXScrnSaver[required][installed]
+        xz-util[required][installed]
+        openssl[required][installed]
+        soprano[required][installed]
+        heimdal[required][]
+        shared-desktop-ontologies[required][installed]
+        qca[required][installed]
+        libdbusmenu[required][installed]
+        polkit-qt[required][installed]
+        grantlee[required][]
+        shared-mime-info[required][installed]
+        enchant[required][installed]
+        giflib[required][installed]
+        jasper[required][installed]
+        openexr[required][installed]
+        xdg-utils[required][installed]
+        phonon[required][installed]
+        hicolor-icon-theme[required][installed]
+        upower[required][installed]
+        udisks[required][installed]
+        libxcursor[required][installed]
+        hspell[optional][installed]
+        avahi[optional][installed]
+
+    kdepimlibs[temp]
+        kdelibs[required][installed]
+        akonadi[required][installed]
+        libical[required][installed]
+        gpgme[required][installed]
+
+    kdebase-runtime[temp]
+        kdelibs[required][installed]
+        kdepimlibs[required][installed]
+        oxygen-icon[required][installed]
+        hicolor-icon-theme[required][installed]
+        smbclient[required][installed]
+        libcanberra[required][installed]
+        ntrack[required][installed]
+        libssh[required][installed]
+
+    kdepim-runtime[temp]
+        kdepimlibs[required][installed]
+        kdebase-runtime[required][installed]
+
+    kdebase-workspace[todo]
+        kdepim-runtime[required][installed]
+        lm-sensors[required][installed]
+        qimageblitz[required][installed]
+        libqalculate[required][installed]
+        polkit-kde[required][]
+        libdmtx[required][installed]
+        kdebindings[optional][]
+
+    kdegraphics[installed]
+        kdebase-runtime[required][installed]
+        qimageblitz[required][installed]
+        lcms[required][installed]
+        sane[required][]
+        libspectre[required][installed]
+        poppler-qt[required][installed]
+        chmlib[required][installed]
+        djvulibre[required][installed]
+        libepub[required][installed]
+
+    kdebase[installed]
+        kdebase-workspace[required][installed]
+
+    kdeartwork[todo]
+        kdebase-workspace[required][installed]
+        kdegrahpics[required][installed]
+        xscreensaver[optional][installed]
+        eigen[optional][installed]
+
+    kdebindings[installed]
+        boost[required][installed]
+        qwt[required][installed]
+        pyqt[required][installed]
+        qscintilla[required][installed]
+
+    kdeadmin[installed]
+
+    kde-l10n[installed]
+
+    kdemultimedia[installed]
+        ffmpeg[required][installed]
+        mplayer[required][installed]
+        pulseaudio[required][installed]
+        libmusicbrainz[required][installed]
+        taglib[required][installed]
+        tunepimp[optional][]
+
+    kdesdk[installed]
+        subversion[required][installed]
+
+    kdeutils[installed]
+        libarchive[required][installed]
+        qimageblitz[required][installed]
+        qjson[required][installed]
+
+    kdeplasma-addons[]
+        kdegrahpics[required][installed]
+        qwt[required][installed]
+        eigen[required][installed]
+
+    kdenetwork[]
+
+
+
+
+
+
+
+chp 35  Multimedia Libraries and Drivers
+
+    alsa-lib[installed]
+
+    alas-plugins[todo]
+        alsa-lib[required][installed]
+
+    alsa-utils[installed](boot)
+        alsa-lib[required][installed]
+        dialog[optional][installed]
+
+    alas-tools[todo]
+        alsa-lib[required][installed]
+
+    alsa-firmware[todo]
+        alas-tools[required][]
+
+    alsa-oss[skipped]
+
+    audio-file[skipped]
+
+    esound[skipped]
+        audio-file[required][installed]
+
+    sdl[todo]
+
+    libao[installed]
+
+    libogg[installed]
+
+    libvorbis[installed]
+
+    libcanberra[installed]
+        libvorbis[required][installed]
+        alsa-lib[optional][installed]
+        gstreamer[optional][installed]
+        pulseaudio[optional][installed]
+        gtk[optional][installed]
+        xorg-proto[optional][installed]
+
+
+    faac[installed]
+
+    faad[installed]
+
+    nas[skipped]
+
+    libmpeg3[skipped]
+
+    libmad[installed]
+
+    libquicktime[skipped]
+
+    speex[installed]
+        libogg[required][installed]
+
+    id3lib[installed]
+
+    flac[installed]
+        libogg[optional][installed]
+        nasm[optional][installed]
+
+    libdvdcss[installed]
+
+    libdvdread[installed]
+        libdvdcss[optional][installed]
+
+    libdv[installed]
+
+    liba52[installed]
+
+    xvidcore[installed]
+        nasm[optional][installed]
+
+    libtheora[installed]
+        libogg[required][installed]
+        libvorbis[recommended][installed]
+
+    xine-lib[todo]
+        xwindow-system[required][installed]
+        alsa-lib[required][installed]
+        ffmpeg[recommended][installed]
+
+    libmikmod[todo]
+
+    gstreamer[installed]
+        glibc[required][installed]
+        libxml2[required][installed]
+
+    gstreamer-base-plugins[installed]
+        gstreamer[required][installed]
+        liboil[required][installed]
+        pango[required][installed]
+
+    gstreamer-good-plugins[todo]
+        gstreamer-base-plugins[required][installed]
+
+    farsight2[todo]
+
+    telepathy-farsight[todo]
+
+    libmusicbrainz[installed]
+        expat[required][installed]
+        python[optional][installed]
+        neon[required][installed]
+        libdiscid[required][installed]
+        libofa[required]
+
+    libmpeg2[installed]
+
+    opal[skipped]
+
+    libvpx[installed]
+
+
+chp 36  Audio Utilities
+
+    mpg123[skipped]
+
+    vorbis-tools[installed]
+        libvorbis[required][installed]
+        libao[optional][installed]
+        flac[optional][installed]
+        curl[optional][installed]
+
+    xmms[skipped]
+
+    lame[installed]
+        libsndfile[optional][installed]
+
+    cdparanoia[installed]
+
+    freetts[skipped]
+
+    audacious1[skipped]
+
+    amarok1[skipped]
+
+chp 37 Video Utilities
+
+    ffmpeg[temp]
+        faad[recommended][installed]
+        lame[recommended][installed]
+        libtheora[recommended][installed]
+        libvorbis[recommended][installed]
+        libvpx[recommended][installed]
+        xwindow-system[recommended][installed]
+        x264[recommended][installed]
+        xvidcore[recommended][installed]
+        faac[optional][installed]
+        freetype[optional][installed]
+        imlib2[optional][installed]
+        liba52[optional][installed]
+        speex[optional][installed]
+        yasm[optional][installed]
+        openjpeg[optional][installed]
+        libvdpau[optional][]
+        libva[optional][]
+
+
+    avifile[skipped]
+
+    mplayer[todo]
+
+    xine-ui[skipped]
+
+    transcode[todo]
+        ffmpeg[required][installed]
+        libmpeg2[required][installed]
+
+
+
+==============================
+
+yasm[installed]
+    cython[optional][installed]
+
+cython[installed]
+
+mysql[temp]
+    openssl[recommended][installed]
+    tcp-wrapper[optional][installed]
+
+soprano[installed]
+    qt4[required][installed]
+    cmake[required][installed]
+    rasqal[required][installed]
+    raptor[required][installed]
+    redland[required][installed]
+    clucene[required][installed]
+
+
+
+gconf[installed]
+    orbit2[required][installed]
+    polkit[required][installed]
+    gtk[recommended][installed]
+
+orbit2[installed]
+    libidl[required][installed]
+    openssl[optional][installed]
+
+libsndfile[installed]
+    flac[required][installed]
+    libvorbis[required][installed]
+    alsa-lib[required][installed]
+    sqlite[required][installed]
+
+libsamplerate[todo]
+    libsndfile[required][installed]
+    flac[required][installed]
+
+libasyncns[installed]
+
+pulseaudio[installed](skeptical)
+    libsamplerate[required][installed]
+    libsndfile[required][installed]
+    libatomic-ops[required][installed]
+    speex[required][installed]
+    gdbm[required][installed]
+    alsa-lib[optional][installed]
+    glib[optional][installed]
+    dbus-glib[optional][installed]
+    xwindow-system[optional][installed]
+    tcp-wrapper[optional][installed]
+    libasyncns[optional][installed]
+
+phonon[installed]
+
+shared-desktop-ontologies[installed]
+
+polkit-qt[installed]
+    polkit[required][installed]
+
+openexr[installed]
+    ilmbase[required][installed]
+
+directfb[installed]
+    libjpeg[required][installed]
+    libpng[required][installed]
+    freetype[required][installed]
+
+openjpeg[installed]
+
+
+
+ghostscript[installed][skeptical]
+    expat[required][installed]
+    freetype[required][installed]
+    jasper[required][installed]
+    libpng[required][installed]
+    libtiff[required][installed]
+    lcms[required][installed]
+    cairo[optional][installed]
+    fontconfig[optional][installed]
+    gtk[optional][installed]
+    libidn[optional][installed]
+
+    # should be built with following instruction
+    patch -Np1 -i ../ghostscript-9.00-system_jasper-1.patch
+    rm -rf expat jasper jpeg libpng tiff zlib
+    ./configure --prefix=/usr --enable-dynamic  --with-x --with-drivers=ALL --with-fontpath=/usr/share/fonts/Type1:/usr/share/fonts --disable-compile-inits # needed for linking with system-zlib
+    make
+
+
+dialog[installed]
+
+file[installed]
+
+enca[installed]
+
+xdg-utils[installed]
+
+nvidia[installed]
+
+hspell[installed]
+    aspell[optional][installed]
+
+libssh[installed]
+    openssh[required][installed]
+
+ntrack[installed]
+    libnl[required][installed]
+    qt4[optional][installed]
+
+lm-sensors[installed]
+    sysfsutils[required][]
+
+libqalculate[installed]
+   cln[required][installed]
+
+qimageblitz[installed]
+
+libdmtx[installed]
+    imagemagick[required][installed]
+
+eigen[installed]
+
+djvulibre[installed]
+    libtiff[required][installed]
+
+libepub
+    libzip[required][installed]
+    libxml2[required][installed]
+
+pyqt[installed]
+    sip[required][installed]
+    python-opengl[required][installed]
+
+tunepimp[]
+    libofa[required][]
+
+libofa[]
+    fftw[required][]
+
+fftw[]
+    gcc-fortran[required][]
+
+wpa-supplicant[todo]
+    dbus[required][installed]
+    libnl[required][installed]
+    openssl[required][installed]
+
+
+

@@ -1,0 +1,74 @@
+format of `target triplt`:   cpu-vendor-os
+example : i686-pc-linux-gnu
+
+
+                binutils                        gcc                             glibc
+
+5.4 binutils    tainted                         N/A                             N/A
+                compiled by host gcc
+                linked by host ld
+                linked to host ld-linux.so
+                lib search order :
+                /tools/i686-lfs-linux-gnu/lib
+
+5.5 gcc         tainted                         tainted                         N/A
+                compiled by host gcc            compiled by host gcc
+                linked by host ld               linked by /tools ld
+                linked to host ld-linux.so      linked to host ld-linked.so
+                lib search order :              will use /tools ld as linker
+                /tools/i686-lfs-linux-gnu/lib
+
+
+5.7 glibc       tainted                         tainted                         isolated
+                compiled by host gcc            compiled by host gcc            compiled by /tools gcc
+                linked by host ld               linked by /tools ld             linked by /tools ld
+                linked to host ld-linux.so      linked to host ld-linux.so      linked to /tools ld-linux.so
+                lib search order :              will use /tools ld as linker    linked to /toos/lib/*
+                /tools/i686-lfs-linux-gnu/lib
+
+5.8 adjusti     from now on: newly built executable will be linked to /tools/lib/*
+
+
+5.9 binutils-2  isolated                        tainted                         isolated
+                compiled by /tools gcc          compiled by host gcc            compiled by /tools gcc
+                linked by /tools ld             linked by /tools ld             linked by /tools ld
+                linked to /tools ld-linux.so    linked to host ld-linux.so      linked to /tools ld-linux.so
+                lib search order :              will use /tools ld as linker    linked to /toos/lib/*
+                /tools/i686-lfs-linux-gnu/lib
+                /tools/lib
+
+5.10 gcc-2      isolated                        isolated                        isolated
+                compiled by /tools gcc          compiled by /tools gcc          compiled by /tools gcc
+                linked by /tools ld             linked by /tools ld             linked by /tools ld
+                linked to /tools ld-linux.so    linked to /tools ld-linux.so    linked to /tools ld-linux.so
+                lib search order :              will use /tools ld as linker    linked to /toos/lib/*
+                /tools/i686-lfs-linux-gnu/lib
+                /tools/lib
+
+
+6.9 glibc       isolated                        isolated                        final
+                compiled by /tools gcc          compiled by /tools gcc          compiled by /tools gcc
+                linked by /tools ld             linked by /tools ld             linked by /tools ld
+                linked to /tools ld-linux.so    linked to /tools ld-linux.so    linked to /lib ld-linux.so
+                lib search order :              will use /tools ld as linker    linked to /lib and /usr/lib
+                /tools/i686-lfs-linux-gnu/lib
+                /tools/lib
+
+6.10 re-adjust  isolated                        isolated                        final
+                compiled by /tools gcc          compiled by /tools gcc          compiled by /tools gcc
+                linked by /tools ld             linked by /tools ld             linked by /tools ld
+                linked to /tools ld-linux.so    linked to /tools ld-linux.so    linked to /lib ld-linux.so
+                lib search order :              will use /tools ld as linker    linked to /lib and /usr/lib
+                /tools/i686-lfs-linux-gnu/lib
+                /usr/lib
+                /lib
+
+6.10 binutils   final                           isolated                        final
+                compiled by /tools gcc          compiled by /tools gcc          compiled by /tools gcc
+                linked by /tools ld             linked by /tools ld             linked by /tools ld
+                linked to /lib ld-linux.so      linked to /tools ld-linux.so    linked to /lib ld-linux.so
+                lib search order :              will use /tools ld as linker    linked to /lib and /usr/lib
+                /usr/i686-lfs-linux-gnu/lib
+                /usr/local/lib
+                /lib
+                /usr/lib
